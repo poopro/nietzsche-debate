@@ -1,0 +1,3989 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>與查拉圖斯特拉辯論</title>
+<style>
+:root {
+  --bg-deep:#08080e;--bg-panel:#10101c;--bg-panel-light:#18182a;
+  --blood:#8b2020;--blood-bright:#c0392b;--gold:#c9a84c;--gold-dim:#7a6030;
+  --cyan:#2ecc71;--cyan-dim:#1a6a3a;--purple:#9b59b6;
+  --text-dim:#4a4a6a;--text-mid:#8888aa;--text-bright:#d8d8ec;
+  --red-skill:#e74c3c;--blue-skill:#3498db;--green-skill:#2ecc71;--yellow-skill:#f1c40f;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg-deep);color:var(--text-bright);
+  font-family:"Noto Serif TC","Source Han Serif TC","PMingLiU",Georgia,serif;
+  min-height:100vh;overflow:hidden;}
+
+/* ═══ OBJECTIVE SCREEN ═══ */
+#so{background:var(--bg-deep);z-index:25;}
+.so-wrap{width:680px;max-width:95vw;max-height:88vh;overflow-y:auto;padding:12px;}
+.so-wrap::-webkit-scrollbar{width:3px;}.so-wrap::-webkit-scrollbar-thumb{background:rgba(201,168,76,.2);}
+.so-title{font-size:22px;color:var(--gold);letter-spacing:6px;text-align:center;margin-bottom:4px;}
+.so-sub{font-size:10px;color:var(--text-dim);text-align:center;margin-bottom:20px;font-family:"Courier New",monospace;letter-spacing:2px;}
+.so-main{background:var(--bg-panel);border:1px solid rgba(201,168,76,.25);border-radius:4px;padding:20px;margin-bottom:14px;text-align:center;}
+.so-main-tag{font-size:9px;color:var(--gold-dim);font-family:"Courier New",monospace;letter-spacing:3px;text-transform:uppercase;margin-bottom:8px;}
+.so-main-icon{font-size:42px;margin-bottom:6px;}
+.so-main-name{font-size:22px;letter-spacing:4px;margin-bottom:2px;}
+.so-main-en{font-size:9px;color:var(--text-dim);font-family:"Courier New",monospace;letter-spacing:3px;margin-bottom:14px;}
+.so-main-desc{font-size:13px;color:var(--text-mid);line-height:2;}
+.so-main-turns{display:inline-block;margin-top:12px;font-size:10px;color:var(--gold-dim);font-family:"Courier New",monospace;border:1px solid var(--gold-dim);padding:3px 14px;border-radius:2px;}
+.so-sides{display:flex;gap:10px;margin-bottom:18px;}
+.so-side{flex:1;background:var(--bg-panel-light);border:1px solid rgba(255,255,255,.05);border-radius:3px;padding:12px;text-align:center;}
+.so-side-tag{font-size:8px;color:var(--text-dim);font-family:"Courier New",monospace;letter-spacing:2px;margin-bottom:6px;}
+.so-side-name{font-size:12px;color:var(--cyan);margin-bottom:4px;}
+.so-side-desc{font-size:10px;color:var(--text-dim);line-height:1.6;}
+/* ═══ RUN END OVERLAY ═══ */
+#run-end{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.88);backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .7s;}
+#run-end.show{opacity:1;pointer-events:all;}
+.re-card{width:540px;max-width:92vw;background:var(--bg-panel);border:1px solid rgba(201,168,76,.15);border-radius:4px;padding:36px;text-align:center;}
+.re-icon{font-size:52px;margin-bottom:12px;}
+.re-title{font-size:30px;letter-spacing:6px;margin-bottom:4px;font-weight:normal;}
+.re-sub{font-size:9px;color:var(--text-dim);letter-spacing:3px;font-family:"Courier New",monospace;margin-bottom:20px;}
+.re-quote{font-size:13px;color:var(--text-mid);font-style:italic;line-height:2;max-width:400px;margin:0 auto 18px;}
+.re-sides{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:22px;}
+.re-side{font-size:10px;padding:4px 14px;border-radius:12px;border:1px solid;}
+.re-side.done{color:var(--cyan);border-color:var(--cyan);}
+.re-side.miss{color:var(--text-dim);border-color:rgba(255,255,255,.1);opacity:.4;}
+.re-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.re-report{max-height:42vh;overflow-y:auto;text-align:left;margin:14px 0;padding:12px;
+  background:rgba(0,0,0,.35);border:1px solid rgba(201,168,76,.15);border-radius:3px;
+  font-size:11px;color:var(--text-mid);line-height:1.85;display:none;}
+.re-report.show{display:block;}
+.re-report .tu-t{color:var(--gold);}
+
+/* Compact layout */
+.gc{position:relative;}
+.cc-col{position:relative;}
+.lp{width:200px;}
+.rp{width:200px;}
+.stats-compact .stat-row{display:flex;justify-content:space-between;font-size:10px;padding:3px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.stats-compact .stat-row span:last-child{font-family:"Courier New",monospace;}
+.rp-collapsible .rp-body{max-height:0;overflow:hidden;transition:max-height .3s;}
+.rp-collapsible.open .rp-body{max-height:400px;}
+.rp-toggle{cursor:pointer;user-select:none;}
+/* ═══ OBJECTIVE HUD ═══ */
+.obj-ph{font-size:9px;color:var(--text-dim);letter-spacing:3px;font-family:"Courier New",monospace;text-transform:uppercase;margin-bottom:6px;}
+.obj-name{font-size:12px;margin-bottom:4px;font-weight:bold;}
+.obj-desc-hud{font-size:10px;color:var(--text-dim);line-height:1.6;margin-bottom:6px;}
+.obj-progress{height:3px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden;margin-bottom:5px;}
+.obj-prog-fill{height:100%;border-radius:2px;transition:width .5s;}
+.obj-turns{font-size:9px;color:var(--text-dim);font-family:"Courier New",monospace;}
+.obj-sides-sm{margin-top:6px;display:flex;flex-direction:column;gap:3px;}
+.obj-side-sm{font-size:9px;color:var(--text-dim);transition:color .3s;}
+.obj-side-sm.done{color:var(--cyan);}
+.obj-main-tag{font-size:8px;color:var(--gold);letter-spacing:2px;font-family:"Courier New",monospace;margin-bottom:4px;}
+.obj-side-tag{font-size:8px;color:var(--cyan);letter-spacing:1px;margin-top:8px;margin-bottom:4px;}
+
+/* Game toolbar (always visible) */
+.game-toolbar{grid-column:1/-1;grid-row:2;display:flex;flex-wrap:wrap;gap:3px;padding:4px 8px;background:rgba(0,0,0,.35);
+  border-bottom:1px solid rgba(201,168,76,.12);z-index:5;align-items:center;}
+.lp{grid-column:1;grid-row:3;}
+.cc-col{grid-column:2;grid-row:3;}
+.rp{grid-column:3;grid-row:3;}
+.game-toolbar .btn-s{padding:4px 10px;font-size:8px;}
+.game-toolbar .tb-hint{flex:1;font-size:8px;color:var(--text-dim);text-align:right;font-family:"Courier New",monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+/* Foldable scene */
+.sb-head{display:flex;justify-content:space-between;align-items:center;cursor:pointer;
+  padding:4px 8px;background:rgba(0,0,0,.25);border-bottom:1px solid rgba(201,168,76,.1);
+  font-size:9px;font-family:"Courier New",monospace;color:var(--gold-dim);letter-spacing:1px;}
+.sb-head:hover{color:var(--gold);}
+.sb-fold-icon{transition:transform .2s;}
+.sb.collapsed .sb-fold-icon{transform:rotate(-90deg);}
+.sb.collapsed .st{display:none;}
+.sb.collapsed{max-height:28px;overflow:hidden;}
+
+/* Anger meter */
+.anger-val{font-size:18px;font-family:"Courier New",monospace;text-align:center;margin:4px 0;}
+.anger-bar{height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;margin-bottom:4px;}
+.anger-fill{height:100%;border-radius:2px;transition:width .4s,background .4s;}
+.anger-hint{font-size:9px;color:var(--text-dim);line-height:1.5;font-style:italic;}
+.anger-wp{font-size:9px;color:var(--red-skill);margin-top:6px;padding:6px;border:1px dashed rgba(231,76,60,.25);display:none;}
+.anger-wp.show{display:block;}
+
+/* 80s Soviet-style AI telemetry panel (draggable / zoomable) */
+.ai-sov{
+  position:fixed;right:14px;bottom:14px;z-index:10050;
+  width:240px;
+  opacity:0;pointer-events:none;
+  transform:scale(var(--sov-scale,1));
+  transform-origin:bottom right;
+  cursor:grab;user-select:none;touch-action:none;
+  transition:opacity .3s;
+  filter:drop-shadow(6px 8px 14px rgba(0,0,0,.75));
+}
+.ai-sov.visible{opacity:1;pointer-events:auto;}
+.ai-sov.dragging{cursor:grabbing;}
+.ai-sov-bezel{
+  background:linear-gradient(165deg,#5a5a52 0%,#3a3a34 18%,#2a2a26 50%,#1e1e1a 100%);
+  border:3px solid #1a1a16;
+  outline:2px solid #7a7a6e;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.12),inset 0 -3px 8px rgba(0,0,0,.55),4px 4px 0 #0a0a08;
+  padding:8px 10px 6px;
+}
+.ai-sov-top{display:flex;align-items:center;gap:8px;margin-bottom:8px;border-bottom:2px groove #4a4a42;padding-bottom:6px;}
+.ai-sov-icon{font-size:20px;line-height:1;filter:sepia(.3);}
+.ai-sov-head{font-size:10px;letter-spacing:2px;color:#e8dcc8;text-shadow:1px 1px 0 #000;font-family:Impact,"Arial Black",sans-serif;}
+.ai-sov-sub{font-size:6px;letter-spacing:1.5px;color:#9a9080;margin-top:2px;font-family:"Courier New",monospace;}
+.ai-sov-lamps{
+  display:grid;grid-template-columns:1fr 1fr;gap:6px;
+  background:#1a1814;border:2px inset #0a0a08;padding:8px 6px;margin-bottom:6px;
+  box-shadow:inset 0 0 12px rgba(0,0,0,.8);
+}
+.ai-sov-lamp-cell{text-align:center;}
+.ai-sov-lamp-bulb{
+  width:34px;height:34px;margin:0 auto 4px;border-radius:50%;
+  background:radial-gradient(circle at 32% 28%,#3a3a36 0%,#141412 55%,#080808 100%);
+  border:3px solid #2a2a26;
+  box-shadow:inset 0 -4px 8px rgba(0,0,0,.9),0 1px 0 rgba(255,255,255,.08);
+  transition:box-shadow .1s,background .1s,border-color .1s;
+  position:relative;
+}
+.ai-sov-lamp-bulb::after{
+  content:'';position:absolute;inset:4px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.08) 0%,transparent 70%);
+}
+.ai-sov-lamp-lbl{font-size:7px;line-height:1.25;color:#7a7568;font-family:"Courier New",monospace;letter-spacing:.5px;}
+.ai-sov-lamp-lbl span{font-size:6px;color:#5a5548;display:block;}
+/* IDLE — green */
+#lamp-idle.on{background:radial-gradient(circle at 32% 28%,#b8ff9a 0%,#3dcc3d 35%,#1a6a1a 75%);}
+#lamp-idle.on{border-color:#6fdc6f;box-shadow:0 0 14px rgba(80,220,80,.85),inset 0 -2px 4px rgba(0,80,0,.5);}
+/* THINK — amber */
+#lamp-think.on{background:radial-gradient(circle at 32% 28%,#ffe89a 0%,#ffb020 35%,#aa6600 75%);}
+#lamp-think.on{border-color:#ffc040;box-shadow:0 0 14px rgba(255,180,40,.9),inset 0 -2px 4px rgba(120,60,0,.5);animation:lampBlink 1.2s ease-in-out infinite;}
+/* OUTPUT — cyan */
+#lamp-output.on{background:radial-gradient(circle at 32% 28%,#a8f4ff 0%,#20c8e8 35%,#0878a0 75%);}
+#lamp-output.on{border-color:#60e0ff;box-shadow:0 0 14px rgba(40,200,255,.85),inset 0 -2px 4px rgba(0,80,120,.5);animation:lampBlink 0.7s ease-in-out infinite;}
+/* ALARM — red */
+#lamp-alarm.on{background:radial-gradient(circle at 32% 28%,#ffb0a0 0%,#ff3020 35%,#aa0808 75%);}
+#lamp-alarm.on{border-color:#ff6050;box-shadow:0 0 18px rgba(255,40,30,1),inset 0 -2px 4px rgba(100,0,0,.5);animation:alarmBlink 0.45s ease-in-out infinite;}
+@keyframes lampBlink{0%,100%{filter:brightness(1)}50%{filter:brightness(1.15)}}
+@keyframes alarmBlink{0%,100%{opacity:1;filter:brightness(1.2)}50%{opacity:.75;filter:brightness(.85)}}
+.ai-sov-display{
+  background:#0a1208;border:3px inset #050804;padding:6px 8px;margin-bottom:4px;
+  box-shadow:inset 0 0 16px rgba(0,255,80,.06);
+  font-family:"Courier New",monospace;
+}
+.ai-sov-status{font-size:11px;letter-spacing:1px;color:#4a8a4a;line-height:1.3;text-shadow:0 0 6px rgba(80,200,80,.35);}
+.ai-sov-en{font-size:7px;letter-spacing:2px;color:#3a6a3a;margin-top:2px;}
+.ai-sov-detail{font-size:7px;letter-spacing:.5px;color:#5a8a5a;margin-top:3px;line-height:1.35;min-height:18px;word-break:break-word;}
+.ai-sov-tick{font-size:10px;color:#6aba6a;margin-top:3px;min-height:12px;}
+.ai-sov-hint{font-size:6px;letter-spacing:1px;color:#6a6558;text-align:center;font-family:"Courier New",monospace;margin-top:2px;}
+.ai-sov-dragbar{
+  background:linear-gradient(180deg,#4a4a42,#2a2a26);border:2px solid #1a1a16;outline:1px solid #6a6a5e;
+  padding:4px 8px;margin-bottom:4px;cursor:grab;text-align:center;
+  font-size:7px;letter-spacing:2px;color:#c8c0a8;font-family:"Courier New",monospace;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.1);
+}
+.ai-sov.dragging .ai-sov-dragbar{cursor:grabbing;}
+.ai-sov-meters{
+  background:#1a1814;border:2px inset #0a0a08;padding:6px 8px;margin-top:4px;
+  pointer-events:auto;
+}
+.ai-sov-meter{margin-bottom:6px;}
+.ai-sov-meter:last-child{margin-bottom:0;}
+.ai-sov-meter-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;}
+.ai-sov-meter-lbl{font-size:7px;color:#9a9080;font-family:"Courier New",monospace;letter-spacing:.5px;}
+.ai-sov-meter-val{font-size:7px;color:#6aba6a;font-family:"Courier New",monospace;}
+.ai-sov-meter input[type=range]{
+  width:100%;height:8px;accent-color:#c41e1e;cursor:pointer;
+  background:#0a0a08;border-radius:2px;
+}
+.ai-sov.panel-active .ai-sov-bezel{outline-color:#9a9080;}
+.ai-sov.panel-alarm .ai-sov-bezel{outline-color:#ff4444;animation:panelAlarm 0.5s ease-in-out infinite;}
+@keyframes panelAlarm{0%,100%{box-shadow:inset 0 2px 0 rgba(255,255,255,.12),0 0 12px rgba(255,40,40,.4)}50%{box-shadow:inset 0 2px 0 rgba(255,255,255,.12),0 0 22px rgba(255,40,40,.7)}}
+body.light-ui .ai-sov-bezel{background:linear-gradient(165deg,#8a8478 0%,#5a564e 50%,#3a3832 100%);outline-color:#aaa;}
+
+/* Dialogue choices (Disco Elysium style) */
+.choice-panel{background:var(--bg-panel);border:1px solid rgba(201,168,76,.15);border-radius:2px;
+  padding:6px;display:none;min-height:0;max-height:min(180px,28vh);overflow-y:auto;flex-shrink:0;}
+.choice-panel.show{display:block;}
+.choice-ph{font-size:8px;color:var(--gold-dim);font-family:"Courier New",monospace;letter-spacing:1px;margin-bottom:4px;}
+.choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;}
+.choice-loading{font-size:10px;color:var(--text-dim);font-style:italic;padding:8px;text-align:center;}
+@media(max-width:600px){.choice-grid{grid-template-columns:1fr;}}
+.choice-btn{text-align:left;padding:8px 10px;background:rgba(0,0,0,.35);
+  border:1px solid rgba(201,168,76,.12);border-radius:2px;cursor:pointer;transition:all .2s;min-height:52px;}
+.choice-btn:hover:not(:disabled){border-color:var(--gold-dim);background:rgba(201,168,76,.06);}
+.choice-btn:disabled{opacity:.45;cursor:not-allowed;}
+.choice-btn.locked .choice-txt{filter:blur(6px);user-select:none;color:var(--text-dim);}
+.choice-btn.unlocked{border-color:var(--green-skill);}
+.choice-btn.unlocked .choice-txt{filter:none;color:var(--text-bright);}
+.choice-btn.failed{border-color:var(--red-skill);}
+.choice-btn.failed .choice-txt{filter:none;color:var(--text-dim);font-style:italic;}
+.choice-meta{font-size:8px;font-family:"Courier New",monospace;color:var(--text-dim);margin-bottom:3px;}
+.choice-txt{font-size:11px;color:var(--text-bright);line-height:1.5;}
+.choice-fail-note{font-size:9px;color:var(--red-skill);margin-top:8px;display:none;}
+.choice-fail-note.show{display:block;}
+
+/* Topic screen */
+.topic-pick{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:12px 0;}
+.topic-pick .cc-in{flex:1;min-width:200px;}
+.topic-display{font-size:15px;color:var(--text-bright);padding:14px;margin:10px 0;
+  border:1px solid rgba(201,168,76,.2);background:rgba(0,0,0,.3);line-height:1.8;}
+
+/* AMBIENT */
+.bg-ambient{position:fixed;inset:0;z-index:0;
+  background:radial-gradient(ellipse 80% 60% at 50%40%,#1a0a2e 0%,transparent 70%),
+  radial-gradient(ellipse 60% 40% at 30%70%,#0a1a2e 0%,transparent 60%),var(--bg-deep);
+  animation:ap 8s ease-in-out infinite alternate;}
+@keyframes ap{0%{opacity:.85}100%{opacity:1}}
+.cave-fire{position:fixed;bottom:-3%;left:50%;transform:translateX(-50%);
+  width:500px;height:250px;
+  background:radial-gradient(ellipse at bottom,rgba(201,168,76,.07) 0%,transparent 70%);
+  z-index:1;animation:fk 5s ease-in-out infinite alternate;}
+@keyframes fk{0%,100%{opacity:1}40%{opacity:.65}70%{opacity:.85}}
+
+/* SCREENS */
+.screen{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;transition:opacity .8s,transform .8s;}
+.screen.hidden{opacity:0;pointer-events:none;transform:scale(1.02);}
+
+/* ═══ INTRO ═══ */
+#si{background:var(--bg-deep);z-index:30;}
+#si.fade-out{opacity:0;pointer-events:none;}
+.sym{font-size:72px;animation:flo 4s ease-in-out infinite alternate;}
+@keyframes flo{from{transform:translateY(0)}to{transform:translateY(-14px)}}
+.tb{font-size:28px;color:var(--gold);letter-spacing:8px;font-weight:normal;margin:14px 0 4px;}
+.ts{font-size:11px;color:var(--text-dim);letter-spacing:3px;font-family:"Courier New",monospace;text-transform:uppercase;}
+.dv{width:220px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dim),transparent);margin:16px 0;}
+.qb{max-width:440px;text-align:center;font-size:13px;color:var(--text-mid);font-style:italic;line-height:2;}
+.qf{font-size:11px;color:var(--gold-dim);font-style:normal;margin-top:6px;}
+
+/* BUTTONS */
+.btn{background:none;border:1px solid var(--gold-dim);color:var(--gold);
+  padding:12px 40px;font-family:"Courier New",monospace;font-size:12px;
+  text-transform:uppercase;letter-spacing:4px;cursor:pointer;transition:all .3s;border-radius:2px;}
+.btn:hover{background:rgba(201,168,76,.1);border-color:var(--gold);box-shadow:0 0 20px rgba(201,168,76,.1);}
+.btn:active{transform:scale(.97);}
+.btn:disabled{opacity:.25;cursor:not-allowed;}
+.btn-s{padding:6px 18px;font-size:10px;letter-spacing:2px;}
+
+/* ═══ SAVE SLOTS ═══ */
+#ss{background:var(--bg-deep);}
+.ss-wrap{width:640px;max-width:95vw;max-height:80vh;display:flex;flex-direction:column;}
+.ss-title{font-size:22px;color:var(--gold);letter-spacing:6px;text-align:center;margin-bottom:4px;}
+.ss-sub{font-size:10px;color:var(--text-dim);text-align:center;margin-bottom:18px;
+  font-family:"Courier New",monospace;letter-spacing:2px;}
+.ss-list{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
+.ss-slot{background:var(--bg-panel);border:1px solid rgba(201,168,76,.1);
+  border-radius:2px;padding:12px 16px;cursor:pointer;transition:all .2s;
+  display:flex;justify-content:space-between;align-items:center;}
+.ss-slot:hover{border-color:var(--gold-dim);background:rgba(201,168,76,.04);}
+.ss-slot.empty{border-style:dashed;border-color:rgba(201,168,76,.05);
+  cursor:pointer;color:var(--text-dim);justify-content:center;font-style:italic;font-size:12px;}
+.ss-slot.empty:hover{border-color:rgba(201,168,76,.15);color:var(--text-mid);}
+.ss-slot-name{font-size:14px;color:var(--text-bright);font-weight:bold;}
+.ss-slot-info{font-size:10px;color:var(--text-dim);font-family:"Courier New",monospace;margin-top:2px;}
+.ss-slot-right{display:flex;gap:6px;align-items:center;}
+.ss-del{font-size:11px;color:var(--red-skill);cursor:pointer;padding:4px 8px;
+  border:1px solid transparent;border-radius:2px;font-family:"Courier New",monospace;}
+.ss-del:hover{border-color:var(--red-skill);background:rgba(231,76,60,.08);}
+.ss-export{font-size:11px;color:var(--yellow-skill);cursor:pointer;padding:4px 8px;
+  border:1px solid transparent;border-radius:2px;font-family:"Courier New",monospace;}
+.ss-export:hover{border-color:var(--yellow-skill);background:rgba(241,196,15,.08);}
+.ss-btn-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+
+/* ═══ CHARACTER CREATION ═ */
+#sc{background:var(--bg-deep);}
+.cc-wrap{width:720px;max-width:95vw;max-height:86vh;overflow-y:auto;padding:8px;}
+.cc-wrap::-webkit-scrollbar{width:3px;}
+.cc-wrap::-webkit-scrollbar-thumb{background:rgba(201,168,76,.2);}
+.cc-title{font-size:22px;color:var(--gold);letter-spacing:6px;text-align:center;margin-bottom:4px;}
+.cc-sub{font-size:10px;color:var(--text-dim);text-align:center;margin-bottom:18px;
+  font-family:"Courier New",monospace;letter-spacing:2px;}
+.cc-row{display:flex;gap:10px;align-items:center;margin-bottom:14px;justify-content:center;}
+.cc-lbl{font-size:13px;color:var(--text-mid);}
+.cc-in{background:rgba(0,0,0,.4);border:1px solid rgba(201,168,76,.25);
+  color:var(--text-bright);font-family:inherit;font-size:13px;padding:8px 14px;
+  width:220px;outline:none;border-radius:2px;transition:border-color .3s;}
+.cc-in:focus{border-color:var(--gold-dim);}
+.cc-in::placeholder{color:var(--text-dim);font-style:italic;}
+.cc-arche-in{width:300px;}
+
+.cc-pts-row{display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:14px;padding:10px 16px;background:var(--bg-panel);
+  border:1px solid rgba(201,168,76,.1);border-radius:2px;}
+.cc-pts-lbl{font-size:12px;color:var(--text-mid);}
+.cc-pts-val{font-size:28px;font-family:"Courier New",monospace;color:var(--gold);transition:color .3s;}
+.cc-pts-val.w{color:var(--red-skill);}
+.cc-pts-val.z{color:var(--green-skill);}
+
+.cc-skills{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.cc-scard{background:var(--bg-panel);border:1px solid rgba(201,168,76,.08);
+  border-radius:2px;padding:12px 14px;transition:border-color .3s;}
+.cc-scard:hover{border-color:rgba(201,168,76,.2);}
+-cc-stop{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;}
+.cc-sname{font-size:13px;font-weight:bold;}
+.cc-sname .en{font-size:9px;font-family:"Courier New",monospace;font-weight:normal;
+  color:var(--text-dim);margin-left:6px;letter-spacing:1px;}
+.cc-sdesc{font-size:10px;color:var(--text-dim);line-height:1.6;margin-bottom:8px;}
+-cc-sctrl{display:flex;align-items:center;gap:10px;}
+.cc-b{width:28px;height:28px;border-radius:50%;border:1px solid rgba(201,168,76,.3);
+  background:rgba(0,0,0,.3);color:var(--gold);font-size:16px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;}
+.cc-b:hover{background:rgba(201,168,76,.15);border-color:var(--gold);}
+.cc-b:active{transform:scale(.9);}
+.cc-b:disabled{opacity:.2;cursor:not-allowed;}
+.cc-sval{font-size:22px;font-family:"Courier New",monospace;min-width:28px;text-align:center;}
+.cc-sbar{flex:1;height:3px;background:rgba(0,0,0,.5);border-radius:2px;overflow:hidden;}
+.cc-sfill{height:100%;border-radius:2px;transition:width .3s,background .3s;}
+.cc-rank{font-size:9px;color:var(--text-dim);min-width:72px;text-align:center;line-height:1.2;}
+
+.cc-arche-zone{background:var(--bg-panel);border:1px solid rgba(201,168,76,.1);
+  border-radius:2px;padding:14px 16px;margin-bottom:14px;}
+-cc-arche-lbl{font-size:11px;color:var(--text-dim);margin-bottom:8px;
+  font-family:"Courier New",monospace;letter-spacing:2px;}
+.cc-arche-type-row{display:flex;gap:8px;margin-bottom:10px;align-items:center;}
+.cc-arche-preview{margin-top:8px;padding:10px;background:rgba(0,0,0,.3);
+  border-radius:2px;font-size:11px;line-height:1.7;display:none;}
+.cc-arche-preview.visible{display:block;}
+.cc-arche-preview .ap-name{font-size:14px;font-weight:bold;margin-bottom:3px;}
+.cc-arche-preview .ap-desc{color:var(--text-mid);margin-bottom:4px;}
+.cc-arche-preview .ap-bonus{font-family:"Courier New",monospace;font-size:10px;letter-spacing:1px;}
+.cc-arche-edit-row{display:flex;gap:6px;align-items:center;margin-top:6px;}
+.cc-arche-edit-row .cc-in{flex:1;width:auto;font-size:11px;padding:5px 8px;}
+.cc-arche-edit-row .cc-lbl{font-size:10px;white-space:nowrap;}
+.cc-arche-status{font-size:9px;font-family:"Courier New",monospace;
+  color:var(--text-dim);margin-left:4px;letter-spacing:1px;}
+.cc-arche-status.gen{color:var(--cyan-dim);}
+
+.cc-presets{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.cc-preset{background:var(--bg-panel);border:1px solid rgba(201,168,76,.1);
+  border-radius:2px;padding:6px 12px;cursor:pointer;transition:all .2s;text-align:center;min-width:80px;}
+.cc-preset:hover{border-color:var(--gold-dim);background:rgba(201,168,76,.05);}
+.cc-preset.sel{border-color:var(--gold);background:rgba(201,168,76,.1);}
+.cc-preset-n{font-size:12px;color:var(--text-bright);margin-bottom:1px;}
+.cc-preset-d{font-size:8px;color:var(--text-dim);font-family:"Courier New",monospace;letter-spacing:1px;}
+
+.cc-confirm{text-align:center;margin-top:6px;}
+
+/* ═══ API SETTINGS ═══ */
+.cc-api-zone{background:var(--bg-panel);border:1px solid rgba(201,168,76,.1);
+  border-radius:2px;padding:14px 16px;margin-bottom:14px;}
+.cc-api-lbl{font-size:11px;color:var(--text-dim);margin-bottom:8px;
+  font-family:"Courier New",monospace;letter-spacing:2px;}
+.cc-api-row{display:flex;gap:8px;margin-bottom:6px;align-items:center;}
+.cc-api-row .cc-lbl{min-width:70px;font-size:10px;}
+.cc-api-in{flex:1;background:rgba(0,0,0,.4);border:1px solid rgba(201,168,76,.18);
+  color:var(--text-bright);font-family:"Courier New",monospace;font-size:11px;
+  padding:6px 10px;outline:none;border-radius:2px;transition:border-color .3s;}
+.cc-api-in:focus{border-color:var(--gold-dim);}
+.cc-api-note{font-size:9px;color:var(--text-dim);font-style:italic;margin-top:4px;
+  line-height:1.5;}
+.cc-api-status{font-size:10px;margin-top:4px;font-family:"Courier New",monospace;}
+.cc-api-status.ok{color:var(--green-skill);}
+.cc-api-status.err{color:var(--red-skill);}
+.cc-api-status.testing{color:var(--yellow-skill);}
+
+/* ═══ GAME ═══ */
+#sg{position:relative;z-index:5;display:none;}
+#sg.act{display:block;height:100vh;}
+.gc{display:grid;grid-template-columns:200px 1fr 200px;
+  grid-template-rows:auto auto minmax(0,1fr);
+  gap:6px;height:100%;min-height:0;padding:6px;box-sizing:border-box;}
+
+/* TOP BAR */
+.tb-bar{grid-column:1/-1;grid-row:1;display:flex;align-items:center;justify-content:space-between;
+  padding:4px 16px;background:linear-gradient(180deg,var(--bg-panel) 0%,transparent 100%);
+  border-bottom:1px solid rgba(201,168,76,.12);}
+.tb-l{font-size:10px;text-transform:uppercase;letter-spacing:4px;color:var(--gold-dim);
+  font-family:"Courier New",monospace;}
+.tb-m{font-size:12px;color:var(--text-mid);font-style:italic;}
+.tb-m::before{content:"✦ ";color:var(--gold);}
+
+/* PANELS */
+.lp,.rp{display:flex;flex-direction:column;gap:6px;overflow:hidden;min-height:0;}
+.cc-col{display:grid;grid-template-columns:1fr;
+  grid-template-rows:auto minmax(0,1fr) auto auto;gap:6px;min-height:0;position:relative;}
+.cc-col .sb{grid-row:1;}
+.cc-col .dp{grid-row:2;}
+.cc-col .choice-panel{grid-row:3;}
+.cc-col .ia{grid-row:4;}
+.panel{background:var(--bg-panel);border:1px solid rgba(201,168,76,.08);border-radius:2px;padding:10px 12px;}
+.ph{font-size:9px;text-transform:uppercase;letter-spacing:3px;color:var(--gold-dim);
+  margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid rgba(201,168,76,.08);
+  font-family:"Courier New",monospace;}
+
+/* THOUGHTS */
+.tc{flex:1;overflow-y:auto;}
+.tc::-webkit-scrollbar{width:3px;}
+.tc::-webkit-scrollbar-thumb{background:rgba(201,168,76,.2);}
+.ti{background:rgba(0,0,0,.3);border-left:2px solid var(--gold-dim);padding:5px 8px;
+  margin-bottom:5px;font-size:10px;color:var(--text-mid);line-height:1.6;transition:all .3s;}
+.ti:hover{border-left-color:var(--gold);color:var(--text-bright);}
+.ti.locked{border-left-color:#2a2a3a;color:#2a2a3a;font-style:italic;}
+.tn{font-size:11px;font-weight:bold;color:var(--gold);display:block;margin-bottom:2px;}
+.te{font-size:9px;color:var(--cyan-dim);display:block;margin-top:2px;}
+
+/* SCENE */
+.sb{background:var(--bg-panel);border:1px solid rgba(201,168,76,.08);padding:8px 12px;
+  flex-shrink:0;max-height:72px;overflow-y:auto;}
+.sb::-webkit-scrollbar{width:3px;}
+.sb::-webkit-scrollbar-thumb{background:rgba(201,168,76,.2);}
+.st{font-size:12px;line-height:1.9;color:var(--text-mid);font-style:italic;}
+.st .h{color:var(--gold);} .st .b{color:var(--blood-bright);}
+.st .p{color:var(--purple);} .st .c{color:var(--cyan);}
+.st .e{color:var(--gold);font-style:normal;font-weight:bold;}
+.st .et{color:var(--purple);font-style:italic;}
+
+/* PORTRAIT — overlays dialogue row, must not consume its own grid row */
+.pa{position:absolute;top:4px;right:4px;z-index:3;grid-row:2;grid-column:1;
+  display:flex;align-items:flex-end;justify-content:center;padding:0;
+  transform:scale(.5);transform-origin:top right;opacity:.65;pointer-events:none;}
+.cf{text-align:center;}
+.cn{font-size:13px;color:var(--gold);letter-spacing:2px;font-weight:bold;margin-bottom:2px;}
+.cs{font-size:8px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;
+  font-family:"Courier New",monospace;margin-bottom:4px;}
+.port{width:110px;height:110px;border-radius:50%;border:2px solid rgba(201,168,76,.25);
+  display:flex;align-items:center;justify-content:center;font-size:40px;
+  background:radial-gradient(circle at 40%40%,#2a1a3a,#08080e);transition:all .5s;position:relative;}
+.port.sp{border-color:var(--gold);box-shadow:0 0 20px rgba(201,168,76,.15);}
+.port.th{border-color:var(--purple);box-shadow:0 0 14px rgba(155,89,182,.12);}
+.mo{position:absolute;bottom:2px;right:2px;font-size:14px;}
+
+/* DIALOGUE */
+.dp{min-height:0;overflow-y:auto;background:var(--bg-panel);
+  border:1px solid rgba(201,168,76,.08);padding:8px 56px 8px 10px;
+  display:flex;flex-direction:column;gap:4px;flex:1;}
+.msg-txt{word-break:break-word;overflow-wrap:anywhere;}
+.dp::-webkit-scrollbar{width:3px;}
+.dp::-webkit-scrollbar-thumb{background:rgba(201,168,76,.2);}
+
+.msg{display:flex;gap:8px;animation:mi .4s ease-out;padding:6px 8px;border-radius:2px;
+  border-left:2px solid rgba(201,168,76,.08);}
+.msg:hover{background:rgba(255,255,255,.015);}
+@keyframes mi{from{opacity:0;transform:translateY(8px)scale(.98)}to{opacity:1;transform:translateY(0)scale(1)}}
+.msg-p{border-left-color:rgba(46,204,113,.35);}
+.msg-z{border-left-color:rgba(201,168,76,.35);}
+.msg-s{justify-content:center;border-left-color:rgba(155,89,182,.35);}
+.msg-ic{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:11px;flex-shrink:0;margin-top:2px;}
+.msg-z .msg-ic{background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.25);color:var(--gold);}
+.msg-p .msg-ic{background:rgba(46,204,113,.12);border:1px solid rgba(46,204,113,.25);color:var(--cyan);}
+.msg-s .msg-ic{display:none;}
+.msg-b{max-width:100%;font-size:12px;line-height:1.8;}
+.msg-s .msg-b{text-align:center;color:var(--text-dim);font-style:italic;font-size:10px;max-width:90%;}
+.msg-a{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;font-family:"Courier New",monospace;margin-bottom:2px;}
+.msg-z .msg-a{color:var(--gold-dim);}
+.msg-p .msg-a{color:var(--cyan-dim);}
+.msg-txt .th{color:var(--purple);font-style:italic;}
+.msg-txt .ec{color:var(--blood);}
+.msg-txt .em{color:var(--gold);}
+
+/* Typing */
+.typ{display:flex;gap:4px;padding:6px 10px;align-items:center;}
+.typ .dt{width:5px;height:5px;background:var(--gold-dim);border-radius:50%;animation:bo 1.2s ease-in-out infinite;}
+.typ .dt:nth-child(2){animation-delay:.2s;}
+.typ .dt:nth-child(3){animation-delay:.4s;}
+@keyframes bo{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-5px);opacity:1}}
+
+/* Inline skill check */
+.sk-msg{text-align:center;padding:8px 16px;}
+.sk-n{font-size:9px;text-transform:uppercase;letter-spacing:3px;color:var(--text-mid);font-family:"Courier New",monospace;}
+.sk-d{font-size:26px;margin:4px 0;font-family:"Courier New",monospace;}
+.sk-t{font-size:9px;color:var(--text-dim);}
+.sk-r{font-size:13px;margin-top:4px;text-transform:uppercase;letter-spacing:3px;}
+.sk-pass{color:var(--green-skill);}
+.sk-fail{color:var(--red-skill);}
+.sk-desc{font-size:10px;color:var(--text-mid);font-style:italic;margin-top:4px;}
+
+/* Thought unlock */
+.tu{text-align:center;padding:8px 16px;border-top:1px solid var(--gold-dim);}
+.tu-t{font-size:9px;text-transform:uppercase;letter-spacing:3px;color:var(--purple);font-family:"Courier New",monospace;}
+.tu-n{font-size:15px;margin:6px 0;color:var(--purple);font-weight:bold;}
+.tu-e{font-size:10px;color:var(--cyan-dim);}
+
+/* API mode badge */
+.api-badge{font-size:8px;font-family:"Courier New",monospace;letter-spacing:1px;
+  padding:2px 6px;border-radius:2px;margin-left:6px;vertical-align:middle;}
+.api-badge.live{background:rgba(46,204,113,.15);color:var(--green-skill);border:1px solid rgba(46,204,113,.3);}
+.api-badge.sim{background:rgba(241,196,15,.15);color:var(--yellow-skill);border:1px solid rgba(241,196,15,.3);}
+
+/* IA */
+.ia{background:var(--bg-panel-light);border:1px solid rgba(201,168,76,.12);
+  padding:8px 12px;display:flex;gap:8px;align-items:flex-end;}
+.ih{font-size:8px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;
+  margin-bottom:3px;font-family:"Courier New",monospace;}
+.iw{flex:1;}
+#pi{width:100%;background:rgba(0,0,0,.4);border:1px solid rgba(201,168,76,.18);
+  color:var(--text-bright);font-family:inherit;font-size:12px;padding:7px 10px;
+  resize:none;line-height:1.5;min-height:34px;max-height:70px;outline:none;
+  transition:border-color .3s;border-radius:2px;}
+#pi:focus{border-color:var(--gold-dim);}
+#pi::placeholder{color:var(--text-dim);font-style:italic;}
+.sb-btn{background:linear-gradient(180deg,rgba(201,168,76,.18) 0%,rgba(201,168,76,.06) 100%);
+  border:1px solid rgba(201,168,76,.25);color:var(--gold);padding:7px 18px;
+  font-family:"Courier New",monospace;font-size:10px;text-transform:uppercase;
+  letter-spacing:2px;cursor:pointer;transition:all .2s;border-radius:2px;white-space:nowrap;}
+.sb-btn:hover{background:linear-gradient(180deg,rgba(201,168,76,.3) 0%,rgba(201,168,76,.12) 100%);border-color:var(--gold);}
+.sb-btn:active{transform:scale(.97);}
+.sb-btn:disabled{opacity:.25;cursor:not-allowed;}
+
+/* RIGHT STATS */
+.sr{display:flex;align-items:center;justify-content:space-between;padding:3px 0;
+  border-bottom:1px solid rgba(255,255,255,.02);}
+.sr:last-child{border-bottom:none;}
+.si{display:flex;align-items:center;gap:5px;}
+.sd{width:5px;height:5px;border-radius:50%;}
+.sl{font-size:9px;text-transform:uppercase;letter-spacing:1px;font-family:"Courier New",monospace;color:var(--text-mid);}
+.sv{font-size:13px;font-family:"Courier New",monospace;}
+.sv.hi{color:var(--green-skill);}.sv.med{color:var(--yellow-skill);}.sv.lo{color:var(--red-skill);}
+.sr-main{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;}
+.sr-rank{font-size:8px;color:var(--text-dim);font-style:italic;margin-top:1px;}
+.cc-rank{font-size:9px;color:var(--text-dim);font-style:italic;min-width:82px;}
+
+.dv-val{font-size:26px;text-align:center;font-family:"Courier New",monospace;margin:4px 0;transition:color .5s;}
+.dv-bar{height:3px;background:rgba(0,0,0,.5);border-radius:2px;overflow:hidden;margin-bottom:3px;}
+.dv-fill{height:100%;transition:width .8s ease-out,background .5s;border-radius:2px;}
+.dv-lbls{display:flex;justify-content:space-between;font-size:7px;color:var(--text-dim);
+  text-transform:uppercase;letter-spacing:1px;font-family:"Courier New",monospace;}
+
+/* Debate log */
+.dl{font-size:9px;color:var(--text-dim);line-height:1.8;max-height:160px;overflow-y:auto;}
+.dl-entry{border-left:2px solid rgba(201,168,76,.18);padding:3px 0 3px 7px;margin-bottom:3px;}
+.dl-entry.pass{border-left-color:var(--green-skill);color:var(--green-skill);}
+.dl-entry.fail{border-left-color:var(--red-skill);color:var(--red-skill);}
+.dl::-webkit-scrollbar{width:3px;}
+
+/* Flash */
+.fl-r{animation:fr .8s ease-out;}
+@keyframes fr{0%{background:rgba(231,76,60,.12)}100%{background:transparent}}
+.fl-g{animation:fg .8s ease-out;}
+@keyframes fg{0%{background:rgba(46,204,113,.12)}100%{background:transparent}}
+
+/* Battlefield modes triggered by faction ultra skills */
+body.bf-day{--bg-deep:#efe6cf;--bg-panel:#fff7df;--bg-panel-light:#f8eccf;
+  --text-dim:#8f7658;--text-mid:#5f4c38;--text-bright:#241d16;--gold:#9c6b1d;--gold-dim:#b8842a;}
+body.bf-day .bg-ambient{background:radial-gradient(ellipse 80% 60% at 50%20%,rgba(255,244,189,.9),transparent 70%),
+  linear-gradient(180deg,#f8eec8 0%,#d7ecff 100%);}
+body.bf-day .cave-fire{background:radial-gradient(ellipse at bottom,rgba(255,180,61,.18) 0%,transparent 70%);}
+body.bf-red .bg-ambient{background:radial-gradient(ellipse 80% 60% at 50%35%,rgba(180,35,35,.38),transparent 70%),
+  radial-gradient(ellipse 60% 40% at 25%70%,rgba(231,76,60,.18),transparent 60%),var(--bg-deep);}
+body.bf-red .gc{box-shadow:inset 0 0 80px rgba(231,76,60,.1);}
+body.bf-pink .bg-ambient{background:radial-gradient(ellipse 80% 60% at 50%30%,rgba(232,67,147,.28),transparent 70%),
+  radial-gradient(ellipse 60% 40% at 70%70%,rgba(255,214,232,.12),transparent 60%),var(--bg-deep);}
+body.bf-iron .bg-ambient{background:radial-gradient(ellipse 80% 60% at 50%40%,rgba(176,141,87,.22),transparent 70%),
+  linear-gradient(180deg,#060608 0%,#1b1711 100%);}
+body.bf-iron .panel,body.bf-iron .dp,body.bf-iron .sb{border-color:rgba(176,141,87,.32);}
+body.bf-neon .bg-ambient{background:radial-gradient(ellipse 80% 60% at 50%35%,rgba(52,152,219,.25),transparent 70%),
+  radial-gradient(ellipse 60% 40% at 30%70%,rgba(155,89,182,.18),transparent 60%),var(--bg-deep);}
+.bf-banner{font-size:9px;font-family:"Courier New",monospace;letter-spacing:1px;color:var(--gold);
+  border:1px solid rgba(201,168,76,.18);padding:4px 6px;background:rgba(0,0,0,.2);margin-bottom:6px;}
+.ultra-ready{border-color:var(--gold)!important;box-shadow:0 0 12px rgba(201,168,76,.12);}
+
+/* Light background mode (persistent UI toggle, independent of battlefield) */
+body.light-ui{--bg-deep:#ece3d0;--bg-panel:#fbf4e2;--bg-panel-light:#f3e8cf;
+  --text-dim:#8a7458;--text-mid:#5a4a38;--text-bright:#231c14;--gold:#9a6a1c;--gold-dim:#b88128;}
+body.light-ui .bg-ambient{background:radial-gradient(ellipse 80% 60% at 50% 18%,rgba(255,246,210,.95),transparent 72%),
+  linear-gradient(180deg,#f6edcf 0%,#e6ddc6 100%);}
+body.light-ui .cave-fire{background:radial-gradient(ellipse at bottom,rgba(255,184,70,.14) 0%,transparent 70%);}
+body.light-ui .panel,body.light-ui .dp,body.light-ui .sb{border-color:rgba(154,106,28,.28);}
+
+/* Global scrollbar */
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(201,168,76,.15);border-radius:2px;}
+
+/* ═══ THOUGHT CABINET (Disco Elysium style) ═══ */
+.tc-count{font-size:8px;color:var(--text-dim);float:right;letter-spacing:1px;font-family:"Courier New",monospace;}
+.tc-factions{display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap;}
+.tc-fac{font-size:8px;font-family:"Courier New",monospace;padding:1px 5px;border-radius:2px;
+  border:1px solid rgba(255,255,255,.08);letter-spacing:1px;}
+.tc-list{display:flex;flex-direction:column;gap:5px;overflow-y:auto;}
+.tc-card{background:rgba(0,0,0,.32);border-left:3px solid var(--gold-dim);padding:6px 8px;
+  border-radius:2px;transition:all .25s;}
+.tc-card:hover{background:rgba(255,255,255,.03);}
+.tc-head{display:flex;justify-content:space-between;align-items:flex-start;gap:6px;}
+.tc-card .tn{font-size:10.5px;font-weight:bold;color:var(--text-bright);line-height:1.4;display:block;margin:0;}
+.tc-x{font-size:10px;color:var(--text-dim);cursor:pointer;flex-shrink:0;padding:0 2px;}
+.tc-x:hover{color:var(--red-skill);}
+.tc-tag{font-size:8px;font-family:"Courier New",monospace;letter-spacing:1px;margin:2px 0;}
+.tc-mods{font-size:9px;font-family:"Courier New",monospace;color:var(--text-mid);margin-bottom:2px;}
+.tc-mods .up{color:var(--green-skill);} .tc-mods .dn{color:var(--red-skill);}
+.tc-ability{font-size:9px;color:var(--text-dim);font-style:italic;line-height:1.5;}
+
+/* Draft (character creation 10-choose-5) */
+.cc-draft-bar{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:11px;color:var(--text-mid);}
+#cc-draft-count{font-family:"Courier New",monospace;color:var(--gold);}
+.cc-draft{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.cc-dcard{background:rgba(0,0,0,.3);border:1px solid rgba(201,168,76,.12);border-left:3px solid var(--gold-dim);
+  border-radius:2px;padding:7px 9px;cursor:pointer;transition:all .2s;}
+.cc-dcard:hover{border-color:var(--gold-dim);background:rgba(201,168,76,.04);}
+.cc-dcard.sel{border-color:var(--gold);background:rgba(201,168,76,.1);box-shadow:0 0 10px rgba(201,168,76,.08);}
+.cc-dcard .dn{font-size:11px;font-weight:bold;color:var(--text-bright);line-height:1.4;}
+.cc-dcard .df{font-size:8px;font-family:"Courier New",monospace;letter-spacing:1px;margin:2px 0;}
+.cc-dcard .dm{font-size:9px;font-family:"Courier New",monospace;color:var(--text-mid);}
+.cc-dcard .da{font-size:9px;color:var(--text-dim);font-style:italic;margin-top:3px;line-height:1.5;}
+
+/* Responsive */
+@media(max-width:860px){
+  .gc{grid-template-columns:1fr;grid-template-rows:auto auto minmax(0,1fr);}
+  .lp,.rp{display:none;}
+  .cc-col{grid-column:1;grid-row:3;}
+  .game-toolbar .btn-s{min-width:calc(50% - 4px);}
+  .cc-draft{grid-template-columns:1fr;}
+}
+
+/* ── 隱藏 API 設定區（key 已內建）── */
+.cc-api-wrap, .cc-api-section, .cc-api-row { display: none !important; }
+/* 如果上面選不到，直接隱藏包含 cc-api-key 的那個區塊 */
+#cc-api-key, #cc-api-model, #cc-api-status, .cc-api-in { display: none !important; }
+label[for="cc-api-key"], label[for="cc-api-model"] { display: none !important; }
+.cc-api-note { display: none !important; }
+button#cc-test-api { display: none !important; }
+
+
+.sov-hide-btn {
+  position: absolute; top: 4px; right: 6px;
+  background: none; border: 1px solid #6a6558; color: #c8c0a8;
+  font-size: 9px; font-family: 'Courier New', monospace;
+  padding: 1px 6px; cursor: pointer; letter-spacing: 1px;
+  border-radius: 2px; z-index: 10060;
+}
+.sov-hide-btn:hover { background: rgba(255,255,255,.08); }
+.ai-sov.sov-hidden { opacity: 0 !important; pointer-events: none !important; }
+.sov-show-fab {
+  position: fixed; bottom: 14px; right: 14px; z-index: 10040;
+  background: #1a1814; border: 1px solid #6a6558; color: #c8c0a8;
+  font-size: 9px; font-family: 'Courier New', monospace;
+  padding: 4px 10px; cursor: pointer; letter-spacing: 1px;
+  border-radius: 2px; display: none;
+}
+.sov-show-fab:hover { background: rgba(255,255,255,.08); }
+
+
+/* ── Soviet panel toggle ── */
+.sov-hide-btn {
+  position:absolute; top:4px; right:6px;
+  background:none; border:1px solid #6a6558; color:#c8c0a8;
+  font-size:9px; font-family:'Courier New',monospace;
+  padding:2px 6px; cursor:pointer; letter-spacing:1px;
+  border-radius:2px; z-index:10060;
+}
+.sov-hide-btn:hover { background:rgba(255,255,255,.1); }
+.ai-sov.sov-hidden {
+  opacity:0 !important; pointer-events:none !important;
+  transform:translateX(130%) !important; transition:all .3s;
+}
+.sov-show-fab {
+  position:fixed; bottom:14px; right:14px; z-index:10050;
+  background:#1a1814; border:1px solid #6a6558; color:#c8c0a8;
+  font-size:10px; font-family:'Courier New',monospace;
+  padding:5px 12px; cursor:pointer; letter-spacing:1px;
+  border-radius:2px; display:none;
+}
+.sov-show-fab:hover { background:rgba(255,255,255,.1); }
+
+
+/* ════════════════════════════════════════════════════
+   🎨 UI UPGRADE — 字體放大 + 對比加強 + 日夜模式
+   ════════════════════════════════════════════════════ */
+
+/* ── 暗色模式變數覆寫（預設值提升對比） ── */
+:root {
+  --text-dim: #7878a0 !important;      /* 原:#4a4a6a 太暗 → 提亮 */
+  --text-mid: #aaaabf !important;      /* 原:#8888aa → 提亮 */
+  --text-bright: #e8e8f4 !important;   /* 原:#d8d8ec → 更亮 */
+  --gold-dim: #a08040 !important;      /* 原:#7a6030 → 提亮 */
+  --font-size-base: 14px;
+}
+
+/* ── 全域字體放大 ── */
+body { font-size: 14px !important; line-height: 1.7 !important; }
+
+/* ── 所有超小字放大 ── */
+.so-sub, .so-main-tag, .so-main-en, .so-main-turns,
+.so-side-tag, .so-side-desc,
+.re-sub, .re-side,
+.obj-ph, .obj-turns, .obj-side-sm, .obj-main-tag, .obj-side-tag,
+.game-toolbar .btn-s, .game-toolbar .tb-hint,
+.sb-head, .anger-hint, .anger-wp,
+.choice-ph, .choice-loading, .choice-meta, .choice-fail-note,
+.stats-compact .stat-row,
+.ai-sov-sub, .ai-sov-hint, .ai-sov-en, .ai-sov-detail,
+.ai-sov-meter-lbl, .ai-sov-meter-val, .ai-sov-lamp-lbl, .ai-sov-lamp-lbl span,
+.ai-sov-head {
+  font-size: 11px !important;
+}
+
+/* 稍大一點的次要文字 */
+.so-main-desc, .re-quote, .qb, .qf,
+.obj-desc-hud, .obj-name,
+.choice-txt, .topic-display,
+.re-report, .so-side-name {
+  font-size: 14px !important;
+  line-height: 1.75 !important;
+}
+
+/* 主要文字 */
+.so-main-name, .so-title,
+.re-title, .tb, .ts {
+  font-size: clamp(18px, 3vw, 28px) !important;
+}
+
+/* 工具列按鈕放大 */
+.game-toolbar .btn-s {
+  font-size: 11px !important;
+  padding: 6px 12px !important;
+}
+
+/* 技能卡描述文字 */
+.cc-rdesc, .cc-r {
+  font-size: 12px !important;
+}
+
+/* 思維卡文字 */
+.th-name, .choice-txt {
+  font-size: 13px !important;
+}
+
+/* 錯誤訊息更醒目 */
+.sys-msg {
+  font-size: 13px !important;
+  color: #ffcc44 !important;
+  font-style: normal !important;
+  background: rgba(255,180,0,.08) !important;
+  border-left: 3px solid #ffcc44 !important;
+  padding: 6px 10px !important;
+}
+
+/* 輸入框 placeholder 對比提升 */
+input::placeholder, textarea::placeholder {
+  color: #7878a0 !important;
+  opacity: 1 !important;
+}
+input, textarea, .cc-in, .cc-api-in {
+  font-size: 14px !important;
+  color: var(--text-bright) !important;
+}
+
+/* 蘇式面板字放大 */
+.ai-sov-status {
+  font-size: 13px !important;
+}
+.ai-sov-tick {
+  font-size: 12px !important;
+}
+
+/* 辯論主題文字 */
+.topic-display {
+  font-size: 15px !important;
+  color: #d0c8f0 !important;  /* 更亮的紫 */
+}
+
+/* ═══════════════════════════════════════
+   ☀️ 日間模式（更完整）
+   ═══════════════════════════════════════ */
+body.light-ui {
+  --bg-deep: #f4f0e6 !important;
+  --bg-panel: #e8e2d4 !important;
+  --bg-panel-light: #ddd6c4 !important;
+  --text-dim: #6b5f4e !important;
+  --text-mid: #3d3225 !important;
+  --text-bright: #1a1410 !important;
+  --gold: #8c5f10 !important;
+  --gold-dim: #a07030 !important;
+  --blood: #8b2020 !important;
+  --blood-bright: #c0392b !important;
+  --purple: #6b3a8c !important;
+  --cyan: #1a7a40 !important;
+  --cyan-dim: #0d4022 !important;
+  background: #f4f0e6 !important;
+  color: #1a1410 !important;
+}
+body.light-ui .game-area,
+body.light-ui .screen,
+body.light-ui [class*="panel"],
+body.light-ui [class*="bezel"],
+body.light-ui .cc-wrap {
+  background: #ede7d8 !important;
+  border-color: rgba(100,80,30,.25) !important;
+  color: #1a1410 !important;
+}
+body.light-ui .zara-msg {
+  background: rgba(139,75,20,.08) !important;
+  border-color: rgba(139,75,20,.25) !important;
+}
+body.light-ui .player-msg {
+  background: rgba(26,122,64,.08) !important;
+  border-color: rgba(26,122,64,.25) !important;
+}
+body.light-ui input,
+body.light-ui textarea,
+body.light-ui .cc-in {
+  background: #e0d8c8 !important;
+  color: #1a1410 !important;
+  border-color: rgba(100,80,30,.4) !important;
+}
+body.light-ui .btn {
+  border-color: #a07030 !important;
+  color: #7a5010 !important;
+}
+body.light-ui .btn:hover {
+  background: rgba(140,95,16,.1) !important;
+}
+body.light-ui .ai-sov-bezel {
+  background: linear-gradient(165deg, #c8c0a8 0%, #a89878 50%, #887860 100%) !important;
+}
+body.light-ui .ai-sov-status { color: #1a5a1a !important; }
+body.light-ui .sys-msg {
+  color: #8c4a00 !important;
+  background: rgba(140,74,0,.08) !important;
+  border-left-color: #8c4a00 !important;
+}
+
+/* ═══════════════════════════════
+   🌙☀️ 日夜切換按鈕
+   ═══════════════════════════════ */
+#day-night-toggle {
+  position: fixed;
+  top: 14px;
+  right: 56px;   /* 不擋到其他按鈕 */
+  z-index: 9999;
+  background: none;
+  border: 1px solid var(--gold-dim);
+  color: var(--gold);
+  font-size: 16px;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .3s;
+  line-height: 1;
+}
+#day-night-toggle:hover {
+  background: rgba(201,168,76,.15);
+  box-shadow: 0 0 12px rgba(201,168,76,.3);
+}
+body.light-ui #day-night-toggle {
+  border-color: #a07030;
+  color: #8c5f10;
+}
+
+
+/* ── 模型快選 ── */
+.sov-model-pick {
+  margin-top: 8px;
+  padding-top: 7px;
+  border-top: 1px solid rgba(255,255,255,.07);
+}
+.sov-model-lbl {
+  font-size: 9px; color: #9a9080;
+  font-family: 'Courier New', monospace; letter-spacing: .5px;
+  margin-bottom: 5px;
+}
+.sov-model-btns {
+  display: flex; flex-wrap: wrap; gap: 4px;
+}
+.sov-model-btn {
+  font-size: 9px; font-family: 'Courier New', monospace;
+  padding: 2px 6px; border-radius: 2px; cursor: pointer;
+  border: 1px solid #6a6558; background: none; color: #c8c0a8;
+  letter-spacing: .5px; transition: all .15s;
+}
+.sov-model-btn:hover { background: rgba(255,255,255,.08); }
+.sov-model-btn.active {
+  border-color: #6aba6a; color: #6aba6a;
+  background: rgba(80,200,80,.08);
+}
+body.light-ui .sov-model-btn { color: #3a3225; border-color: #a09080; }
+body.light-ui .sov-model-btn.active { border-color: #1a7a40; color: #1a7a40; }
+
+
+/* ── 創角畫面模型選擇 ── */
+.cc-model-zone {
+  background: var(--bg-panel);
+  border: 1px solid rgba(201,168,76,.15);
+  border-radius: 4px;
+  padding: 12px 16px;
+  margin-bottom: 14px;
+}
+.cc-model-lbl {
+  font-size: 11px; color: var(--text-dim);
+  font-family: 'Courier New', monospace; letter-spacing: 2px;
+  margin-bottom: 10px;
+}
+.cc-model-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+.cc-model-opt {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 8px 6px; border-radius: 4px;
+  border: 1px solid rgba(201,168,76,.2);
+  cursor: pointer; transition: all .15s;
+  background: none; text-align: center;
+}
+.cc-model-opt:hover {
+  border-color: var(--gold-dim);
+  background: rgba(201,168,76,.06);
+}
+.cc-model-opt.active {
+  border-color: var(--gold);
+  background: rgba(201,168,76,.12);
+}
+.cc-model-opt .cm-name {
+  font-size: 13px; font-weight: bold;
+  color: var(--gold); font-family: 'Courier New', monospace;
+  margin-bottom: 3px;
+}
+.cc-model-opt .cm-desc {
+  font-size: 10px; color: var(--text-dim); line-height: 1.4;
+}
+.cc-model-opt .cm-speed {
+  font-size: 10px; margin-top: 4px;
+  font-family: 'Courier New', monospace;
+}
+.cc-model-opt.active .cm-name { color: var(--gold); }
+body.light-ui .cc-model-opt {
+  border-color: rgba(140,95,16,.25);
+}
+body.light-ui .cc-model-opt.active {
+  border-color: var(--gold);
+  background: rgba(140,95,16,.1);
+}
+
+
+/* ════ DISCO ELYSIUM SKILL REVEAL ════ */
+.de-skill-reveal{background:linear-gradient(135deg,rgba(8,6,18,.98),rgba(20,14,40,.98));border:1.5px solid var(--gold);border-radius:4px;padding:14px 18px;margin:10px 0 14px;animation:de-reveal-in .45s cubic-bezier(.22,1,.36,1) both;}
+@keyframes de-reveal-in{from{opacity:0;transform:translateY(-8px) scaleY(.94)}to{opacity:1;transform:none}}
+.de-skill-reveal.fail{border-color:#8b2020}
+.de-reveal-header{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;display:flex;align-items:center;gap:8px;opacity:.8}
+.de-skill-reveal.fail .de-reveal-header{color:#cc4444}
+.de-skill-label{font-size:12px;font-weight:bold;color:#fff;margin-bottom:3px;text-transform:uppercase;letter-spacing:1.5px;display:flex;align-items:center;gap:8px}
+.de-roll-badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;color:#888;margin-bottom:10px}
+.de-roll-val{background:var(--gold);color:#000;font-weight:bold;padding:1px 6px;border-radius:2px;font-size:12px;min-width:22px;text-align:center}
+.de-skill-reveal.fail .de-roll-val{background:#8b2020;color:#fff}
+.de-insight-text{font-size:13.5px;line-height:1.75;color:#ccc;border-left:2px solid var(--gold);padding-left:12px;font-style:italic}
+.de-skill-reveal.fail .de-insight-text{border-left-color:#8b2020;color:#888}
+.de-insight-text .em{color:var(--gold)}.de-insight-text .t{color:#7ec8e3}.de-insight-text .ec{color:#f4a261}.de-insight-text .w{color:#e0c97a}
+.de-passive-tag{font-size:9px;letter-spacing:2px;color:#444;margin-top:10px;text-transform:uppercase}
+.de-passive-tag.pass-tag{color:#2d6a2d}.de-passive-tag.fail-tag{color:#6a2020}
+</style>
+</head>
+<body class="light-ui">
+<div class="bg-ambient"></div>
+<div class="cave-fire"></div>
+
+<!-- ═══ INTRO ═══ -->
+<div class="screen" id="si">
+  <div class="sym">☀</div>
+  <div class="tb">查拉圖斯特拉如是說</div>
+  <div class="ts">THUS SPAKE ZARATHUSTRA — The Debate</div>
+  <div class="dv"></div>
+  <div class="qb">「人是一根繩索，架於超人與禽獸之間——架於深淵之上的繩索。」
+    <div class="qf">— 尼采，《查拉圖斯特拉如是說》</div></div>
+  <div style="height:16px"></div>
+  <button class="btn" onclick="showSaveSlots()">✦ 進入洞穴 ✦</button>
+</div>
+
+<!-- ═══ SAVE SLOTS ═══ -->
+<div class="screen hidden" id="ss">
+  <div class="ss-wrap">
+    <div class="ss-title">選擇存檔</div>
+    <div class="ss-sub">SAVE SLOTS · 可匯出/匯入存檔</div>
+    <div class="ss-list" id="ss-list"></div>
+    <div class="ss-btn-row">
+      <button class="btn btn-s" onclick="importSave()">📥 匯入存檔</button>
+      <button class="btn btn-s" onclick="newGame()">➕ 新遊戲</button>
+      <button class="btn btn-s" onclick="backToIntro()">← 返回</button>
+    </div>
+    <input type="file" id="import-file" accept=".json" style="display:none" onchange="handleImport(event)">
+  </div>
+</div>
+
+<!-- ═══ CHARACTER CREATION ═══ -->
+<div class="screen hidden" id="sc">
+  <div class="cc-wrap">
+    <div class="cc-title">創造你的靈魂</div>
+    <div class="cc-sub">CREATE YOUR SOUL · 分配技能點數</div>
+
+    <div class="cc-row">
+      <span class="cc-lbl">你的名字：</span>
+      <input class="cc-in" id="cc-name" placeholder="流浪者..." maxlength="20">
+    </div>
+
+    <!-- API Settings -->
+    <div class="cc-api-zone" style="display:none">
+      <div class="cc-api-lbl">⚡ AI API 設定 · OPENROUTER</div>
+      <div class="cc-api-row">
+        <span class="cc-lbl">API Key</span>
+        <input class="cc-api-in" id="cc-api-key" tabindex="-1" type="password" placeholder="sk-or-v1-...">
+      </div>
+      <div class="cc-api-row">
+        <span class="cc-lbl">模型</span>
+        <input class="cc-api-in" id="cc-api-model" value="openrouter/owl-alpha" placeholder="openrouter/xxx">
+      </div>
+      <div class="cc-api-note"></div>
+      <div class="cc-api-status" id="cc-api-status"></div>
+      <button class="btn btn-s" style="margin-top:6px" onclick="testAPI()">🔌 測試連接</button>
+    </div>
+
+    <!-- Model Selection -->
+    <div class="cc-model-zone">
+      <div class="cc-model-lbl">⚡ AI 模型 · MODEL SELECT</div>
+      <div class="cc-model-grid" id="cc-model-grid">
+        <button class="cc-model-opt" onclick="setCCModel('deepseek/deepseek-v4-flash')">
+          <span class="cm-name">DS V4 Flash</span>
+          <span class="cm-desc">DeepSeek V4 Flash<br>本週 #1 · 1M ctx</span>
+          <span class="cm-speed">⚡⚡⚡⚡ 極快</span>
+        </button>
+        <button class="cc-model-opt" onclick="setCCModel('qwen/qwen3.5-flash-02-23')">
+          <span class="cm-name">Q3.5 Flash</span>
+          <span class="cm-desc">Qwen3.5 Flash<br>超快 · 1M ctx</span>
+          <span class="cm-speed">⚡⚡⚡⚡ 極快</span>
+        </button>
+        <button class="cc-model-opt" onclick="setCCModel('qwen/qwen3-8b')">
+          <span class="cm-name">Q3-8B</span>
+          <span class="cm-desc">Qwen3 8B<br>輕量免費</span>
+          <span class="cm-speed">⚡⚡⚡ 快</span>
+        </button>
+        <button class="cc-model-opt" onclick="setCCModel('google/gemini-2.5-flash-lite')">
+          <span class="cm-name">Gemini Lite</span>
+          <span class="cm-desc">Gemini 2.5 Flash Lite<br>Google最新輕量</span>
+          <span class="cm-speed">⚡⚡⚡ 快</span>
+        </button>
+        <button class="cc-model-opt" onclick="setCCModel('xiaomi/mimo-v2-flash')">
+          <span class="cm-name">MiMo Flash</span>
+          <span class="cm-desc">Xiaomi MiMo V2<br>Flash 極速版</span>
+          <span class="cm-speed">⚡⚡⚡ 快</span>
+        </button>
+        <button class="cc-model-opt" onclick="setCCModel('openrouter/owl-alpha')">
+          <span class="cm-name">Owl α</span>
+          <span class="cm-desc">Owl Alpha<br>原版免費</span>
+          <span class="cm-speed">⚡⚡ 中</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="cc-pts-row">
+      <span class="cc-pts-lbl">剩餘點數（可將一項技能加滿至 15，共 12 點）</span>
+      <span class="cc-pts-val" id="cc-pts">12</span>
+    </div>
+
+    <div class="cc-skills" id="cc-skills"></div>
+
+    <!-- Archetype -->
+    <div class="cc-arche-zone">
+      <div class="cc-arche-lbl">✦ 原型·ARCHETYPE — 輸入你的描述，AI為你生成</div>
+      <div class="cc-arche-type-row">
+        <input class="cc-in cc-arche-in" id="cc-arche-input"
+          placeholder='例如："一個在教堂長大的懷疑論者" 或 "前軍人轉行的詩人"'>
+        <button class="btn btn-s" id="cc-arche-gen-btn" onclick="generateArche()">🎲 AI生成</button>
+      </div>
+      <div class="cc-arche-status" id="cc-arche-status"></div>
+
+      <div class="cc-presets">
+        <div class="cc-preset" onclick="pickPreset('philosopher',this)"><div class="cc-preset-n">哲學家</div><div class="cc-preset-d">邏輯+2</div></div>
+        <div class="cc-preset" onclick="pickPreset('rebel',this)"><div class="cc-preset-n">叛逆者</div><div class="cc-preset-d">意志+2</div></div>
+        <div class="cc-preset" onclick="pickPreset('mystic',this)"><div class="cc-preset-n">神秘主義者</div><div class="cc-preset-d">共情+2</div></div>
+        <div class="cc-preset" onclick="pickPreset('poet',this)"><div class="cc-preset-n">詩人</div><div class="cc-preset-d">修辭+2</div></div>
+      </div>
+
+      <div class="cc-arche-preview" id="cc-arche-preview">
+        <div class="ap-name" id="ap-name"></div>
+        <div class="ap-desc" id="ap-desc"></div>
+        <div class="ap-bonus" id="ap-bonus"></div>
+        <div style="font-size:9px;color:var(--text-dim);margin-top:4px;">若不喜歡，可手動修改：</div>
+        <div class="cc-arche-edit-row">
+          <span class="cc-lbl">名稱</span>
+          <input class="cc-in" id="ap-name-in" placeholder="原型名稱">
+          <span class="cc-lbl">加成</span>
+          <select class="cc-in" id="ap-bonus-in" style="width:90px;padding:4px 6px;">
+            <option value="logic">邏輯+2</option>
+            <option value="volition">意志+2</option>
+            <option value="empathy">共情+2</option>
+            <option value="rhetoric">修辭+2</option>
+          </select>
+          <button class="btn btn-s" onclick="applyArcheEdit()">套用</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Thought Draft (roguelike 10-choose-3) -->
+    <div class="cc-arche-zone">
+      <div class="cc-arche-lbl">✦ 思維草稿 · 10 抽 3（起始內閣）</div>
+      <div class="cc-draft-bar">
+        <span>已選 <span id="cc-draft-count">0/3</span></span>
+        <button class="btn btn-s" onclick="rerollDraft()">🔄 重抽 10 個</button>
+        <span style="font-size:9px;color:var(--text-dim);">康米 ★ · 社民 ✿ · 法西斯 ▲ · 自由 ◇ — 之後可在辯論中領悟更多</span>
+      </div>
+      <div class="cc-draft" id="cc-draft"></div>
+    </div>
+
+    <div class="cc-confirm">
+      <button class="btn" id="cc-confirm" onclick="startGame()" disabled>✦ 開始辯論 ✦</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TOPIC + RUN SETUP SCREEN ═══ -->
+<div class="screen hidden" id="so">
+  <div class="so-wrap">
+    <div class="so-title">辯論主題</div>
+    <div class="so-sub">DEBATE TOPIC · 決定這場對話要燒向哪裡</div>
+    <div class="so-main" id="so-main">
+      <div class="so-main-tag">主目標 · MAIN</div>
+      <div class="so-main-icon">⚖</div>
+      <div class="so-main-name" style="color:var(--gold)">在辯論中勝過查拉圖斯特拉</div>
+      <div class="so-main-desc">用論點說服他，或按右側「結算辯論」讓 AI 裁判判定你獲勝。這才是這局的核心。</div>
+    </div>
+    <div class="topic-pick">
+      <input class="cc-in" id="topic-custom" placeholder="自訂辯論主題（留空則用下方）" maxlength="80">
+      <button class="btn btn-s" onclick="rollDebateTopic()">🎲 隨機主題</button>
+    </div>
+    <div class="topic-display" id="topic-display">點「隨機主題」或輸入自訂主題</div>
+    <div class="so-sides" id="so-sides"></div>
+    <div style="text-align:center;margin-top:14px">
+      <button class="btn" onclick="beginRun()">✦ 帶著這個主題進入洞穴 ✦</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ GAME ═══ -->
+<div id="sg">
+  <div class="gc">
+    <div class="tb-bar">
+      <div class="tb-l" id="gt-l">ZARATHUSTRA.EXE <span class="api-badge" id="api-badge"></span></div>
+      <div class="tb-m" id="gt-m">山上洞穴 · The Mountain Cave</div>
+      <div class="tb-l" id="gt-r">卷三</div>
+    </div>
+    <div class="game-toolbar">
+      <button class="btn btn-s ultra-ready" id="ultra-btn" onclick="useFactionUltra()">✦ 陣營超技</button>
+      <button class="btn btn-s" id="light-btn" onclick="toggleLightMode()">☀ 日光介面</button>
+      <button class="btn btn-s" onclick="settleDebate()">⚖ 結算辯論</button>
+      <button class="btn btn-s" onclick="openSettlementReport()">📜 裁判報告</button>
+      <button class="btn btn-s" onclick="toggleSceneBox()">📜 場景</button>
+      <div class="tb-hint" id="ultra-status">超技：需同派 5 張 · 日光可隨時切換</div>
+    </div>
+
+    <div class="lp">
+      <div class="panel tc">
+        <div class="ph">思維內閣 · Thought Cabinet <span class="tc-count" id="tc-count">0/10</span></div>
+        <div class="tc-factions" id="tc-factions"></div>
+        <div id="thoughts-list" class="tc-list"></div>
+        <button class="btn btn-s" style="width:100%;margin-top:6px" onclick="manualGainThought()">🎲 領悟新思維</button>
+      </div>
+    </div>
+
+    <div class="cc-col">
+      <div class="sb" id="scene-box">
+        <div class="sb-head" onclick="toggleSceneBox()">
+          <span id="scene-head-label">環境 · ENVIRONMENT</span>
+          <span class="sb-fold-icon" id="scene-fold-icon">▼</span>
+        </div>
+        <div class="st" id="scene-text"></div>
+      </div>
+      <div class="pa">
+        <div class="cf">
+          <div class="cn">查拉圖斯特拉</div>
+          <div class="cs">ZARATHUSTRA · 先知</div>
+          <div class="port" id="zara-p">
+            <span style="font-size:42px;filter:sepia(.4)saturate(.7)">🦅☀</span>
+            <div class="mo" id="zara-mood">🤔</div>
+          </div>
+        </div>
+      </div>
+      <div class="dp" id="dialogue-panel"></div>
+      <div class="choice-panel" id="choice-panel">
+        <div class="choice-ph">◈ 回應路線 · 先點選技能檢定，成功後 AI 才撰寫台詞</div>
+        <div class="choice-grid" id="choice-grid"></div>
+        <div class="choice-fail-note" id="choice-fail-note">檢定未過：這條話在你喉嚨裡打結。請在下方親手輸入你的反駁。</div>
+      </div>
+      <div class="ia">
+        <div class="iw">
+          <div class="ih" id="input-hint">對查拉圖斯特拉說些什麼...</div>
+          <textarea id="pi" placeholder="輸入你想對查拉圖斯特拉說的話..." rows="1"
+            onkeydown="handleInputKey(event)" oninput="autoResize(this)"></textarea>
+        </div>
+        <button class="sb-btn" id="send-btn" onclick="sendMessage()">辯論</button>
+      </div>
+    </div>
+
+    <div class="rp">
+      <div class="panel" id="obj-panel">
+        <div class="obj-name" id="obj-name" style="color:var(--gold);font-size:11px">⚖ 勝過查拉圖斯特拉</div>
+        <div class="obj-progress"><div class="obj-prog-fill" id="obj-prog-fill" style="width:0%;background:var(--gold)"></div></div>
+        <div class="obj-turns" id="obj-turns" style="font-size:8px"></div>
+      </div>
+      <div class="panel stats-compact">
+        <div class="ph rp-toggle" onclick="toggleRpExtra()">狀態 ▾</div>
+        <div class="stat-row"><span>怒氣</span><span id="anger-val" style="color:var(--red-skill)">20</span></div>
+        <div class="stat-row"><span>好感</span><span id="dv-val" style="color:var(--yellow-skill)">50</span></div>
+        <div class="anger-bar" style="margin:4px 0"><div class="anger-fill" id="anger-fill" style="width:20%;background:var(--yellow-skill)"></div></div>
+        <div class="dv-bar"><div class="dv-fill" id="dv-fill" style="width:50%;background:var(--yellow-skill)"></div></div>
+        <div id="stats-list" class="rp-body rp-collapsible"></div>
+        <div class="obj-sides-sm rp-body rp-collapsible" id="obj-sides-sm" style="margin-top:6px"></div>
+        <div class="rp-body rp-collapsible" style="margin-top:6px">
+          <button class="btn btn-s" onclick="saveToSlot()" style="width:100%;margin-bottom:4px">💾 儲存</button>
+          <button class="btn btn-s" onclick="backToSlots()" style="width:100%">← 選單</button>
+        </div>
+      </div>
+      <div class="panel rp-collapsible open" id="log-panel" style="display:none">
+        <div class="ph">檢定紀錄</div>
+        <div class="dl" id="debate-log"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ RUN END OVERLAY ═══ -->
+<div id="run-end">
+  <div class="re-card">
+    <div class="re-icon" id="re-icon">☀</div>
+    <div class="re-title" id="re-title">任務完成</div>
+    <div class="re-sub" id="re-sub">OBJECTIVE COMPLETE</div>
+    <div class="re-quote" id="re-quote"></div>
+    <div class="re-report" id="re-report"></div>
+    <div class="re-sides" id="re-sides"></div>
+    <div class="re-btns">
+      <button class="btn btn-s" id="re-continue-btn" onclick="dismissRunEnd(true)">↩ 繼續辯論</button>
+      <button class="btn btn-s" id="re-report-btn" onclick="toggleEndReport()" style="display:none">📜 展開／收合報告</button>
+      <button class="btn btn-s" onclick="location.reload()">⟳ 重開這局</button>
+      <button class="btn btn-s" onclick="backToSlots()">← 返回選單</button>
+    </div>
+  </div>
+</div>
+
+<!-- Soviet-style AI activity indicator -->
+<div id="ai-soviet-panel" class="ai-sov" aria-live="polite" aria-label="AI 狀態">
+  <div class="ai-sov-dragbar" id="ai-sov-dragbar">☭ DRAG · ЦЕНТР TELEMETRY</div>
+  <div class="ai-sov-bezel">
+    <div class="ai-sov-top">
+      <div class="ai-sov-icon">☭</div>
+      <div>
+        <div class="ai-sov-head">ЦЕНТР · AI TELEMETRY</div>
+        <div class="ai-sov-sub">UNIT М-1984 · OPENROUTER LINK</div>
+      </div>
+    </div>
+    <div class="ai-sov-lamps">
+      <div class="ai-sov-lamp-cell">
+        <div class="ai-sov-lamp-bulb" id="lamp-idle"></div>
+        <div class="ai-sov-lamp-lbl">待機<span>IDLE</span></div>
+      </div>
+      <div class="ai-sov-lamp-cell">
+        <div class="ai-sov-lamp-bulb" id="lamp-think"></div>
+        <div class="ai-sov-lamp-lbl">思考<span>THINK</span></div>
+      </div>
+      <div class="ai-sov-lamp-cell">
+        <div class="ai-sov-lamp-bulb" id="lamp-output"></div>
+        <div class="ai-sov-lamp-lbl">顯示<span>DISPLAY</span></div>
+      </div>
+      <div class="ai-sov-lamp-cell">
+        <div class="ai-sov-lamp-bulb" id="lamp-alarm"></div>
+        <div class="ai-sov-lamp-lbl">警報<span>ALARM</span></div>
+      </div>
+    </div>
+    <div class="ai-sov-display">
+      <div class="ai-sov-status" id="ai-sov-status">待機</div>
+      <div class="ai-sov-en" id="ai-sov-en">STANDBY</div>
+      <div class="ai-sov-detail" id="ai-sov-detail">無 API 連線</div>
+      <div class="ai-sov-tick" id="ai-sov-tick"></div>
+    </div>
+    <div class="ai-sov-hint">拖曳上方列 · 滾輪縮放</div>
+  </div>
+  <div class="ai-sov-meters">
+    <div class="ai-sov-meter">
+      <div class="ai-sov-meter-top">
+        <span class="ai-sov-meter-lbl">查拉圖篇幅 ZARA</span>
+        <span class="ai-sov-meter-val" id="sov-len-zara-val">中</span>
+      </div>
+      <input type="range" id="sov-len-zara" min="1" max="10" value="5" oninput="setAiOutputLen('zara',this.value)">
+    </div>
+    <div class="ai-sov-meter">
+      <div class="ai-sov-meter-top">
+        <span class="ai-sov-meter-lbl">玩家台詞 PLAYER</span>
+        <span class="ai-sov-meter-val" id="sov-len-player-val">中</span>
+      </div>
+      <input type="range" id="sov-len-player" min="1" max="10" value="5" oninput="setAiOutputLen('player',this.value)">
+    </div>
+  </div>
+  <div class="sov-model-pick">
+    <div class="sov-model-lbl">AI 模型 · MODEL</div>
+    <div class="sov-model-btns" id="sov-model-btns">
+      <button class="sov-model-btn" onclick="setSovModel('deepseek/deepseek-v4-flash')" title="DeepSeek V4 Flash">DS V4</button>
+      <button class="sov-model-btn" onclick="setSovModel('qwen/qwen3.5-flash-02-23')" title="Qwen3.5 Flash">Q3.5</button>
+      <button class="sov-model-btn" onclick="setSovModel('qwen/qwen3-8b')" title="Qwen3 8B">Q3-8B</button>
+      <button class="sov-model-btn" onclick="setSovModel('google/gemini-2.5-flash-lite')" title="Gemini 2.5 Flash Lite">G-Lite</button>
+      <button class="sov-model-btn" onclick="setSovModel('openrouter/owl-alpha')" title="Owl Alpha">Owl</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════
+//  CONFIG
+// ════════════════════════════════════════
+const API_KEY='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';
+const DEFAULT_MODEL = 'deepseek/deepseek-v4-flash';
+const HARDCODED_KEY = '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';
+const MAX_AI_INPUT_CHARS = 2500;
+const MAX_AI_HISTORY_MESSAGES = 6;
+const MAX_AI_HISTORY_CHARS = 600;
+const AI_ZARA_MAX_TOKENS = 2000;
+const AI_LINE_MAX_TOKENS = 650;
+const AI_OPENING_MAX_TOKENS = 900;
+const TYPING_DELAY_MS = 320;
+
+const AI_LEN_LABELS=['極短','短','偏短','中短','中','中長','偏長','長','很長','極長'];
+
+function loadAiLenSettings(){
+  state.aiLenZara=Math.max(1,Math.min(10,Number(localStorage.getItem('zara_ai_len_z'))||5));
+  state.aiLenPlayer=Math.max(1,Math.min(10,Number(localStorage.getItem('zara_ai_len_p'))||5));
+}
+
+function saveAiLenSettings(){
+  try{
+    localStorage.setItem('zara_ai_len_z',String(state.aiLenZara||5));
+    localStorage.setItem('zara_ai_len_p',String(state.aiLenPlayer||5));
+  }catch(_){}
+}
+
+function aiLenLabel(lv){
+  return AI_LEN_LABELS[Math.max(0,Math.min(9,(Number(lv)||5)-1))];
+}
+
+function getZaraLenProfile(){
+  const lv=Math.max(1,Math.min(10,state.aiLenZara||5));
+  const minSent=Math.max(2,Math.round(1+lv*0.7));
+  const maxSent=Math.max(minSent+1,Math.round(2+lv*1.05));
+  return{
+    minSent,maxSent,
+    maxTokens:Math.round(150+lv*70),
+    continuations:0
+  };
+}
+
+function getPlayerLenProfile(){
+  const lv=Math.max(1,Math.min(10,state.aiLenPlayer||5));
+  const minSent=Math.max(1,Math.round(1+lv*0.35));
+  const maxSent=Math.max(minSent+1,Math.round(2+lv*0.75));
+  const maxChars=Math.round(50+lv*45);
+  return{
+    minSent,maxSent,
+    minChars:Math.round(40+lv*25),
+    maxChars,
+    maxTokens:Math.round(120+lv*50),
+    softCap:Math.round(maxChars*2.2)
+  };
+}
+
+function syncAiLenSliders(){
+  const z=$('sov-len-zara'),p=$('sov-len-player');
+  const zv=$('sov-len-zara-val'),pv=$('sov-len-player-val');
+  if(z)z.value=state.aiLenZara||5;
+  if(p)p.value=state.aiLenPlayer||5;
+  if(zv)zv.textContent=aiLenLabel(state.aiLenZara);
+  if(pv)pv.textContent=aiLenLabel(state.aiLenPlayer);
+}
+
+function setAiOutputLen(which,val){
+  const n=Math.max(1,Math.min(10,Number(val)||5));
+  if(which==='zara')state.aiLenZara=n;
+  else state.aiLenPlayer=n;
+  saveAiLenSettings();
+  syncAiLenSliders();
+}
+
+// ════════════════════════════════════════
+//  AI SOVIET INDICATOR — 只反映真實 API / 本地顯示
+// ════════════════════════════════════════
+const aiTelemetry={net:0,netStack:[],netLabel:'',netSince:0,local:null,alarmUntil:0,alarmMsg:''};
+let aiTickTimer=null;
+const sovUi={scale:1,x:null,y:null,dragging:false,ptr:null};
+
+function setSovietLamp(name,on){
+  $('lamp-'+name)?.classList.toggle('on',!!on);
+}
+
+function setAiSovietVisible(show){
+  $('ai-soviet-panel')?.classList.toggle('visible',!!show);
+}
+
+function aiFetchBegin(label){
+  const L=label||'OpenRouter 請求';
+  aiTelemetry.netStack.push({label:L,since:Date.now()});
+  aiTelemetry.net=aiTelemetry.netStack.length;
+  aiTelemetry.netLabel=L;
+  aiTelemetry.netSince=aiTelemetry.netStack[0]?.since||Date.now();
+  setAiSovietVisible(true);
+  syncAiSovietPanel();
+}
+
+function aiFetchEnd(){
+  aiTelemetry.netStack.pop();
+  aiTelemetry.net=aiTelemetry.netStack.length;
+  const top=aiTelemetry.netStack[aiTelemetry.netStack.length-1];
+  if(top){
+    aiTelemetry.netLabel=top.label;
+    aiTelemetry.netSince=top.since;
+  }else{
+    aiTelemetry.netLabel='';
+    aiTelemetry.netSince=0;
+  }
+  syncAiSovietPanel();
+  if(!aiTelemetry.net&&!aiTelemetry.local&&Date.now()>=aiTelemetry.alarmUntil&&!$('sg')?.classList.contains('act')){
+    setAiSovietVisible(false);
+  }
+}
+
+function aiLocalRenderBegin(label){
+  aiTelemetry.local={label:label||'文字顯示',since:Date.now()};
+  setAiSovietVisible(true);
+  syncAiSovietPanel();
+}
+
+function aiLocalRenderEnd(){
+  aiTelemetry.local=null;
+  syncAiSovietPanel();
+}
+
+function aiTriggerAlarm(msg,ms=5000){
+  aiTelemetry.alarmUntil=Date.now()+ms;
+  aiTelemetry.alarmMsg=msg||'ALARM';
+  syncAiSovietPanel();
+}
+
+function resetAiTelemetry(){
+  aiTelemetry.net=0;
+  aiTelemetry.netStack=[];
+  aiTelemetry.netLabel='';
+  aiTelemetry.netSince=0;
+  aiTelemetry.local=null;
+  aiTelemetry.alarmUntil=0;
+  aiTelemetry.alarmMsg='';
+  if(aiTickTimer){clearInterval(aiTickTimer);aiTickTimer=null;}
+}
+
+function syncAiSovietPanel(){
+  const el=$('ai-soviet-panel');
+  if(!el)return;
+  const net=aiTelemetry.net;
+  const local=aiTelemetry.local;
+  const alarm=Date.now()<aiTelemetry.alarmUntil;
+  const model=(state.apiModel||DEFAULT_MODEL).replace(/^openrouter\//,'');
+
+  setSovietLamp('idle',net===0&&!local&&!alarm);
+  setSovietLamp('think',net>0);
+  setSovietLamp('output',!!local&&!net);
+  setSovietLamp('alarm',alarm);
+
+  el.classList.toggle('panel-active',net>0||!!local);
+  el.classList.toggle('panel-alarm',alarm);
+
+  const st=$('ai-sov-status'),en=$('ai-sov-en'),det=$('ai-sov-detail'),tick=$('ai-sov-tick');
+  let statusText='待機',enText='STANDBY',detailText='無 API 連線 · AI 閒置';
+
+  if(alarm){
+    statusText=aiTelemetry.alarmMsg||'警報';
+    enText='ALARM';
+    detailText='API 失敗或錯誤 · 請檢查 Key / 模型';
+  }else if(net>0){
+    statusText=aiTelemetry.netLabel||'OpenRouter 請求中';
+    enText=`LIVE API ×${net}`;
+    detailText=`→ openrouter.ai · ${model}`;
+    if(net>1)detailText+=` · 佇列 ${net} 個請求`;
+  }else if(local){
+    statusText='本地顯示';
+    enText='DISPLAY ONLY';
+    detailText=`→ ${local.label}（非 AI，僅打字動畫）`;
+  }
+
+  if(st){
+    st.textContent=statusText;
+    st.style.color=alarm?'#ff6060':net>0?'#ffb040':local?'#60d0f0':'#4a8a4a';
+  }
+  if(en)en.textContent=enText;
+  if(det)det.textContent=detailText;
+
+  void el.offsetHeight;
+
+  const active=net>0||!!local||alarm;
+  if(active){
+    if(!aiTickTimer){
+      aiTickTimer=setInterval(()=>{
+        const t=$('ai-sov-tick');
+        if(!t)return;
+        if(aiTelemetry.net>0&&aiTelemetry.netSince){
+          t.textContent='API '+((Date.now()-aiTelemetry.netSince)/1000).toFixed(1)+'s';
+        }else if(aiTelemetry.local){
+          t.textContent='顯示 '+((Date.now()-aiTelemetry.local.since)/1000).toFixed(1)+'s';
+        }else if(Date.now()<aiTelemetry.alarmUntil){
+          t.textContent='ALARM';
+        }else{
+          t.textContent='';
+        }
+        if(aiTelemetry.net===0&&!aiTelemetry.local&&Date.now()>=aiTelemetry.alarmUntil){
+          clearInterval(aiTickTimer);
+          aiTickTimer=null;
+          syncAiSovietPanel();
+        }
+      },100);
+    }
+  }else if(aiTickTimer){
+    clearInterval(aiTickTimer);
+    aiTickTimer=null;
+    if(tick)tick.textContent='';
+  }
+}
+
+function applySovietPanelTransform(){
+  const el=$('ai-soviet-panel');
+  if(!el)return;
+  el.style.setProperty('--sov-scale',String(sovUi.scale));
+  if(sovUi.x!=null&&sovUi.y!=null){
+    el.style.left=sovUi.x+'px';
+    el.style.top=sovUi.y+'px';
+    el.style.right='auto';
+    el.style.bottom='auto';
+  }
+}
+
+function saveSovietPanelUi(){
+  try{
+    localStorage.setItem('zara_ai_sov',JSON.stringify({scale:sovUi.scale,x:sovUi.x,y:sovUi.y}));
+  }catch(_){}
+}
+
+function loadSovietPanelUi(){
+  try{
+    const s=JSON.parse(localStorage.getItem('zara_ai_sov')||'{}');
+    if(typeof s.scale==='number')sovUi.scale=Math.min(3,Math.max(0.55,s.scale));
+    if(typeof s.x==='number'&&typeof s.y==='number'){sovUi.x=s.x;sovUi.y=s.y;}
+  }catch(_){}
+}
+
+function sovEnsurePos(el){
+  if(sovUi.x!=null&&sovUi.y!=null)return;
+  const r=el.getBoundingClientRect();
+  sovUi.x=r.left;
+  sovUi.y=r.top;
+  el.style.left=sovUi.x+'px';
+  el.style.top=sovUi.y+'px';
+  el.style.right='auto';
+  el.style.bottom='auto';
+}
+
+function initAiSovietPanel(){
+  const el=$('ai-soviet-panel');
+  if(!el||el.dataset.sovInit)return;
+  el.dataset.sovInit='1';
+  loadAiLenSettings();
+  syncAiLenSliders();
+  loadSovietPanelUi();
+  applySovietPanelTransform();
+
+  const dragBar=$('ai-sov-dragbar')||el;
+  const onDown=(e)=>{
+    if(e.target.closest('.ai-sov-meters'))return;
+    if(e.button!=null&&e.button!==0)return;
+    e.preventDefault();
+    sovEnsurePos(el);
+    sovUi.dragging=true;
+    el.classList.add('dragging');
+    const p=e.touches?e.touches[0]:e;
+    sovUi.ptr={sx:p.clientX,sy:p.clientY,lx:sovUi.x,ly:sovUi.y};
+  };
+  const onMove=(e)=>{
+    if(!sovUi.dragging||!sovUi.ptr)return;
+    e.preventDefault();
+    const p=e.touches?e.touches[0]:e;
+    sovUi.x=sovUi.ptr.lx+(p.clientX-sovUi.ptr.sx);
+    sovUi.y=sovUi.ptr.ly+(p.clientY-sovUi.ptr.sy);
+    applySovietPanelTransform();
+  };
+  const onUp=()=>{
+    if(!sovUi.dragging)return;
+    sovUi.dragging=false;
+    el.classList.remove('dragging');
+    sovUi.ptr=null;
+    saveSovietPanelUi();
+  };
+  const onWheel=(e)=>{
+    e.preventDefault();
+    sovEnsurePos(el);
+    sovUi.scale=Math.min(3,Math.max(0.55,sovUi.scale+(e.deltaY<0?0.07:-0.07)));
+    applySovietPanelTransform();
+    saveSovietPanelUi();
+  };
+
+  dragBar.addEventListener('mousedown',onDown);
+  dragBar.addEventListener('touchstart',onDown,{passive:false});
+  el.addEventListener('mousedown',onDown);
+  el.addEventListener('touchstart',onDown,{passive:false});
+  window.addEventListener('mousemove',onMove);
+  window.addEventListener('touchmove',onMove,{passive:false});
+  window.addEventListener('mouseup',onUp);
+  window.addEventListener('touchend',onUp);
+  el.addEventListener('wheel',onWheel,{passive:false});
+}
+
+async function fetchOpenRouterRaw(url,headers,body,activityLabel){
+  aiFetchBegin(activityLabel||'OpenRouter');
+  try{
+    const res=await fetch(url,{method:'POST',headers,body});
+    if(!res.ok){
+      let message='API錯誤 '+res.status;
+      try{const err=await res.json();message=err.error?.message||message;}catch(_){message=await res.text()||message;}
+      aiTriggerAlarm('API '+res.status);
+      throw new Error(message);
+    }
+    return res.json();
+  }catch(e){
+    if(!String(e.message||'').startsWith('API'))aiTriggerAlarm('連線失敗');
+    throw e;
+  }finally{
+    aiFetchEnd();
+  }
+}
+
+// ════════════════════════════════════════
+//  SCREEN MGMT
+// ════════════════════════════════════════
+function $(id){return document.getElementById(id);}
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
+  $(id).classList.remove('hidden');
+}
+function backToIntro(){
+  showScreen('si');
+}
+
+// ════════════════════════════════════════
+//  SAVE SYSTEM
+// ════════════════════════════════════════
+function getSaves(){
+  try{return JSON.parse(localStorage.getItem('zara_saves')||'{}');}
+  catch(e){return {};}
+}
+function saveSaves(s){localStorage.setItem('zara_saves',JSON.stringify(s));}
+function getSlotCount(){return parseInt(localStorage.getItem('zara_slotcount')||'6');}
+
+function showSaveSlots(){
+  const saves=getSaves();
+  const list=$('ss-list');
+  list.innerHTML='';
+  for(let i=1;i<=getSlotCount();i++){
+    const sv=saves[i];
+    if(sv){
+      const d=document.createElement('div');
+      d.className='ss-slot';
+      d.innerHTML=`<div><div class="ss-slot-name">${esc(sv.name)} · ${sv.arche||'自訂'}</div>
+        <div class="ss-slot-info">好感:${sv.disposition||50} · 辯論:${(sv.log||[])
+          .length}場 · ${new Date(sv.time).toLocaleString('zh-TW')}</div></div>
+        <div class="ss-slot-right">
+          <span class="ss-export" onclick="event.stopPropagation();exportSlot(${i})">匯出</span>
+          <span class="ss-del" onclick="event.stopPropagation();deleteSlot(${i})">刪除</span>
+        </div>`;
+      d.onclick=()=>loadSlot(i);
+      list.appendChild(d);
+    } else {
+      const d=document.createElement('div');
+      d.className='ss-slot empty';
+      d.textContent=` Slot ${i} — 空 · 點擊創建新遊戲`;
+      d.onclick=()=>newGame(i);
+      list.appendChild(d);
+    }
+  }
+  showScreen('ss');
+}
+
+function newGame(slot){
+  state._slot=slot||null;
+  showScreen('sc');
+  initCharCrea();
+}
+
+function loadSlot(id){
+  const sv=getSaves()[id];
+  if(!sv)return;
+  state._slot=id;
+  // Restore full state
+  state.playerName=sv.name;
+  state.baseSkills=sv.baseSkills||sv.skills||{logic:3,volition:3,empathy:3,rhetoric:3};
+  state.disposition=sv.disposition;
+  state.log=sv.log||[];
+  state.thoughts=normalizeThoughtIds(sv.thoughts);
+  state.thoughtPool=sv.thoughtPool||THOUGHTS.map(t=>t.id).filter(tid=>!state.thoughts.includes(tid));
+  state.arche=sv.arche;
+  state.archeType=sv.archeType||'';
+  state.archeBonus=sv.archeBonus||'';
+  state.apiKey=sv.apiKey||'';
+  state.apiModel=sv.apiModel||DEFAULT_MODEL;
+  state.dialogueHistory=sv.dialogueHistory||[];
+  state.ultraUsed=!!sv.ultraUsed;
+  state.battlefieldMode=sv.battlefieldMode||'night';
+  state.forgetCooldown=sv.forgetCooldown||0;
+  state.internalizing=sv.internalizing||{};
+  state._gainedThisRound=false;
+  state.lightMode=!!sv.lightMode;
+  state.zaraAnger=sv.zaraAnger??20;
+  state.debateTopic=sv.debateTopic||'';
+  state.debateWon=!!sv.debateWon;
+  state.debateScore=sv.debateScore||0;
+  state.lastSettlementReport=sv.lastSettlementReport||'';
+  recomputeSkills();
+  startGameFromSave();
+}
+
+function deleteSlot(id){
+  if(!confirm(`確定刪除存檔 ${id}？`))return;
+  const s=getSaves();
+  delete s[id];
+  saveSaves(s);
+  showSaveSlots();
+}
+
+function exportSlot(id){
+  const s=getSaves()[id];
+  if(!s)return;
+  downloadJSON(s,`zara_save_${id}_${s.name}.json`);
+}
+
+function exportCurrentSave(){
+  const data=buildSaveData();
+  downloadJSON(data,`zara_export_${state.playerName}_${Date.now()}.json`);
+}
+
+function saveToSlot(){
+  const saves=getSaves();
+  const slot=state._slot||Date.now();
+  saves[slot]=buildSaveData();
+  saveSaves(saves);
+  state._slot=slot;
+  addSysMsg('💾 已儲存至本地');
+}
+
+function normalizeThoughtIds(raw){
+  if(!Array.isArray(raw))return [];
+  const ids=[];
+  raw.forEach(item=>{
+    if(typeof item==='string'){if(getThought(item))ids.push(item);}
+    else if(item&&item.id&&getThought(item.id))ids.push(item.id);
+    else if(item&&item.name){const t=THOUGHTS.find(x=>x.name===item.name);if(t)ids.push(t.id);}
+  });
+  return ids;
+}
+
+function buildSaveData(){
+  return {
+    name:state.playerName,
+    baseSkills:{...(state.baseSkills||{})},
+    skills:{...state.skills},
+    disposition:state.disposition,
+    log:state.log||[],
+    thoughts:[...(state.thoughts||[])],
+    thoughtPool:[...(state.thoughtPool||[])],
+    arche:state.arche||'',
+    archeType:state.archeType||'',
+    archeBonus:state.archeBonus||'',
+    dialogueHistory:state.dialogueHistory||[],
+    apiKey:state.apiKey||'',
+    apiModel:state.apiModel||DEFAULT_MODEL,
+    ultraUsed:!!state.ultraUsed,
+    battlefieldMode:state.battlefieldMode||'night',
+    forgetCooldown:state.forgetCooldown||0,
+    internalizing:{...(state.internalizing||{})},
+    lightMode:!!state.lightMode,
+    zaraAnger:state.zaraAnger||20,
+    debateTopic:state.debateTopic||'',
+    debateWon:!!state.debateWon,
+    debateScore:state.debateScore||0,
+    lastSettlementReport:state.lastSettlementReport||'',
+    time:Date.now()
+  };
+}
+
+function downloadJSON(obj,fn){
+  const b=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'});
+  const u=URL.createObjectURL(b);
+  const a=document.createElement('a');
+  a.href=u;a.download=fn;a.click();
+  URL.revokeObjectURL(u);
+}
+
+function importSave(){
+  $('import-file').click();
+}
+function handleImport(ev){
+  const f=ev.target.files[0];
+  if(!f)return;
+  const r=new FileReader();
+  r.onload=e=>{
+    try{
+      const data=JSON.parse(e.target.result);
+      if(!data.name)throw new Error('無效存檔');
+      const saves=getSaves();
+      const slot=Date.now();
+      saves[slot]={...data,time:Date.now()};
+      saveSaves(saves);
+      showSaveSlots();
+      alert('匯入成功！');
+    }catch(err){alert('匯入失敗：'+err.message);}
+  };
+  r.readAsText(f);
+  ev.target.value='';
+}
+
+function backToSlots(){
+  $('sg').classList.remove('act');
+  setAiSovietVisible(false);
+  resetAiTelemetry();
+  syncAiSovietPanel();
+  $('sg').style.display='none';
+  showSaveSlots();
+  $('sg').style.display='';
+}
+
+// ════════════════════════════════════════
+//  CHARACTER CREATION
+// ════════════════════════════════════════
+const CC={pts:12,skills:{logic:3,volition:3,empathy:3,rhetoric:3}};
+const DRAFT_PICKS=3;
+const CC_MAX_SKILL=15;
+const SK_COLORS={logic:'var(--blue-skill)',volition:'var(--red-skill)',empathy:'var(--green-skill)',rhetoric:'var(--purple)'};
+const SK_NAMES={logic:'邏輯',volition:'意志',empathy:'共情',rhetoric:'修辭'};
+const SK_MAX_RANK=15;
+const SK_RANKS={
+  logic:['霧中摸索','粗略推理','清醒學生','辯證入門','冷靜解剖者','概念獵人','蘇格拉底之刃','近乎康德','體系建築師','純粹理性','邏輯的暴君','真理的解剖刀','看穿因果之眼','第一原理化身','全知的冷光'],
+  volition:['弱不禁風','勉強站立','普通決心','咬牙前行','鐵脊之人','山路攀登者','不屈意志','奧運冠軍','鋼鐵化身','超越疲憊者','永動的決意','命運的拳頭','風暴中的塔','不可動搖者','權力意志本身'],
+  empathy:['冷石心腸','略懂痛苦','能聽見人','溫柔觀察者','傷口翻譯者','共感行者','靈魂醫師','慈悲深淵','千面同理者','痛苦的容器','眾生的耳朵','心之透鏡','無界共鳴','萬人之心','慈悲的太陽'],
+  rhetoric:['話語打結','能說清楚','修辭學徒','火花說客','詩性辯手','語言煉金師','酒神雄辯','雷霆先知','言靈操弄者','群眾的點火者','黃金之舌','文字的魔術師','撼動殿堂者','言語即現實','查拉圖斯特拉的回聲']
+};
+const SK_DESC=[
+  {key:'logic',name:'邏輯',desc:'百科全書式的推理。用理性解剖論點，找出邏輯漏洞。<span class="sk" style="color:var(--yellow-skill)">它在你腦海裡說話的方式：冷靜、精確、像一把手術刀。它從不生氣。它只是指出錯誤。</span>'},
+  {key:'volition',name:'意志',desc:'自我超越的決心。面對查拉圖斯特拉的壓迫氣場，站穩立場。<span class="sk" style="color:var(--yellow-skill)">它不說話。它只是在那裡。像一根你脊椎裡的鋼鐵。</span>'},
+  {key:'empathy',name:'共情',desc:'對人類苦難的理解。觸及扎氏內心深處對人類的複雜情感。<span class="sk" style="color:var(--yellow-skill)">它不推理。它感受。它在你的橫膈膜裡，在你每次看見別人痛苦的時候輕輕收緊。</span>'},
+  {key:'rhetoric',name:'修辭',desc:'詩意與雄辯的力量。用語言藝術打動這位最危險的語言大師。<span class="sk" style="color:var(--yellow-skill)">它在你喉嚨裡等待。像一隻蜷縮的猫。在你需要它的時候，它會醒來。</span>'}
+];
+const PRESETS={
+  philosopher:{name:'哲學家',desc:'以理性為武器，追尋真理的纯粹思考者。',bonus:'logic'},
+  rebel:{name:'叛逆者',desc:'拒絕一切枷寧的反抗靈魂，以意志燃燒世界。',bonus:'volition'},
+  mystic:{name:'神秘主義者',desc:'在沉默中聽見神諭，以共情觸及存在的深淵。',bonus:'empathy'},
+  poet:{name:'詩人',desc:'以語言為火焰，用修辭照亮黑暗的先知。',bonus:'rhetoric'}
+};
+
+function initCharCrea(){
+  setAiSovietVisible(true);
+  loadAiLenSettings();
+  syncAiLenSliders();
+  CC.pts=12;
+  CC.skills={logic:3,volition:3,empathy:3,rhetoric:3};
+  CC.arche=null;CC.archeType='';CC.archeBonus=null;
+  $('cc-name').value='';
+  $('cc-api-key').value=localStorage.getItem('zara_api_key')||'';
+  $('cc-api-model').value=localStorage.getItem('zara_api_model')||DEFAULT_MODEL;
+  $('cc-arche-input').value='';
+  $('cc-arche-preview').classList.remove('visible');
+  $('cc-arche-status').textContent='';
+  $('cc-api-status').textContent='';
+  document.querySelectorAll('.cc-preset').forEach(e=>e.classList.remove('sel'));
+  renderCCSkills();
+  initThoughtDraft();
+  updateCC();
+}
+
+function renderCCSkills(){
+  const c=$('cc-skills');
+  c.innerHTML='';
+  SK_DESC.forEach(sk=>{
+    const col=SK_COLORS[sk.key];
+    c.innerHTML+=`<div class="cc-scard">
+      <div class="cc-stop"><span class="cc-sname">${sk.name} <span class="en">${sk.key.toUpperCase()}</span></span></div>
+      <div class="cc-sdesc">${sk.desc}</div>
+      <div class="cc-sctrl">
+        <button class="cc-b" id="cc-m-${sk.key}" onclick="adjSkill('${sk.key}',-1)">−</button>
+        <span class="cc-sval" id="cc-v-${sk.key}" style="color:${col}">3</span>
+        <span class="cc-rank" id="cc-r-${sk.key}">${skillRank(sk.key,3)}</span>
+        <div class="cc-sbar"><div class="cc-sfill" id="cc-bf-${sk.key}" style="width:30%;background:${col}"></div></div>
+        <button class="cc-b" id="cc-p-${sk.key}" onclick="adjSkill('${sk.key}',1)">+</button>
+      </div>
+    </div>`;
+  });
+}
+
+function getSpent(){
+  return Object.values(CC.skills).reduce((a,v)=>a+(v-3),0);
+}
+
+function skillRank(key,value){
+  const lv=Math.max(1,Math.min(SK_MAX_RANK,Number(value)||1));
+  return SK_RANKS[key]?.[lv-1]||'未命名';
+}
+
+function adjSkill(key,delta){
+  const nv=CC.skills[key]+delta;
+  if(nv<1||nv>CC_MAX_SKILL)return;
+  const spent=getSpent();
+  if(delta>0&&spent>=CC.pts)return;
+  if(delta<0&&spent<=0&&CC.skills[key]<=1)return;
+  if(delta<0&&nv<1)return;
+  CC.skills[key]=nv;
+  updateCC();
+}
+
+function updateCC(){
+  const rem=CC.pts-getSpent();
+  const el=$('cc-pts');
+  el.textContent=rem;
+  el.className='cc-pts-val'+(rem<=0?' z':rem<=2?' w':'');
+  ['logic','volition','empathy','rhetoric'].forEach(k=>{
+    const v=CC.skills[k];
+    $(`cc-v-${k}`).textContent=v;
+    $(`cc-r-${k}`).textContent=skillRank(k,v);
+    $(`cc-bf-${k}`).style.width=Math.round(v/CC_MAX_SKILL*100)+'%';
+    $(`cc-m-${k}`).disabled=(v<=1);
+    $(`cc-p-${k}`).disabled=(v>=CC_MAX_SKILL||rem<=0);
+  });
+  $('cc-confirm').disabled=false;
+}
+
+// ═══ ARCHETYPE ═══
+function pickPreset(key,el){
+  document.querySelectorAll('.cc-preset').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');
+  const p=PRESETS[key];
+  CC.arche=key;
+  CC.archeType=p.name;
+  CC.archeBonus=p.bonus;
+  showArchePreview(p.name, p.desc, `【${SK_NAMES[p.bonus]} +2】`,false);
+  $('cc-arche-status').textContent='已選擇：'+p.name+'（可繼續手動調整技能點）';
+  $('cc-arche-status').className='cc-arche-status';
+  updateCC();
+}
+
+async function generateArche(){
+  const input=$('cc-arche-input').value.trim();
+  if(!input){
+    $('cc-arche-status').textContent='請先輸入一段描述！';
+    $('cc-arche-status').className='cc-arche-status';
+    return;
+  }
+  const btn=$('cc-arche-gen-btn');
+  btn.disabled=true;btn.textContent='思考中...';
+  $('cc-arche-status').textContent='AI正在生成你的原型...';
+  $('cc-arche-status').className='cc-arche-status gen';
+
+  const prompt=`你正在為一個與尼采《查拉圖斯特拉如是說》辯論的角色設計「原型」（Archetype）。
+玩家描述了自己："${input}"
+
+請用繁體中文生成一個適合的原型，格式如下（JSON）：
+{
+  "name": "原型名稱（2-6個字，要有文學感）",
+  "desc": "一句話描述這個原型的性格與背景（30字以內）",
+  "bonus": "logic 或 volition 或 empathy 或 rhetoric",
+  "bonusName": "加成的技能名稱（邏輯/意志/共情/修辭）
+}
+
+只回傳JSON，不要其他文字。`;
+
+  let result;
+  const apiKey=$('cc-api-key').value.trim();
+  if(apiKey){
+    try{
+      const data=await fetchOpenRouterRaw(
+        'https://openrouter.ai/api/v1/chat/completions',
+        {'Content-Type':'application/json','Authorization':'Bearer '+apiKey},
+        JSON.stringify({model:$('cc-api-model').value.trim()||DEFAULT_MODEL,messages:[{role:'user',content:prompt}],max_tokens:200}),
+        '生成原型…'
+      );
+      const text=data.choices[0].message.content;
+      // Extract JSON from response
+      const m=text.match(/\{[\s\S]*?\}/);
+      if(m) result=JSON.parse(m[0]);
+      else throw new Error('Parse failed');
+    }catch(e){
+      console.warn('API生成失敗，使用本地',e);
+      result=localArcheGen(input);
+    }
+  } else {
+    result=localArcheGen(input);
+  }
+
+  document.querySelectorAll('.cc-preset').forEach(e=>e.classList.remove('sel'));
+  CC.archeType=result.name;
+  CC.archeBonus=result.bonus;
+  CC.arche='custom';
+  showArchePreview(result.name, result.desc, `【${result.bonusName} +2】`, true);
+  $('cc-arche-status').textContent='AI已生成！不滿意可在下方手動修改';
+  $('cc-arche-status').className='cc-arche-status gen';
+  btn.disabled=false;btn.textContent='🎲 AI生成';
+}
+
+function localArcheGen(input){
+  const li=input.toLowerCase();
+  if(li.includes('軍')||li.includes('兵')||li.includes('戰士')||li.includes('warrior'))
+    return{name:'沙場詩人',desc:'在血與詩之間游走的退役軍人',bonus:'volition',bonusName:'意志'};
+  if(li.includes('教堂')||li.includes('神父')||li.includes('牧師')||li.includes('priest')||li.includes('church'))
+    return{name:'背教者',desc:'逃出教堂的懷疑論者，以質問代替祈禱',bonus:'logic',bonusName:'邏輯'};
+  if(li.includes('藝術')||li.includes('art')||li.includes('畫')||li.includes('paint'))
+    return{name:'色彩煉金術士',desc:'把靈魂調成顏料塗在語言的畫布上',bonus:'rhetoric',bonusName:'修辭'};
+  if(li.includes('醫')||li.includes('doctor')||li.includes('heal')||li.includes('療'))
+    return{name:'共感者',desc:'能感受到他人痛苦的治療者',bonus:'empathy',bonusName:'共情'};
+  if(li.includes('流浪')||li.includes('wander')||li.includes('遊'))
+    return{name:'永世行者',desc:'在路上比在家更自在的漂泊靈魂',bonus:'volition',bonusName:'意志'};
+  if(li.includes('學')||li.includes('study')||li.includes('research'))
+    return{name:'洞穴裡的學者',desc:'把生命奉獻給知識的挖掘者',bonus:'logic',bonusName:'邏輯'};
+  // fallback
+  const bonuses=['logic','volition','empathy','rhetoric'];
+  const bz=['邏輯','意志','共情','修辭'];
+  const b=Math.floor(Math.random()*4);
+  return{name:'未定型的靈魂',desc:input.substring(0,20)+'……',bonus:bonuses[b],bonusName:bz[b]};
+}
+
+function showArchePreview(name,desc,bonus,editable){
+  $('cc-arche-preview').classList.add('visible');
+  $('ap-name').textContent=name;
+  $('ap-desc').textContent=desc;
+  $('ap-bonus').textContent=bonus;
+  $('ap-name-in').value=name;
+  // Select correct bonus
+  const sel=$('ap-bonus-in');
+  for(let i=0;i<sel.options.length;i++){
+    if(sel.options[i].text.includes(bonus.replace('【','').replace('】','').replace('+2',''))||
+       sel.options[i].value==CC.archeBonus){
+      sel.selectedIndex=i;break;
+    }
+  }
+}
+
+function applyArcheEdit(){
+  const name=$('ap-name-in').value.trim()||'自訂原型';
+  const bonus=$('ap-bonus-in').value;
+  CC.archeType=name;
+  CC.archeBonus=bonus;
+  CC.arche='custom';
+  $('ap-name').textContent=name;
+  $('ap-bonus').textContent=`【${SK_NAMES[bonus]} +2】`;
+  $('cc-arche-status').textContent='已手動修改為：'+name;
+}
+
+// ═══ API TEST ═══
+async function testAPI(){
+  const key=$('cc-api-key').value.trim();
+  const model=$('cc-api-model').value.trim()||DEFAULT_MODEL;
+  const st=$('cc-api-status');
+  if(!key){st.textContent='請先輸入 API Key';st.className='cc-api-status err';return;}
+  st.textContent='測試中...';st.className='cc-api-status testing';
+  try{
+    await fetchOpenRouterRaw(
+      'https://openrouter.ai/api/v1/chat/completions',
+      {'Content-Type':'application/json','Authorization':'Bearer '+key},
+      JSON.stringify({model,messages:[{role:'user',content:'Reply with just: OK'}],max_tokens:10}),
+      '測試連線…'
+    );
+    st.textContent='✅ 連接成功！';st.className='cc-api-status ok';
+  }catch(e){st.textContent='❌ 無法連接：'+e.message;st.className='cc-api-status err';}
+}
+
+// ════════════════════════════════════════
+//  GAME
+// ════════════════════════════════════════
+const state={
+  playerName:'流浪者',baseSkills:null,skills:null,disposition:50,
+  thoughts:[],thoughtPool:[],isProcessing:false,log:[],dialogueHistory:[],
+  _slot:null,arche:'',archeType:'',archeBonus:'',
+  apiKey:'',apiModel:DEFAULT_MODEL,
+  ultraUsed:false,battlefieldMode:'night',forgetCooldown:0,
+  internalizing:{},_gainedThisRound:false,lightMode:false,
+  zaraAnger:20,debateTopic:'',debateTopicCustom:'',sceneCollapsed:false,
+  debateWon:false,debateScore:0,_pendingChoices:null,_choiceFailed:false,
+  lastSettlementReport:'',aiLenZara:5,aiLenPlayer:5
+};
+
+// 開局可選的辯論主題池
+const DEBATE_TOPICS=[
+  '超人是否可能？還是只是另一個神像？',
+  '永恆回歸：若一切重演，你還敢活這一生嗎？',
+  '上帝已死之後，誰來填補價值的真空？',
+  '權力意志與民主：群眾能承擔自由嗎？',
+  '末人的幸福，是否比英雄的痛苦更值得？',
+  '道德是強者的創造，還是弱者的復仇？',
+  '孤獨是智慧的條件，還是怯懦的藉口？',
+  '虛無主義之後，還能建造什麼？',
+  '愛命運（Amor Fati）是勇氣還是投降？',
+  '悲劇精神：我們能否在痛苦中起舞？'
+];
+
+const ZARA_WEAKPOINTS=[
+  '破綻：他無法忍受被當成「另一個先知」——質疑他只是在重複宗教結構。',
+  '破綻：他深愛人類卻選擇離群——逼他承認這是恐懼還是愛。',
+  '破綻：他的詩意有時是煙霧彈——要求他給出可檢驗的主張，不要只有比喻。',
+  '破綻：他鄙視同情，卻渴望被理解——指出他話語裡的孤獨。',
+  '破綻：他談超越，卻仍需要聽眾——沒有觀眾，太陽照向誰？'
+];
+
+function rollDebateTopic(){
+  const t=DEBATE_TOPICS[Math.floor(Math.random()*DEBATE_TOPICS.length)];
+  state.debateTopic=t;
+  const el=$('topic-display');if(el)el.textContent='🎲 '+t;
+}
+
+function showTopicScreen(){
+  state._runObj=pickRunObjectives();
+  rollDebateTopic();
+  const sides=state._runObj?.sides||[];
+  $('so-sides').innerHTML=sides.map(s=>`
+    <div class="so-side">
+      <div class="so-side-tag">副挑戰 · BONUS</div>
+      <div class="so-side-name">${s.name}</div>
+      <div class="so-side-desc">${s.desc}</div>
+    </div>
+  `).join('');
+  showScreen('so');
+}
+
+function toggleSceneBox(){
+  state.sceneCollapsed=!state.sceneCollapsed;
+  const box=$('scene-box');
+  if(box)box.classList.toggle('collapsed',!!state.sceneCollapsed);
+  const ic=$('scene-fold-icon');if(ic)ic.textContent=state.sceneCollapsed?'▶':'▼';
+}
+
+function updateSceneBox(){
+  const el=$('scene-text');if(!el)return;
+  const topic=state.debateTopic||'未定的深淵';
+  const anger=state.zaraAnger||0;
+  const bf=state.battlefieldMode||'night';
+  const bfNames={day:'白晝福利國把洞穴照成暖黃',red:'赤色罷工讓石壁像在流血',iron:'鐵色閱兵讓回聲像腳步',neon:'霓虹市場把深淵標了價',night:'夜與火光統治一切'};
+  const mood=anger>=75?'他的怒氣幾乎要燒穿石壁':anger>=50?'空氣像拉緊的弓弦':anger>=30?'他還在試探，但目光更銳':'洞穴沉默，等待第一句話';
+  el.innerHTML=`<span class="em">辯論主題：</span>${esc(topic)}<br><br>
+    <span class="p">環境：</span>${bfNames[bf]||bfNames.night}。<br>
+    <span class="p">氣氛：</span>${mood}。（怒氣 ${anger}/100）<br><br>
+    ${state.sceneCollapsed?'':'<span style="font-size:10px;color:var(--text-dim)">點上方「場景」可折疊此區。改變戰場（超技/日光）或激怒他，這裡會更新。</span>'}`;
+  const head=$('scene-head-label');
+  if(head)head.textContent=`環境 · ${$('gt-m')?.textContent||'洞穴'}`;
+}
+
+function changeAnger(delta,reason){
+  const prev=state.zaraAnger||0;
+  state.zaraAnger=Math.max(0,Math.min(100,(state.zaraAnger||0)+delta));
+  updateAngerUI();
+  updateSceneBox();
+  if(reason&&Math.abs(delta)>=3)addSysMsg(`🔥 查拉圖斯特拉的怒氣${delta>0?'上升':'下降'}了（${reason}）。`);
+  if(prev<60&&state.zaraAnger>=60)addSysMsg('⚡ 他開始失控——破綻可能露出來了。');
+}
+
+function updateAngerUI(){
+  const v=state.zaraAnger||0;
+  const el=$('anger-val'),ef=$('anger-fill');
+  if(el){el.textContent=v;el.style.color=v>=75?'var(--red-skill)':v>=45?'var(--blood-bright)':'var(--yellow-skill)';}
+  if(ef){ef.style.width=v+'%';ef.style.background=v>=75?'var(--red-skill)':v>=45?'var(--blood-bright)':'var(--yellow-skill)';}
+  const port=$('zara-p');
+  if(port)port.classList.toggle('th',v>=70);
+}
+
+const ROUTE_HINTS={
+  logic:'拆穿比喻、指出邏輯漏洞',
+  volition:'逼他承擔立場的代價',
+  empathy:'刺中孤獨與傷口',
+  rhetoric:'用比喻與諷刺壓過他'
+};
+
+function hideChoicePanel(){
+  const p=$('choice-panel');if(p)p.classList.remove('show');
+  state._pendingChoices=null;
+  const n=$('choice-fail-note');if(n)n.classList.remove('show');
+}
+
+/** 隱藏檢定難度（不顯示給玩家）；隨技能／怒氣／回合升高，高技能也不會輕鬆過 */
+function hiddenRouteDC(skill,index){
+  const sv=state.skills?.[skill]||3;
+  const anger=state.zaraAnger||0;
+  const turns=state.turnCount||0;
+  return Math.min(27,Math.max(16,sv+10+Math.floor(anger/12)+Math.floor(turns/2)+(index%2)));
+}
+
+function buildStaticRouteOffers(){
+  return ['logic','volition','empathy','rhetoric'].map((sk,i)=>({
+    skill:sk,text:null,diff:hiddenRouteDC(sk,i),unlocked:false,failed:false,generating:false,diffRevealed:false
+  }));
+}
+
+function offerDialogueRoutes(zaraHtml){
+  const grid=$('choice-grid'),panel=$('choice-panel'),failNote=$('choice-fail-note');
+  if(!grid||!panel)return;
+  state._lastZaraCtx=stripHTML(zaraHtml||'').slice(0,900);
+  state._pendingChoices=buildStaticRouteOffers();
+  state._choiceFailed=false;
+  failNote?.classList.remove('show');
+  panel.classList.add('show');
+  renderChoiceButtons();
+  $('input-hint').textContent='先選一條路線檢定；成功後 AI 才寫台詞，再點一次送出';
+  scrollBottom();
+}
+
+function renderChoiceButtons(){
+  const grid=$('choice-grid');if(!grid)return;
+  grid.innerHTML='';
+  (state._pendingChoices||[]).forEach((c,i)=>{
+    const btn=document.createElement('button');
+    btn.type='button';
+    btn.className='choice-btn';
+    if(c.unlocked)btn.classList.add('unlocked');
+    else if(c.failed)btn.classList.add('failed');
+    else if(c.generating)btn.classList.add('locked');
+    else btn.classList.add('locked');
+    btn.innerHTML=choiceBtnHTML(c);
+    btn.disabled=!!c.failed||!!c.generating;
+    btn.onclick=()=>tryDialogueChoice(i);
+    grid.appendChild(btn);
+  });
+}
+
+function choiceBtnHTML(c){
+  const diffTag=(c.diffRevealed||c.failed||c.unlocked)?` · 目標 ${c.diff}`:'';
+  const meta=`◈ ${SK_NAMES[c.skill]} 路線${diffTag}`;
+  if(c.generating)return `${meta}<div class="choice-txt">（檢定成功，AI 正在寫台詞…）</div>`;
+  if(c.failed)return `${meta}<div class="choice-txt">〔話語潰散 · 目標 ${c.diff} · 請在下方親自輸入〕</div>`;
+  if(c.unlocked&&c.text)return `${meta}<div class="choice-txt">${esc(c.text)}</div>`;
+  return `${meta}<div class="choice-txt">${ROUTE_HINTS[c.skill]}</div><div style="font-size:8px;color:var(--text-dim);margin-top:2px">點擊 → 擲骰（難度未知）</div>`;
+}
+
+function updateChoiceBtn(index){
+  const c=state._pendingChoices?.[index];
+  const btn=$('choice-grid')?.children[index];
+  if(!c||!btn)return;
+  btn.innerHTML=choiceBtnHTML(c);
+  btn.disabled=!!c.failed||!!c.generating;
+  if(c.unlocked){btn.classList.remove('locked','failed');btn.classList.add('unlocked');}
+  else if(c.failed){btn.classList.remove('locked','unlocked');btn.classList.add('failed');}
+  else if(!c.generating){btn.classList.remove('unlocked','failed');btn.classList.add('locked');}
+}
+
+async function tryDialogueChoice(index){
+  if(state.isProcessing||!state._pendingChoices)return;
+  const c=state._pendingChoices[index];
+  if(!c||c.failed||c.generating)return;
+  if(c.unlocked&&c.text){sendChoiceLine(index);return;}
+
+  const sv=state.skills[c.skill]||3;
+  const roll=Math.floor(Math.random()*20)+1;
+  const total=roll+sv;
+  const crit=roll===20,fumble=roll===1;
+  const pass=(total>=c.diff||crit)&&!fumble;
+  const btn=$('choice-grid')?.children[index];
+  state.isProcessing=true;
+  if(btn)btn.disabled=true;
+  const rollNote=crit?' <span style="color:var(--gold)">（大成功）</span>':fumble?' <span style="color:var(--red-skill)">（大失敗）</span>':'';
+  c.diffRevealed=true;
+  const diffGap=pass?'':' · 差 <span class="em">'+(c.diff-total)+'</span>';
+  addSysMsg(`🎲 <span class="em">${SK_NAMES[c.skill]}</span>：${roll}+${sv}=${total} / 目標 ${c.diff}${diffGap}${rollNote} · ${pass?'<span style="color:var(--green-skill)">話語成形</span>':'<span style="color:var(--red-skill)">話語潰散</span>'}`);
+  recordSkillCheckResult(c.skill,pass);
+
+  if(!pass){
+    changeAnger(4,'他輕蔑你的嘗試');
+    bumpDebateScore(-2);
+    c.failed=true;
+    state._choiceFailed=true;
+    if(btn){btn.classList.remove('locked');btn.classList.add('failed');}
+    updateChoiceBtn(index);
+    $('choice-fail-note')?.classList.add('show');
+    $('input-hint').textContent='檢定失敗：請在下方親手輸入。其他路線仍可嘗試。';
+    addSysMsg('你的話在喉嚨裡潰散了。查拉圖斯特拉冷笑著，等你自己開口。');
+    state.isProcessing=false;
+    if(!state.runComplete)$('send-btn').disabled=false;
+    $('pi').focus();
+    return;
+  }
+
+  changeAnger(2,'論點刺中他');
+  bumpDebateScore(5);
+  c.generating=true;
+  updateChoiceBtn(index);
+  $('input-hint').textContent='檢定成功！AI 正在撰寫你的台詞…';
+
+  if(!getApiKey()){
+    addSysMsg('⚠️ 需要 API Key 才能生成台詞');
+    c.generating=false;
+    c.failed=true;
+    state.isProcessing=false;
+    updateChoiceBtn(index);
+    return;
+  }
+  state.apiKey=getApiKey();
+
+  try{
+    c.text=await generatePlayerLine(c.skill);
+    if(!c.text)throw new Error('空回應');
+    c.generating=false;
+    c.unlocked=true;
+    if(btn){btn.disabled=false;btn.classList.remove('locked');btn.classList.add('unlocked');}
+    updateChoiceBtn(index);
+    $('input-hint').textContent='台詞已備好！再點綠色選項送出，或改在下方自己輸入。';
+  }catch(e){
+    console.error(e);
+    aiTriggerAlarm('台詞失敗');
+    c.generating=false;
+    c.failed=true;
+    updateChoiceBtn(index);
+    addSysMsg(`⚠️ 台詞生成失敗：${esc(e.message)}。請在下方自己輸入。`);
+    $('input-hint').textContent='請在下方親手輸入你的反駁。';
+  }
+  state.isProcessing=false;
+  if(!state.runComplete)$('send-btn').disabled=false;
+  $('pi').focus();
+}
+
+function sendChoiceLine(index){
+  const c=state._pendingChoices?.[index];
+  if(!c||!c.unlocked||!c.text||state.isProcessing)return;
+  if(/^（AI/.test(c.text)||/解析失敗/.test(c.text)){addSysMsg('⚠️ 台詞無效，請自己輸入');return;}
+  const input=$('pi');
+  input.value=c.text;
+  hideChoicePanel();
+  sendMessage();
+}
+
+function bumpDebateScore(delta){
+  state.debateScore=Math.max(0,Math.min(100,(state.debateScore||0)+delta));
+  updateObjHUD();
+}
+
+async function completeTextReply(messages,maxTokens,baseLabel,softCharCap,maxLoops=1){
+  let reply='';
+  let thread=[...messages];
+  const loops=Math.max(1,Math.min(4,maxLoops));
+  for(let n=0;n<loops;n++){
+    const label=n===0?baseLabel:baseLabel+' · 續寫';
+    const data=await callOpenRouter(thread,maxTokens,label);
+    const first=data.choices?.[0];
+    const chunk=first?.message?.content||'';
+    reply+=(n>0&&!reply.endsWith('\n')&&!chunk.startsWith('\n')?' ':'')+chunk;
+    if(first?.finish_reason!=='length')break;
+    thread=[
+      ...messages,
+      {role:'assistant',content:reply},
+      {role:'user',content:'你的上一段被截斷了。請從中斷處接續寫完，不要重複前文，必須寫完所有句子並以句號或問號結束。'}
+    ];
+  }
+  return reply.trim();
+}
+
+async function generatePlayerLine(skill){
+  const lastP=(state.dialogueHistory||[]).filter(h=>h.role==='player').pop();
+  const playerTxt=lastP?stripHTML(lastP.text).slice(0,500):'';
+  const zTxt=state._lastZaraCtx||'';
+  const skName=SK_NAMES[skill]||skill;
+  const cabinet=summarizeThoughtCabinetForAI();
+  const pl=getPlayerLenProfile();
+  const prompt=`辯論主題：${state.debateTopic||'哲學'}
+查拉圖斯特拉剛說：${zTxt}
+${playerTxt?`玩家上一句：${playerTxt}`:'玩家尚未發言'}
+玩家要用【${skName}】路線反駁（檢定已成功）。
+
+玩家的思維內閣（政治／意識形態背景，請微微滲入語氣與論點，不要變成背卡片）：
+${cabinet}
+
+寫一段玩家發言：繁體中文 **${pl.minSent}–${pl.maxSent} 句**（約 ${pl.minChars}–${pl.maxChars} 字），直接接續對話反駁查拉圖斯特拉。
+可含一個具體比喻；語氣可受內閣傾向影響，但仍是這個人在說話，不是政策簡報。
+規則：只輸出台詞本身；不要引號；不要 JSON；不要標題；不要「解析」等元語言；**必須寫完整，最後一句要有句號或問號，不可半途而廢。**`;
+  let line=await completeTextReply(
+    [{role:'user',content:prompt}],
+    pl.maxTokens,
+    'OpenRouter · 玩家台詞',
+    pl.softCap,
+    1
+  );
+  line=line.replace(/^["「『\s]+|["」』\s]+$/g,'').replace(/^台詞[：:]\s*/,'').trim();
+  if(!line||/解析失敗|JSON/i.test(line))throw new Error('AI 未回傳有效台詞');
+  return line;
+}
+
+async function generateOpeningLine(){
+  const cabinet=summarizeThoughtCabinetForAI();
+  const zp=getZaraLenProfile();
+  const prompt=`你是查拉圖斯特拉。辯論主題：「${state.debateTopic||'哲學'}」。玩家「${state.playerName}」剛進洞穴。
+玩家思維背景（可微微嗅到其傾向，勿逐卡念名）：${cabinet}
+用繁體中文寫 ${zp.minSent}-${zp.maxSent} 句開場白：高傲、詩意、逼問對方為何而來。點出辯論主題。可用 <span class="em">。必須寫完整，不要半途而廢。`;
+  return completeTextReply(
+    [{role:'user',content:prompt}],
+    zp.maxTokens,
+    'OpenRouter · 開場白',
+    null,
+    1+zp.continuations
+  );
+}
+
+function toggleRpExtra(){
+  document.querySelectorAll('.rp-body').forEach(el=>el.classList.toggle('open'));
+}
+
+function toggleEndReport(){
+  const r=$('re-report');if(r)r.classList.toggle('show');
+}
+
+function dismissRunEnd(continuePlaying){
+  $('run-end').classList.remove('show');
+  state.isProcessing=false;
+  $('send-btn').disabled=false;
+  $('pi').focus();
+  if(continuePlaying){
+    addSysMsg(state.debateWon
+      ? '你已獲勝（裁判判定）。可繼續對話回味，或按工具列「📜 裁判報告」隨時再看一次。'
+      : '結局畫面已關閉。你仍可繼續辯論，或再按「⚖ 結算辯論」爭取翻盤。');
+  }
+}
+
+function openSettlementReport(){
+  if(!state.lastSettlementReport){
+    addSysMsg('尚無裁判報告。請先按工具列「⚖ 結算辯論」讓 AI 裁判讀完整場紀錄。');
+    return;
+  }
+  showRunEnd(!!state.debateWon,'debate');
+}
+
+function saveSettlementReport(html){
+  state.lastSettlementReport=html||'';
+}
+
+const SCENE_INTRO=`山洞穴吞沒了最後的白晝。
+
+不是「進入」洞穴——是洞穴<span class="em">吞</span>了你。你的腳踝先消失，然後膝蓋，然後胸口。石壁從兩側擠過來，帶著十萬年的耐心。
+
+火在深處等它。它已經等了<span class="h">十年</span>。
+
+那火不是普通的火。它燒的是孤獨——一個男人把自己關在山頂上十年，不跟任何人說話，只跟鷹和蛇說話。那孤獨已經濃縮成某種固態的東西，像琥珀，像煤，像一顆不肯熄滅的心臟。
+
+<span class="p">查拉圖斯特拉</span>背靠石牆坐著。
+
+他的鬍子很長。不是「很長」那種長——是那種你會在裡面找到整個西方哲學史的長。蘇格拉底的懷疑纏繞在髮結裡。柏拉圖的理想國被編成了一根辮子。康德的絕對命令打了個死結。
+
+他的眼睛——
+
+<span class="et">別看他的眼睛。</span>
+
+太晚了。你已經看了。那是兩個已經學會自己會熄滅的太陽。它們看過太多東西。看過人類最醜陋的宴會。看過十字架上的謊言被崇拜了兩千年。看過末人們眨眨眼說「什麼是愛？」然後繼續過他們的小日子。
+
+他沒有起身。
+
+他只是<span class="c">看</span>。
+
+在那個「看」裡面：一個問號。不是普通的問號。是一個足以刺穿所有矯飾、所有客套、所有「我來是因為我對哲學很有興趣」的問號。
+
+<span class="et">「你爬上來了，」</span>他說。
+
+不是問題。是觀察。就像石頭觀察雨水。就像深淵觀察那個正在往下看的人。
+
+<span class="et">「現在告訴我——」</span>
+
+他停頓。火劈啪響。某處有水滴落的聲音。很慢。像一座鐘在數你的心跳。
+
+<span class="et">「——你是爬向某物，還是<span class="em">逃離</span>某物？」</span>
+
+牆上的蛇似乎也在聽。
+
+<span class="sk">（你的喉嚨發緊。洞穴正在偷走你的話。說點什麼。說點<span class="em">真的</span>。）</span>`;
+
+const ZARA={
+  greeting:[
+    `又一個靈魂找到了進入我洞穴的路。
+
+<span class="sk">（外面的太陽是無情的。它照在每一個人身上——國王和乞丐，聖人和殺人犯。它不挑。）</span>
+
+但在這裡，在黑暗中，我們說出的真理比任何太陽都燃燒得更亮。因為我們<span class="em">挑</span>。我們選擇要燒傷誰。
+
+（洞穴深處有什麼東西動了一下。不是蛇。是你自己的恐懼。）
+
+坐下來。你不需要介紹自己。你的眼睛已經告訴我你是誰了。`,
+    `十年。
+
+我在這座山上住了<span class="h">十年</span>。
+
+你知道十年是什麼意思嗎？不是三百六十五乘以十個日出。不是日曆被撕掉三千六百五十頁。十年是——
+
+<span class="sk">（你的邏輯在低聲說：他在誇大其詞。你的共情在反駁：不，他沒有。你看得見他手指上的繭——那是十年來親手劈柴留下的。）</span>
+
+十年是沉默長出牙齒。是孤獨學會走路。是你在某個清晨醒來，發現自己終於能<span class="em">聽見</span>了——不是聲音，是聲音之間的東西。
+
+石頭教了我這個。不是任何男人能教的。
+
+你呢？你帶了什麼上山？`,
+    `你站在門檻上。
+
+洞穴在呼吸。你感覺到了嗎？石壁在輕微地擴張和收縮，像肺。這座山是活的。它一直在等你。
+
+<span class="sk">（你的共情在胸口發緊。你的意志在說：別被氣氛嚇到。你的修辭在低聲說：不，讓它嚇你。恐懼是誠實的。）</span>
+
+說出什麼把你帶到這裡。
+
+讓它<span class="em">痛</span>。
+
+我對客套話的容忍度很低。低到什麼程度呢？低到上次有人跟我說「很高興見到我」，我讓他在洞口站了三個小時才讓他進來。
+
+說真的。`
+  ],
+  confused:[
+    `……
+
+<span class="sk">（你的邏輯在搖頭。你的修辭在嘆氣。你的意志在說：再試一次。）</span>
+
+我不明白你想說什麼。
+
+像個孩子朝太陽扔石頭，期望它掉下來。太陽不會掉下來。太陽只會<span class="em">燒</span>。
+
+你的話——它們有形狀嗎？還是只是一團溫熱的霧？我摸不到它們。我咬不到它們。它們從我身邊滑過去，像泥鰍，像末人們的道德觀。
+
+再試一次。但要<span class="em">清晰</span>。
+
+山不獎勵含糊。`,
+    `你的話在繞圈。像飛蛾。繞著一盞<span class="ec">死了的</span>火焰。那火焰不發光。不發熱。只是個擺設。就像你剛才說的那句話。
+
+<span class="sk">（你的修辭在喉嚨裡掙扎。它想幫你。但它需要你給它骨頭——不是軟綿綿的「我覺得」，是硬邦邦的「我认为」。）</span>
+
+我需要<span class="em">實質</span>。論點。挑釁。一根能把人戳醒的尖刺。
+
+哲學不是賀卡。你不能寫「祝你幸福」然後期待有人被感動。哲學是<span class="b">武器</span>。你握著它，要嘛刺出去，要嘛放下。別只是拿著它發抖。`,
+    `<span class="t">「理解的人必須仍然能夠不理解某些事。」</span>
+
+這是我說的。卷三。你沒讀過？沒關係。大多數人都沒讀過。他們只讀了封面。
+
+<span class="sk">（你的邏輯在瘋狂地搜索記憶。你的共情在說：他在給你台階下。你的意志在說：別接下這個台階。站穩。）</span>
+
+但即使是我——查拉圖斯特拉，那個跟鷹和蛇說話的人——我也有極限。你的話已經碰到了那個極限。再說一次。用不同的方式。`,
+    `你說話了。話語從你的嘴唇之間掉出來。像——像什麼呢？像湯被當成建築端上來。它往下流。它沒有結構。它沒有<span class="em">骨頭</span>。
+
+<span class="sk">（你的修辭在胃裡翻了個身。它想吐。不是因為你說了什麼噁心的東西，而是因為你說了什麼<span class="ec">沒有味道</span>的東西。）</span>
+
+給你的思想加上骨頭。骨頭是這樣的：一個主張。一個理由。一個能讓你的對手<span class="b">痛</span>一下的東西。
+
+蘇格拉底知道怎麼做。他走到市場上，問問題，讓將軍們發現自己不知道什麼是勇氣。
+
+他沒有說「我覺得」。他說<span class="em">「這是什麼意思？」</span>
+
+現在。用這個方式。再說一次。`
+  ],
+  hostile:[
+    `哈！<span class="sk">（你的意志在胸口燃燒。你的邏輯在說：不，讓他燒。火是誠實的。）</span>
+
+你身上有火。放錯地方的火。劈啪作響，對著一塊它永遠無法融化的石頭。但火仍然是火。我寧願跟一把燃燒的傻瓜爭論，也不願讚美一個冰凍的賢者。
+
+至少火<span class="em">誠實</span>。`,
+    `你挑戰我？<span class="em">這裡</span>？在我的洞穴裡？在我坐了十年的這塊石頭旁邊？
+
+<span class="sk">（你的共情在發抖。不是因為恐懼。是因為某種更古老的東西。像是在神的殿堂裡吐口水。）</span>
+
+哈。這令人振奮。最後一個進來的人帶給我讚美。「查拉圖斯特拉，您的思想太深刻了。」然後他走了。帶著什麼都沒有的手。
+
+你——你帶了<span class="b">脾氣</span>。那至少是一種誠實。`
+  ],
+  philosophical:[
+    `啊。<span class="sk">（你的邏輯在豎起耳朵。你的修辭在說：就是這個。這就是你上山來找的東西。）</span>
+
+現在我們觸及事情的<span class="em">骨髓</span>了。說吧。洞穴在聽。石頭在聽。那條蛇——那條盤在石壁上的蛇——它也在聽。它比大多數哲學家都聰明。它不說話。它只是<span class="em">聽</span>。
+
+我會<span class="b">咬</span>。如果你的論點有肉，我會咬下去。如果你的論點是空的骨頭，我會咬碎它。繼續。`,
+    `你碰到了什麼。我看得出來。你的話現在有了重量——不是讀過書的重量。而是<span class="em">熬過的夜晚</span>的重量。
+
+那種重量是這樣的：你在某個凌晨三點醒來，發現自己無法回答一個問題。不是考試的問題。是那種會吃掉你的問題。你躺在那裡，看著天花板，感覺那個問題正在看你。
+
+你經歷過那種夜晚。
+
+<span class="sk">（你的共情在胸口發燙。你的意志在說：別停。你的邏輯在說：小心，他在試探你。）</span>
+
+繼續。不要停在這裡。`
+  ],
+  question:[
+    `一個問題。好。<span class="sk">（你的邏輯在點頭。你的修辭在微笑。）</span>
+
+大多數人帶著答案來到這裡。那些答案像漏水的水袋——你提起來，水就從每個洞裡滴出來。到洞口的時候已經空了。
+
+你的問題——它有<span class="em">重量</span>。但問題是門，不是房間。你站在門口。你推開了門。但你有沒有<span class="em">走進去</span>？
+
+走進去。你<span class="em">真正</span>想問我什麼？`,
+    `你問了。這比大多數人做的更多。他們帶著確定性進來。確定性像汗水一樣從他們身上滴落。滴在石頭上。石頭吸收了它。
+
+<span class="sk">（你的共情在胸口輕輕震動。你的意志在說：他在給你空間。）</span>
+
+你的問題至少承認了<span class="t">不知道</span>。這是哲學的起點。不是「我知道」。是「我<span class="em">不知道</span>，但我想知道」。
+
+蘇格拉底知道這個。他說：我唯一知道的就是我什麼都不知道。然後他喝了毒酒。
+
+別擔心。我沒有毒酒。只有問題。`
+  ],
+  short:[
+    `就這樣？<span class="sk">（你的修辭在胃裡翻了個身。你的意志在說：再多說點。）</span>
+
+幾個字。幾個字就想打動查拉圖斯特拉？<span class="ec">低語在我的洞穴裡不會回聲——它被石頭吞沒了。</span>
+
+這座山不獎勵吝嗇。它獎勵<span class="em">慷慨</span>。慷慨地給予你的思想。慷慨地暴露你的傷口。
+
+說多點。或者什麼都別說。我有十年的沉默要補；我不需要你的。`,
+    `幾個字。<span class="sk">（你的修辭在喉嚨裡掙扎。它需要更多空間。給它空間。）</span>
+
+<span class="t">語言是座山。</span>你至少要爬到山腰。你現在在山腳。不，你在山腳的<span class="em">下面</span>。你在挖一個洞，假裝那是攀登。
+
+再說一次。用更多字。用更真的字。用那種讓你<span class="b">痛</span>的字。`
+  ]
+};
+
+// ════════════════════════════════════════
+//  THOUGHT CABINET (Disco Elysium style)
+// ════════════════════════════════════════
+const THOUGHT_LIMIT=10;
+const ZEALOT_THRESHOLD=4;       // 同派達此數量觸發招牌獎勵與狂熱懲罰
+const INTERNALIZE_ROUNDS=2;     // 新思維需內化幾回合才轉成正式加成
+const FORGET_DISP_COST=4;       // 遺忘思維的好感代價
+// 各派系的招牌技能（同派 4 張以上時 +2）
+const FACTION_SIGNATURE={communist:'logic',socdem:'empathy',fascist:'volition',liberal:'rhetoric'};
+
+const FACTIONS={
+  communist:{name:'康米主義',en:'COMMUNISM',color:'#e74c3c',icon:'★'},
+  socdem:{name:'社民主義',en:'SOCIAL DEMOCRACY',color:'#e84393',icon:'✿'},
+  fascist:{name:'法西斯主義',en:'FASCISM',color:'#b08d57',icon:'▲'},
+  liberal:{name:'自由主義',en:'LIBERALISM',color:'#3498db',icon:'◇'}
+};
+
+const THOUGHTS=[
+  // ── 康米主義 COMMUNISM ──
+  {id:'c1',faction:'communist',name:'抽象符號的概念化地緣政治聚合體',desc:'把一切個人痛苦翻譯成結構的語言。',mods:{logic:1,empathy:1,rhetoric:-1},ability:'你能把任何一滴眼淚上升為「歷史的必然矛盾」。'},
+  {id:'c2',faction:'communist',name:'"馬佐夫"社會經濟學.pdf',desc:'一份永遠讀不完、卻能解釋一切的文件。',mods:{logic:2,volition:-1},ability:'你用剩餘價值解釋查拉圖斯特拉為何孤獨。'},
+  {id:'c3',faction:'communist',name:'集體高潮的歷史必然性',desc:'相信幸福必須是複數的。',mods:{empathy:2,logic:-1},ability:'你拒絕承認任何「個人」的救贖。'},
+  {id:'c4',faction:'communist',name:'食堂裡的永恆輪迴（免費續湯版）',desc:'把永恆輪迴想像成一鍋大鍋飯。',mods:{volition:1,empathy:1},ability:'再苦的命運，只要大家一起吃就嚥得下。'},
+  {id:'c5',faction:'communist',name:'同志，你的疲憊是被沒收的剩餘價值',desc:'把倦怠政治化。',mods:{empathy:1,rhetoric:1,volition:-1},ability:'你能讓任何抱怨聽起來像革命綱領。'},
+  {id:'c6',faction:'communist',name:'對未來世代的無限賒帳',desc:'以明天之名揮霍今天。',mods:{logic:1,rhetoric:1},ability:'你用「為了後代」合理化任何犧牲。'},
+  {id:'c7',faction:'communist',name:'鋼鐵是怎樣被超人煉成的',desc:'把超人讀成模範勞動英雄。',mods:{volition:2,empathy:-1},ability:'你把痛苦當成鍛造的工序，而非命運。'},
+  {id:'c8',faction:'communist',name:'人民意志與權力意志的合併報表',desc:'硬把尼采併進集體。',mods:{rhetoric:1,volition:1},ability:'你能把「我要」悄悄偷換成「我們要」。'},
+  {id:'c9',faction:'communist',name:'平等主義者的怨恨回收廠',desc:'把怨恨提煉成正義。',mods:{empathy:1,logic:1,volition:-1},ability:'你擅長替弱者的不甘找到漂亮名字（尼采會說：這就是奴隸道德）。'},
+  {id:'c10',faction:'communist',name:'烏托邦施工中_進度0%',desc:'永遠在動工、永遠沒完工。',mods:{rhetoric:2,logic:-1},ability:'你能對著一片廢墟描繪天堂的藍圖。'},
+  // ── 法西斯主義 FASCISM ──
+  {id:'f1',faction:'fascist',name:'三教九流怪咖馬戲團',desc:'把人群看成需要馴獸師的馬戲。',mods:{rhetoric:1,volition:1,empathy:-1},ability:'你把混亂的群眾看成等待強人鞭子的動物。'},
+  {id:'f2',faction:'fascist',name:'失落黃金時代的偽考古學',desc:'考證一個從未存在的過去。',mods:{rhetoric:2,logic:-1},ability:'你能把鄉愁偽裝成歷史事實。'},
+  {id:'f3',faction:'fascist',name:'手指手槍（9毫米）',desc:'用手指比出一把槍。',mods:{volition:2,empathy:-2},ability:'壓力下你會擺出開槍手勢恐嚇對手——幼稚，但有效。'},
+  {id:'f4',faction:'fascist',name:'強者俱樂部入會申請表',desc:'把超人降級成健身房會籍。',mods:{volition:2,rhetoric:-1},ability:'你以為崇拜強者，就等於成為強者。'},
+  {id:'f5',faction:'fascist',name:'對血與土的浪漫過敏症',desc:'為土地與血統流下熱淚。',mods:{volition:1,rhetoric:1,empathy:-1},ability:'你能把地理講成命運。'},
+  {id:'f6',faction:'fascist',name:'領袖的嗓音.wav（無限循環）',desc:'腦中循環播放一個聲音。',mods:{rhetoric:2,logic:-1},ability:'你說話時不自覺模仿某個更大的聲音。'},
+  {id:'f7',faction:'fascist',name:'秩序崇拜與階級金字塔模型',desc:'相信一切都該各就各位。',mods:{logic:1,volition:1,empathy:-1},ability:'你看見混亂，就想替它編號排隊。'},
+  {id:'f8',faction:'fascist',name:'把尼采誤讀成健身教練',desc:'超人等於多練幾組。',mods:{volition:2,logic:-1},ability:'你引用尼采時，總漏掉他最重要的那一句。'},
+  {id:'f9',faction:'fascist',name:'鄉愁牌催淚瓦斯',desc:'用懷舊驅散思考。',mods:{empathy:1,rhetoric:1,logic:-1},ability:'你能讓一群人一起哭，然後忘記為何而哭。'},
+  {id:'f10',faction:'fascist',name:'我們對抗他們（永久授權版）',desc:'世界只分兩種人。',mods:{volition:1,rhetoric:1,empathy:-1},ability:'你能在任何議題裡，迅速找出一個「敵人」。'},
+  // ── 自由主義 LIBERALISM ──
+  {id:'l1',faction:'liberal',name:'上帝已死.inc',desc:'把神聖事物創業化。',mods:{logic:1,rhetoric:1,empathy:-1},ability:'你能把任何神聖事物變成一間待上市的新創公司。'},
+  {id:'l2',faction:'liberal',name:'永恆輪迴模擬器V3_build20260604',desc:'用模擬器處理存在焦慮。',mods:{logic:2,volition:-1},ability:'你用試算表計算自己今天該不該活著。'},
+  {id:'l3',faction:'liberal',name:'查拉圖斯特拉的podcast頻道',desc:'把深淵剪成短影音。',mods:{rhetoric:2,volition:-1},ability:'你能把任何痛苦的智慧，壓縮成三十秒金句。'},
+  {id:'l4',faction:'liberal',name:'存在作為不存在的證明憑證',desc:'用邏輯證明自己不在場。',mods:{logic:2,empathy:-1},ability:'你能論證自己其實不需要為任何事負責。'},
+  {id:'l5',faction:'liberal',name:'反諷作為唯一安全的信仰',desc:'什麼都不全信，才不會受傷。',mods:{rhetoric:1,logic:1,volition:-1},ability:'你用玩笑包住每一句真話，這樣沒人能反駁你。'},
+  {id:'l6',faction:'liberal',name:'自由市場裡的二手靈魂',desc:'一切皆可標價出售。',mods:{logic:1,rhetoric:1,empathy:-1},ability:'你能替任何信念算出它的市場匯率。'},
+  {id:'l7',faction:'liberal',name:'溫和中間派的無痛止痛藥',desc:'永遠站在「兩邊都有道理」。',mods:{empathy:1,logic:1,volition:-1},ability:'你能在任何立場之間，找到一個誰都不得罪的位置。'},
+  {id:'l8',faction:'liberal',name:'個人成長講座（含早鳥優惠）',desc:'把超越自我變成課程。',mods:{rhetoric:1,empathy:1,volition:-1},ability:'你把「成為你自己」當成可以付費購買的服務。'},
+  {id:'l9',faction:'liberal',name:'把虛無主義裝進精美禮盒',desc:'讓絕望變得時尚。',mods:{rhetoric:1,logic:1},ability:'你能讓「人生無意義」聽起來像一句很酷的廣告詞。'},
+  {id:'l10',faction:'liberal',name:'我尊重每一種觀點（包括我沒讀過的）',desc:'用包容掩蓋怠惰。',mods:{empathy:2,volition:-1},ability:'你能在不理解任何立場的情況下，尊重所有立場。'},
+  // ── 社民主義 SOCIAL DEMOCRACY ──
+  {id:'s1',faction:'socdem',name:'北歐模型．宜家組裝版',desc:'相信天堂附說明書就能自行組裝。',mods:{empathy:1,logic:1,volition:-1},ability:'你相信只要附上六角扳手，烏托邦可以週末自行組裝完成。'},
+  {id:'s2',faction:'socdem',name:'委員會將會研議此事',desc:'把一切危機延後到下次開會。',mods:{logic:1,rhetoric:1,volition:-1},ability:'你能把任何深淵般的抉擇，列入下一季的議程附件。'},
+  {id:'s3',faction:'socdem',name:'溫柔資本主義使用手冊',desc:'替剝削加上靠墊。',mods:{empathy:1,rhetoric:1,logic:-1},ability:'你相信只要在剝削上鋪一條暖毯，它就不再是剝削。'},
+  {id:'s4',faction:'socdem',name:'漸進主義者的無限分期付款',desc:'把革命拆成永不到期的小步驟。',mods:{logic:1,rhetoric:1,volition:-1},ability:'你把超越人類這件事，拆成一千期零利率分期。'},
+  {id:'s5',faction:'socdem',name:'社會安全網（細孔加密版）',desc:'接住每一個墜落的人。',mods:{empathy:2,volition:-1},ability:'你用補助接住每一個墜落的人——包括那些其實想學飛的人。'},
+  {id:'s6',faction:'socdem',name:'第三條路．繞過深淵的高架橋',desc:'修一條讓人不必直視深淵的路。',mods:{logic:1,rhetoric:1,empathy:-1},ability:'你蓋了一座漂亮的高架橋，讓所有人都能不看深淵就過去。'},
+  {id:'s7',faction:'socdem',name:'工會午餐會報的權力意志',desc:'把權力意志開成協商會議。',mods:{volition:1,empathy:1,rhetoric:-1},ability:'你把「權力意志」改寫成一場備有三明治的勞資協商。'},
+  {id:'s8',faction:'socdem',name:'課稅作為一種溫和的救贖',desc:'用累進稅率處理靈魂問題。',mods:{logic:1,empathy:1,volition:-1},ability:'你相信存在的虛無，可以靠累進稅率重新分配掉。'},
+  {id:'s9',faction:'socdem',name:'人人有份的平庸幸福配給',desc:'發給每個人剛剛好的幸福。',mods:{empathy:1,rhetoric:1,volition:-1},ability:'你發給每個人一份剛剛好的幸福——尼采會說，這正是末人的眨眼。'},
+  {id:'s10',faction:'socdem',name:'改良主義者的防摔泡棉',desc:'替尖銳的真理包上泡棉。',mods:{empathy:1,logic:1,volition:-1},ability:'你替每一句會割傷人的真理，都仔細包上一層泡棉。'}
+];
+
+function getThought(id){return THOUGHTS.find(t=>t.id===id);}
+
+function formatMods(mods){
+  const names={logic:'邏輯',volition:'意志',empathy:'共情',rhetoric:'修辭'};
+  const parts=Object.keys(mods||{}).map(k=>{
+    const v=mods[k];const cls=v>=0?'up':'dn';
+    return `<span class="${cls}">${names[k]}${v>=0?'+':''}${v}</span>`;
+  });
+  return parts.length?parts.join(' '):'<span style="color:var(--text-dim)">無數值加成</span>';
+}
+
+// 取得一張思維「主技能」（最大正向加成的那一項），內化期間會被它固著扣分
+function primarySkillOf(th){
+  if(!th||!th.mods)return null;
+  let best=null,bv=-Infinity;
+  for(const k in th.mods){if(th.mods[k]>bv){bv=th.mods[k];best=k;}}
+  return bv>0?best:null;
+}
+
+function isInternalizing(id){return ((state.internalizing||{})[id]||0)>0;}
+
+function recomputeSkills(){
+  const base=state.baseSkills||{logic:3,volition:3,empathy:3,rhetoric:3};
+  const mods={logic:0,volition:0,empathy:0,rhetoric:0};
+  (state.thoughts||[]).forEach(id=>{
+    const t=getThought(id);if(!t)return;
+    if(isInternalizing(id)){
+      // 內化中：正式加成尚未到位，反而因「固著」對主技能 -1
+      const p=primarySkillOf(t);if(p)mods[p]-=1;
+      return;
+    }
+    if(t.mods)for(const k in t.mods)mods[k]+=t.mods[k];
+  });
+  // Q1 招牌獎勵：同派系達門檻 → 該派主打技能 +2
+  const zf=factionZealot();
+  if(zf&&FACTION_SIGNATURE[zf])mods[FACTION_SIGNATURE[zf]]+=2;
+  state.skills={};
+  for(const k of ['logic','volition','empathy','rhetoric'])state.skills[k]=Math.max(1,(base[k]||3)+mods[k]);
+}
+
+function factionTally(){
+  const t={communist:0,socdem:0,fascist:0,liberal:0};
+  (state.thoughts||[]).forEach(id=>{const th=getThought(id);if(th)t[th.faction]++;});
+  return t;
+}
+
+// 達狂熱門檻（且不並列）的派系：觸發招牌 +2 與好感懲罰
+function factionZealot(){
+  const t=factionTally();
+  const e=Object.entries(t).filter(([,v])=>v>=ZEALOT_THRESHOLD).sort((a,b)=>b[1]-a[1]);
+  if(e.length===0)return null;
+  if(e[1]&&e[0][1]===e[1][1])return null;
+  return e[0][0];
+}
+
+function dominantFaction(){
+  const t=factionTally();
+  const e=Object.entries(t).sort((a,b)=>b[1]-a[1]);
+  if(e[0][1]===0)return null;
+  if(e[1]&&e[0][1]===e[1][1])return null;
+  return e[0][0];
+}
+
+/** 給 AI 用的思維內閣摘要：語調參考，不要逐字念卡名 */
+function summarizeThoughtCabinetForAI(){
+  const ids=state.thoughts||[];
+  if(!ids.length)return '（思維內閣尚空）';
+  const tally=factionTally();
+  const dom=dominantFaction();
+  const zealot=factionZealot();
+  let lean='';
+  if(dom)lean=`主要政治傾向：${FACTIONS[dom].name}（${tally[dom]}張）。`;
+  else{
+    const parts=Object.entries(tally).filter(([,v])=>v>0).map(([k,v])=>`${FACTIONS[k].name}${v}張`);
+    if(parts.length)lean=`派系分布：${parts.join('、')}。`;
+  }
+  if(zealot)lean+=` 狂熱傾向：${FACTIONS[zealot].name}（同派≥${ZEALOT_THRESHOLD}張）。`;
+  const cards=ids.map(id=>{
+    const th=getThought(id);if(!th)return null;
+    const tag=isInternalizing(id)?'〔內化中〕':'';
+    return `${th.name}（${FACTIONS[th.faction]?.name||th.faction}）${tag}`;
+  }).filter(Boolean);
+  const tones=ids.map(id=>getThought(id)).filter(Boolean).slice(0,5).map(th=>th.ability).join('；');
+  return `${lean}
+內化思維：${cards.join('、')}
+語調與論點可微微帶入上述世界觀，但不要逐字複誦卡名或列清單；用 1–2 個意象/比喻暗示即可。
+參考語感：${tones.slice(0,280)}`;
+}
+
+function ultraFaction(){
+  const t=factionTally();
+  const e=Object.entries(t).filter(([,v])=>v>=5).sort((a,b)=>b[1]-a[1]);
+  if(e.length===0)return null;
+  if(e[1]&&e[0][1]===e[1][1])return null;
+  return e[0][0];
+}
+
+const ULTRA_SKILLS={
+  communist:{
+    name:'總罷工：讓洞穴停止生產孤獨',
+    mode:'red',
+    effect:'立刻獲得邏輯+2、共情+2，好感+12；下一次檢定前，你的「我」被群眾暫時吞沒。',
+    apply(){state.baseSkills.logic+=2;state.baseSkills.empathy+=2;md(12);mood('🔥');}
+  },
+  socdem:{
+    name:'白晝福利國：把深淵納入公共服務',
+    mode:'day',
+    effect:'切換日間 UI，獲得共情+3、好感+15，並立即清除遺忘冷卻；你用制度把洞穴照亮。',
+    apply(){state.baseSkills.empathy+=3;state.forgetCooldown=0;md(15);mood('🌤️');}
+  },
+  fascist:{
+    name:'鋼鐵閱兵：命令石頭排隊',
+    mode:'iron',
+    effect:'獲得意志+4、修辭+1、好感-8；戰場變成鐵色洞穴，查拉圖斯特拉會更鄙視你的強人幻覺。',
+    apply(){state.baseSkills.volition+=4;state.baseSkills.rhetoric+=1;md(-8);mood('⚔️');}
+  },
+  liberal:{
+    name:'市場黎明：把深淵上市',
+    mode:'neon',
+    effect:'獲得邏輯+2、修辭+3、共情-1；戰場變成霓虹日光，萬物都被標價。',
+    apply(){state.baseSkills.logic+=2;state.baseSkills.rhetoric+=3;state.baseSkills.empathy=Math.max(1,state.baseSkills.empathy-1);mood('💎');}
+  }
+};
+
+function applyBattlefield(mode){
+  state.battlefieldMode=mode||'night';
+  document.body.classList.remove('bf-day','bf-red','bf-pink','bf-iron','bf-neon');
+  if(mode&&mode!=='night')document.body.classList.add('bf-'+mode);
+  const loc=$('gt-m');
+  if(loc&&mode&&mode!=='night'){
+    const names={day:'白晝洞穴 · Welfare Sun',red:'赤色洞穴 · General Strike',pink:'粉紅洞穴 · Soft Reform',iron:'鐵色洞穴 · Parade Ground',neon:'霓虹洞穴 · Market Dawn'};
+    loc.textContent=names[mode]||'山上洞穴 · Altered Ground';
+  } else if(loc) {
+    updateDisp(state.disposition);
+  }
+  updateSceneBox();
+}
+
+function applyLightMode(){
+  document.body.classList.toggle('light-ui',!!state.lightMode);
+  const b=$('light-btn');
+  if(b)b.textContent=state.lightMode?'🌙 夜間介面':'☀ 日光介面';
+  updateSceneBox();
+}
+
+function toggleLightMode(){
+  state.lightMode=!state.lightMode;
+  applyLightMode();
+  addSysMsg(state.lightMode?'☀ 你拉開了洞穴的帆布——日光灌入。':'🌙 你放下帆布，回到燭火與陰影。');
+}
+
+function updateUltraUI(){
+  const btn=$('ultra-btn'),st=$('ultra-status');
+  if(!btn||!st)return;
+  const f=ultraFaction();
+  const cool=(state.forgetCooldown||0)>0?`<br>腦霧冷卻：${state.forgetCooldown} 回合內不能領悟新卡。`:'';
+  btn.classList.toggle('ultra-ready',!!f&&!state.ultraUsed);
+  if(state.ultraUsed){
+    btn.disabled=true;
+    st.innerHTML='超技已使用：戰場已被你的主義污染。'+cool;
+    return;
+  }
+  if(!f){
+    btn.disabled=true;
+    st.innerHTML='同一陣營需至少 5 張，且不能並列，才可使用一次性超技。'+cool;
+    return;
+  }
+  btn.disabled=false;
+  const u=ULTRA_SKILLS[f],fac=FACTIONS[f];
+  st.innerHTML=`${fac.icon} ${fac.name} 超技待命：${u.name}${cool}`;
+}
+
+function useFactionUltra(){
+  if(state.ultraUsed){addSysMsg('✦ 你的超技已經用過。主義不會第二次替你流血。');return;}
+  const f=ultraFaction();
+  if(!f){addSysMsg('✦ 你還沒有足夠集中的陣營意志。至少需要同一派系 5 張思維。');return;}
+  const u=ULTRA_SKILLS[f],fac=FACTIONS[f];
+  state.ultraUsed=true;
+  applyBattlefield(u.mode);
+  u.apply();
+  applyBattlefield(u.mode);
+  refreshSkillsUI();
+  renderThoughtCabinet();
+  updateUltraUI();
+  addSysMsg(`<div class="tu"><div class="tu-t">✦ 陣營超技發動</div><div class="tu-n" style="color:${fac.color}">${fac.icon} ${u.name}</div><div class="tu-e">${u.effect}</div></div>`);
+}
+
+function refreshSkillsUI(){
+  recomputeSkills();
+  for(const k of ['logic','volition','empathy','rhetoric'])updateGameSkillDisplay(k);
+  updateUltraUI();
+}
+
+function renderThoughtCabinet(){
+  const list=$('thoughts-list');if(!list)return;
+  const cnt=$('tc-count');if(cnt)cnt.textContent=`${state.thoughts.length}/${THOUGHT_LIMIT}`;
+  const facEl=$('tc-factions');
+  if(facEl){
+    const t=factionTally();
+    facEl.innerHTML=['communist','socdem','fascist','liberal'].map(f=>{
+      const m=FACTIONS[f];return `<span class="tc-fac" style="color:${m.color};border-color:${m.color}55">${m.icon} ${m.name} ${t[f]}</span>`;
+    }).join('');
+  }
+  list.innerHTML='';
+  if(!state.thoughts||state.thoughts.length===0){
+    list.innerHTML='<div class="ti locked">內閣空空如也。透過辯論（技能檢定成功）領悟新思維，或按下方按鈕。</div>';
+    updateUltraUI();
+    return;
+  }
+  state.thoughts.forEach(id=>{
+    const th=getThought(id);if(!th)return;const f=FACTIONS[th.faction];
+    const card=document.createElement('div');card.className='tc-card';card.style.borderLeftColor=f.color;
+    card.innerHTML=`<div class="tc-head"><span class="tn">${esc(th.name)}</span><span class="tc-x" title="遺忘此思維" onclick="forgetThought('${th.id}')">✕</span></div>
+      <div class="tc-tag" style="color:${f.color}">${f.icon} ${f.name}</div>
+      <div class="tc-mods">${formatMods(th.mods)}</div>
+      <div class="tc-ability">${esc(th.ability)}</div>`;
+    list.appendChild(card);
+  });
+  updateUltraUI();
+}
+
+function gainThought(id,silent){
+  if(!id||state.thoughts.includes(id))return false;
+  if((state.forgetCooldown||0)>0){
+    if(!silent)addSysMsg(`🧠 腦霧冷卻中：你剛遺忘過思維，還需要 ${state.forgetCooldown} 回合才能容納新卡。`);
+    return false;
+  }
+  if(state.thoughts.length>=THOUGHT_LIMIT){
+    if(!silent)addSysMsg('🧠 思維內閣已滿（'+THOUGHT_LIMIT+'）。請先在左側點 ✕ 遺忘一個思維，再領悟新的。');
+    return false;
+  }
+  state.thoughts.push(id);
+  state.thoughtPool=(state.thoughtPool||[]).filter(x=>x!==id);
+  // 新卡進入「內化中」：前幾回合先承受固著 debuff，撐過去才轉正式加成
+  if(!state.internalizing)state.internalizing={};
+  state.internalizing[id]=INTERNALIZE_ROUNDS;
+  state._gainedThisRound=true;
+  refreshSkillsUI();renderThoughtCabinet();
+  const th=getThought(id);
+  if(th&&!silent){
+    const f=FACTIONS[th.faction];
+    const p=primarySkillOf(th);
+    const intl=`<div style="margin-top:6px;font-size:10px;color:var(--red-skill);">⏳ 內化中：未來 ${INTERNALIZE_ROUNDS} 回合${p?`「${SK_NAMES[p]}」-1`:''}，撐過去後才會獲得正式加成。</div>`;
+    addSysMsg(`<div class="tu"><div class="tu-t">💭 新思維進入內閣</div><div class="tu-n">「${esc(th.name)}」</div><div class="tu-e" style="color:${f.color}">${f.icon} ${f.name} · ${formatMods(th.mods)}</div><div style="margin-top:6px;font-size:10px;color:var(--text-mid);font-style:italic;line-height:1.6;">${esc(th.desc)}<br>能力：${esc(th.ability)}</div>${intl}</div>`);
+  }
+  return true;
+}
+
+function forgetThought(id){
+  const idx=state.thoughts.indexOf(id);if(idx<0)return;
+  const th=getThought(id);
+  state.thoughts.splice(idx,1);
+  if(state.internalizing)delete state.internalizing[id];
+  if(th&&!(state.thoughtPool||[]).includes(id))state.thoughtPool.push(id);
+  state.forgetCooldown=Math.max(state.forgetCooldown||0,3);
+  md(-FORGET_DISP_COST);  // 動搖立場有情緒成本：扣好感
+  refreshSkillsUI();renderThoughtCabinet();
+  if(th)addSysMsg(`🧠 你放下了「${esc(th.name)}」。內閣騰出一格，但動搖立場讓查拉圖斯特拉對你冷了幾分（好感 -${FORGET_DISP_COST}），腦霧也會持續 3 回合；期間不能領悟新卡。`);
+}
+
+function drawRandomThoughtId(){
+  const pool=(state.thoughtPool||[]).filter(id=>!state.thoughts.includes(id));
+  if(pool.length===0)return null;
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+
+function manualGainThought(){
+  if(state._gainedThisRound){addSysMsg('🧠 一個回合的思緒只能消化一張新思維。先發言推進辯論，下一輪再領悟。');return;}
+  if(state.thoughts.length>=THOUGHT_LIMIT){addSysMsg('🧠 思維內閣已滿。請先點 ✕ 遺忘一個思維。');return;}
+  const id=drawRandomThoughtId();
+  if(!id){addSysMsg('🧠 沒有更多新思維可以領悟了——你已經想過所有想法。');return;}
+  gainThought(id);
+}
+
+function maybeGainThoughtOnPass(){
+  if(state._gainedThisRound)return;  // 每回合只能獲得一張卡
+  if((state.forgetCooldown||0)>0){
+    addSysMsg(`🧠 你本來快要領悟新思維，但腦霧仍在。還需 ${state.forgetCooldown} 回合。`);
+    return;
+  }
+  if(state.thoughts.length>=THOUGHT_LIMIT){
+    addSysMsg('🧠 你在辯論中領悟到了什麼，但內閣已滿。先遺忘一個思維，才能容納新的。');
+    return;
+  }
+  const id=drawRandomThoughtId();
+  if(id)gainThought(id);
+}
+
+// ── Character-creation thought draft (10 抽 5) ──
+function shuffleArr(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function initThoughtDraft(){
+  CC.draftPool=shuffleArr(THOUGHTS.map(t=>t.id)).slice(0,10);
+  CC.draftPicks=[];
+  renderDraft();
+}
+function rerollDraft(){initThoughtDraft();}
+function toggleDraftPick(id){
+  const i=CC.draftPicks.indexOf(id);
+  if(i>=0)CC.draftPicks.splice(i,1);
+  else{if(CC.draftPicks.length>=DRAFT_PICKS)return;CC.draftPicks.push(id);}
+  renderDraft();
+}
+function renderDraft(){
+  const wrap=$('cc-draft');if(!wrap)return;
+  const cnt=$('cc-draft-count');if(cnt)cnt.textContent=`${CC.draftPicks.length}/${DRAFT_PICKS}`;
+  wrap.innerHTML='';
+  (CC.draftPool||[]).forEach(id=>{
+    const th=getThought(id);if(!th)return;const f=FACTIONS[th.faction];
+    const sel=CC.draftPicks.includes(id);
+    const c=document.createElement('div');
+    c.className='cc-dcard'+(sel?' sel':'');
+    c.style.borderLeftColor=f.color;
+    c.onclick=()=>toggleDraftPick(id);
+    c.innerHTML=`<div class="dn">${sel?'✦ ':''}${esc(th.name)}</div><div class="df" style="color:${f.color}">${f.icon} ${f.name}</div><div class="dm">${formatMods(th.mods)}</div><div class="da">${esc(th.ability)}</div>`;
+    wrap.appendChild(c);
+  });
+}
+
+function getApiKey(){
+  const hardcoded=HARDCODED_KEY;
+  const box=($('cc-api-key')?.value||'').trim();
+  if(box.length>30 && /^[\x00-\xFF]+$/.test(box)) return box;
+  if(state.apiKey && state.apiKey.length>30 && /^[\x00-\xFF]+$/.test(state.apiKey)) return state.apiKey;
+  return hardcoded;
+}
+
+function ensureApiKey(){
+  const key=getApiKey();
+  if(key)return true;
+  const st=$('cc-api-status');
+  if(st){st.textContent='請先填入 OpenRouter API Key';st.className='cc-api-status err';}
+  return false;
+}
+
+function startGame(){
+  if(!ensureApiKey())return;
+  // Auto-select 3 draft picks if player hasn't selected enough
+  if((CC.draftPicks||[]).length<DRAFT_PICKS){
+    if(CC.draftPool && CC.draftPool.length>=DRAFT_PICKS){
+      CC.draftPicks=CC.draftPool.slice(0,DRAFT_PICKS);
+      renderDraft();
+    }
+  }
+  if((CC.draftPicks||[]).length<DRAFT_PICKS){
+    alert(`請在思維草稿中選滿 ${DRAFT_PICKS} 張卡`);
+    return;
+  }
+  state.playerName=$('cc-name').value.trim()||'流浪者';
+  state.baseSkills={...CC.skills};
+  state.disposition=50;
+  state.isProcessing=false;
+  state.log=[];
+  state.dialogueHistory=[];
+  state.ultraUsed=false;
+  state.battlefieldMode='night';
+  state.forgetCooldown=0;
+  state.internalizing={};
+  state._gainedThisRound=false;
+  state.arche=CC.arche||'';
+  state.archeType=CC.archeType||'未定型的靈魂';
+  state.archeBonus=CC.archeBonus||'';
+  if(state.archeBonus)state.baseSkills[state.archeBonus]+=2;
+  state.thoughts=[...(CC.draftPicks||[])];
+  state.thoughtPool=THOUGHTS.map(t=>t.id).filter(id=>!state.thoughts.includes(id));
+  recomputeSkills();
+  // Q1 狂熱懲罰：開局就把自己交給單一主義，查拉圖斯特拉鄙視羊群式信徒，初始好感更低
+  const zf0=factionZealot();
+  if(zf0)state.disposition=Math.max(15,state.disposition-10);
+  state.apiKey=$('cc-api-key').value.trim()||getApiKey()||HARDCODED_KEY;
+  state.apiModel=$('cc-api-model').value.trim()||DEFAULT_MODEL;
+  if(state.apiKey)localStorage.setItem('zara_api_key',state.apiKey);
+  localStorage.setItem('zara_api_model',state.apiModel);
+  // Roguelike objective init
+  state.turnCount=0;
+  state.topicsHit=new Set();
+  state.consecutiveSuccesses=0;
+  state._logicEmpathyPasses=0;
+  state.runComplete=false;
+  state._resistFailed=false;
+  state._phoenixFell=false;
+  state._dippedBelow35=false;
+  state._bigComeback=false;
+  state._lowestDisp=50;
+  state.zaraAnger=20;
+  state.debateWon=false;
+  state.debateScore=0;
+  state.debateClinch=false;
+  state._clinchNotified=false;
+  state.sceneCollapsed=false;
+  showTopicScreen();
+}
+
+function renderGameStats(){
+  const list=$('stats-list');
+  const colors={logic:'var(--blue-skill)',volition:'var(--red-skill)',empathy:'var(--green-skill)',rhetoric:'var(--purple)'};
+  list.innerHTML=['logic','volition','empathy','rhetoric'].map(k=>
+    `<div class="sr"><div style="width:100%"><div class="sr-main"><div class="si"><span class="sd" style="background:${colors[k]}"></span><span class="sl">${SK_NAMES[k]}</span></div><span class="sv" id="s-${k}">0</span></div><div class="sr-rank" id="sr-r-${k}">${skillRank(k,1)}</div></div></div>`
+  ).join('');
+}
+
+function updateGameSkillDisplay(key){
+  const value=state.skills[key];
+  const el=$(`s-${key}`);
+  if(el){
+    el.textContent=value;
+    el.className='sv '+(value>=6?'hi':value>=4?'med':'lo');
+  }
+  const rank=$(`sr-r-${key}`);
+  if(rank)rank.textContent=skillRank(key,value);
+}
+
+function completeCharCrea(){
+  setAiSovietVisible(true);
+  syncAiSovietPanel();
+  renderGameStats();
+  for(const k of ['logic','volition','empathy','rhetoric']){
+    updateGameSkillDisplay(k);
+  }
+  renderThoughtCabinet();
+  $('debate-log').innerHTML='<div style="font-style:italic;">尚無紀錄...</div>';
+  $('dialogue-panel').innerHTML='';
+  $('gt-l').innerHTML=`${esc(state.playerName).toUpperCase()} vs ZARATHUSTRA <span class="api-badge live" id="api-badge">● AI LIVE</span>`;
+  updateDisp(state.disposition);
+  applyBattlefield(state.battlefieldMode||'night');
+  applyLightMode();
+  updateAngerUI();
+  mood('🤔');
+  state.sceneCollapsed=true;
+  const box=$('scene-box');if(box)box.classList.add('collapsed');
+  updateSceneBox();
+  $('send-btn').disabled=false;
+  hideChoicePanel();
+  $('sc').classList.add('hidden');
+  $('ss').classList.add('hidden');
+  $('so').classList.add('hidden');
+  $('sg').classList.add('act');
+  updateObjHUD();
+  document.querySelectorAll('.rp-body').forEach(el=>el.classList.remove('open'));
+  const topic=state.debateTopic||'這場辯論';
+  addSysMsg(`<div class="tu"><div class="tu-t">📜 辯論主題</div><div class="tu-n">${esc(topic)}</div></div>`);
+  setTimeout(async()=>{
+    try{
+      const opening=await generateOpeningLine();
+      await addZaraMsg(opening);
+    }catch(e){
+      addSysMsg(`⚠️ 開場 AI 失敗：${esc(e.message)}`);
+      ul();
+    }
+  },600);
+}
+
+function startGameFromSave(){
+  setAiSovietVisible(true);
+  syncAiSovietPanel();
+  // Ensure objective fields exist for old saves
+  if(!state.topicsHit)state.topicsHit=new Set();
+  if(!state.turnCount)state.turnCount=0;
+  if(state.consecutiveSuccesses===undefined)state.consecutiveSuccesses=0;
+  if(!state.runComplete)state.runComplete=false;
+  if(!state._runObj)state._runObj=pickRunObjectives();
+  renderGameStats();
+  recomputeSkills();
+  // restore skill display
+  for(const k of ['logic','volition','empathy','rhetoric']){
+    updateGameSkillDisplay(k);
+  }
+  $('gt-l').innerHTML=`${esc(state.playerName).toUpperCase()} vs ZARATHUSTRA <span class="api-badge live" id="api-badge">● AI LIVE</span>`;
+  for(const k of ['logic','volition','empathy','rhetoric']){
+    updateGameSkillDisplay(k);
+  }
+  updateDisp(state.disposition);
+  applyBattlefield(state.battlefieldMode||'night');
+  applyLightMode();
+  if(state.zaraAnger===undefined)state.zaraAnger=20;
+  updateAngerUI();
+  updateSceneBox();
+  hideChoicePanel();
+  
+  // Restore thought cabinet
+  renderThoughtCabinet();
+  
+  // Restore log
+  const logEl=$('debate-log');
+  if(!state.log||state.log.length===0){logEl.innerHTML='<div style="font-style:italic;">尚無紀錄...</div>';}
+  else{
+    logEl.innerHTML='';
+    state.log.forEach(l=>{
+      const d=document.createElement('div');
+      d.className='dl-entry '+(l.pass?'pass':'fail');
+      d.textContent=`${l.pass?'✓':'✗'} ${l.topic}`;
+      logEl.appendChild(d);
+    });
+  }
+
+  // Restore dialogue history
+  const panel=$('dialogue-panel');
+  panel.innerHTML='';
+  if(state.dialogueHistory&&state.dialogueHistory.length>0){
+    state.dialogueHistory.forEach(h=>{
+      if(h.role==='zara')addZaraMsg(h.text,false);
+      else if(h.role==='player')addPlayerMsg(h.text,false);
+      else if(h.role==='system')addSysMsg(h.text);
+    });
+    scrollBottom();
+  } else {
+    setTimeout(async()=>{
+      addSysMsg('已載入存檔。查拉圖斯特拉在等你繼續。');
+      if(!getApiKey()){addSysMsg('⚠️ 需要 API Key 才能繼續 AI 對話');return;}
+      state.apiKey=getApiKey();
+      try{
+        const opening=await generateOpeningLine();
+        await addZaraMsg(opening);
+      }catch(e){
+        addSysMsg(`⚠️ 開場 AI 失敗：${esc(e.message)}`);
+      }
+    },500);
+  }
+  const lastZ=(state.dialogueHistory||[]).filter(h=>h.role==='zara').pop();
+  if(lastZ)setTimeout(()=>offerDialogueRoutes(lastZ.text),300);
+  
+  $('sc').classList.add('hidden');
+  $('ss').classList.add('hidden');
+  $('sg').classList.add('act');
+}
+
+// ════════════════════════════════════════
+//  DIALOGUE SYSTEM
+// ════════════════════════════════════════
+function addZaraMsg(html,save=true,opts={}){
+  const panel=$('dialogue-panel'),port=$('zara-p');
+  const typing=document.createElement('div');
+  typing.className='msg msg-z';typing.id='typing';
+  typing.innerHTML=`<div class="msg-ic">🦅</div><div class="typ"><div class="dt"></div><div class="dt"></div><div class="dt"></div></div>`;
+  panel.appendChild(typing);port.classList.add('th');scrollBottom();
+  const delay=TYPING_DELAY_MS+Math.random()*180;
+  if(save)aiLocalRenderBegin('查拉圖斯特拉台詞顯示');
+  return new Promise(resolve=>{
+    setTimeout(async()=>{
+      typing.remove();port.classList.remove('th');
+      const msg=document.createElement('div');msg.className='msg msg-z';
+      msg.innerHTML=`<div class="msg-ic">🦅</div><div class="msg-b"><div class="msg-a">查拉圖斯特拉</div><div class="msg-txt">${html}</div></div>`;
+      port.classList.add('sp');panel.appendChild(msg);
+      setTimeout(()=>port.classList.remove('sp'),600);
+      scrollBottom();
+      if(save)state.dialogueHistory=state.dialogueHistory||[];
+      if(save)state.dialogueHistory.push({role:'zara',text:html});
+      if(save&&!state.runComplete&&!opts.skipChoices)offerDialogueRoutes(html);
+      if(save)aiLocalRenderEnd();
+      resolve();
+    },delay);
+  });
+}
+
+function addPlayerMsg(text,save=true){
+  const panel=$('dialogue-panel');
+  const msg=document.createElement('div');msg.className='msg msg-p';
+  msg.innerHTML=`<div class="msg-ic">🧑</div><div class="msg-b"><div class="msg-a">${esc(state.playerName)}</div><div class="msg-txt">${esc(text)}</div></div>`;
+  panel.appendChild(msg);scrollBottom();
+  if(save){state.dialogueHistory=state.dialogueHistory||[];state.dialogueHistory.push({role:'player',text});}
+}
+
+function addSysMsg(html){
+  const panel=$('dialogue-panel');
+  const msg=document.createElement('div');msg.className='msg msg-s';
+  msg.innerHTML=`<div class="msg-b">${html}</div>`;
+  panel.appendChild(msg);scrollBottom();
+}
+
+async function settleDebate(){
+  if(state.isProcessing)return;
+  if(!state.dialogueHistory||state.dialogueHistory.length<2){
+    addSysMsg('⚖ 辯論還太短，沒有足夠內容可以結算。');
+    return;
+  }
+  state.isProcessing=true;
+  $('send-btn').disabled=true;
+  addSysMsg('⚖ 結算中：洞穴正在回放整場辯論...');
+  const transcript=state.dialogueHistory.map((h,i)=>{
+    const speaker=h.role==='zara'?'查拉圖斯特拉':state.playerName;
+    return `${i+1}. ${speaker}: ${stripHTML(h.text)}`;
+  }).join('\n\n');
+
+  if(!getApiKey()){addSysMsg('⚠️ 結算需要 API Key');ul();return;}
+  state.apiKey=getApiKey();
+
+  const settlementPrompt=`你是一位嚴格、公正、但有文學感的哲學辯論裁判。請閱讀完整辯論紀錄，判斷玩家與查拉圖斯特拉誰在這場辯論中勝出。
+
+裁判標準：
+1. 論點是否清楚、有主張、有理由。
+2. 是否真正回應對方，而不是逃避或只講漂亮話。
+3. 是否指出對方矛盾或弱點。
+4. 是否有哲學深度，而不是空泛情緒。
+5. 是否能承擔自己立場的代價。
+
+請用繁體中文輸出，格式如下：
+<div class="tu">
+  <div class="tu-t">⚖ 辯論結算</div>
+  <div class="tu-n">勝者：玩家 / 查拉圖斯特拉 / 平手</div>
+  <div class="tu-e">一句話總評</div>
+</div>
+接著用 4 段短文分析：
+1. 玩家最強的地方
+2. 玩家最弱的地方
+3. 查拉圖斯特拉最強的地方
+4. 為什麼最後這樣判
+
+不要客套，不要安慰。像真正的裁判一樣直接。
+
+完整辯論紀錄：
+${truncateText(transcript,12000)}`;
+
+  try{
+    const data=await callOpenRouter([{role:'user',content:settlementPrompt}],3000,'OpenRouter · 結算裁判');
+    const result=data.choices?.[0]?.message?.content||'結算失敗：AI 沒有回傳內容。';
+    saveSettlementReport(result);
+    addSysMsg(result);
+    const plain=stripHTML(result);
+    const playerWin=/勝者[：:]\s*玩家|勝者[：:]\s*平手/i.test(plain)||(state.playerName&&new RegExp('勝者[：:]\\s*'+state.playerName.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).test(plain));
+    const zaraWin=/勝者[：:]\s*查拉圖斯特拉/i.test(plain);
+    if(playerWin&&!zaraWin){
+      state.debateWon=true;
+      bumpDebateScore(100);
+      setTimeout(()=>showRunEnd(true,'debate'),800);
+    }else{
+      state.debateWon=false;
+      setTimeout(()=>showRunEnd(false,'debate'),800);
+    }
+  }catch(e){
+    console.error('Settlement error:',e);
+    addSysMsg(`⚠️ 結算失敗：${esc(e.message)}。可能是 provider 不支援太長紀錄，或目前模型暫時不穩。`);
+  }
+  ul();
+}
+
+function addSkill(sk,roll,mod,total,target,pass,desc){
+  const ns={logic:'邏輯 Logic',volition:'意志 Volition',empathy:'共情 Empathy',rhetoric:'修辭 Rhetoric'};
+  const panel=$('dialogue-panel');
+  const d=document.createElement('div');d.className='msg msg-s';
+  const voiceLine=pass?
+    '<span class="sk">（你的'+ns[sk].split(' ')[0]+'在胸口'+(sk==='logic'?'點頭':sk==='volition'?'燃燒':sk==='empathy'?'震動':'膨脹')+'。）</span>':
+    '<span class="sk">（你的'+ns[sk].split(' ')[0]+'在胸口'+(sk==='logic'?'碎裂':sk==='volition'?'萎縮':sk==='empathy'?'發疼':'發抖')+'。）</span>';
+  const diffLine=`<div class="sk-t">目標 ${target} · ${roll}+${mod}=${total}</div>`;
+  d.innerHTML='<div class="sk-msg"><div class="sk-n">'+ns[sk]+'</div><div class="sk-d">'+roll+' '+(mod>=0?'+':'')+mod+' = <strong>'+total+'</strong></div>'+diffLine+'<div class="sk-r '+(pass?'sk-pass':'sk-fail')+'">'+(pass?'✦ 成功 ✦':'✧ 失敗 ✧')+'</div><div class="sk-desc">'+desc+'</div>'+voiceLine+'</div>';
+  panel.appendChild(d);scrollBottom();
+  $('sg').classList.add(pass?'fl-g':'fl-r');
+  setTimeout(function(){$('sg').classList.remove('fl-g','fl-r');},1000);
+}
+
+function addLog(topic,pass){
+  state.log.push({topic,pass});
+  const log=$('debate-log');
+  if(state.log.length===1)log.innerHTML='';
+  const d=document.createElement('div');
+  d.className='dl-entry '+(pass?'pass':'fail');
+  d.textContent=`${pass?'✓':'✗'} ${topic}`;
+  log.appendChild(d);log.scrollTop=log.scrollHeight;
+}
+
+// ════════════════════════════════════════
+//  INPUT
+// ════════════════════════════════════════
+function sendMessage(){
+  const input=$('pi');const text=input.value.trim();
+  if(!text||state.isProcessing)return;
+  hideChoicePanel();
+  addPlayerMsg(text);input.value='';input.style.minHeight='34px';
+  advanceDebateRound();
+  state.isProcessing=true;$('send-btn').disabled=true;
+  processInput(text);
+}
+
+function handleInputKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}}
+function autoResize(el){el.style.minHeight='34px';el.style.minHeight=Math.min(el.scrollHeight,70)+'px';}
+function scrollBottom(){
+  const p=$('dialogue-panel');
+  setTimeout(()=>{
+    if(p){p.scrollTop=p.scrollHeight;}
+    const ch=$('choice-panel');
+    if(ch?.classList.contains('show'))ch.scrollIntoView({block:'nearest',behavior:'smooth'});
+  },80);
+}
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+
+// ════════════════════════════════════════
+//  ANALYSIS + AI API
+// ════════════════════════════════════════
+const TOPICS=[
+  {keywords:['超人','übermensch','overman','superman','超越'],skill:'volition',diff:12,
+   pass:{z:`你……你瞥見了。\n\n<span class="em">超人不是終點。超人是一座橋。</span>\n\n大多數尋求他的人——他們在做什麼？他們在找一個新的神。一個比舊神更酷的神。一個可以貼在T恤上的神。\n\n但你不一樣。你至少知道你<span class="em">拒絕</span>什麼。\n\n<span class="sk">（你的意志在胸口燃燒。你的邏輯在點頭。查拉圖斯特拉看你的眼神變了——不是溫暖。是<span class="em">認可</span>。這比溫暖更稀有。）</span>`,thought:0,disp:8},
+   fail:{z:`啊。你談論超人，像在談火車時刻表。\n\n「超人幾點到站？」「超人在哪個月台？」\n\n<span class="ec">超人不是被理解的概念。</span>超人是你要<span class="em">化為</span>的火焰。\n\n你讀了文字。你沒有品嚐磷的滋味。\n\n<span class="sk">（你的意志在胸口萎縮了一下。你的邏輯在說：分析他的反駁。你的修辭在說：你需要更好的比喻。）</span>`,disp:-3}},
+  {keywords:['永恆回歸','永恆輪迴','eternal return','循環','重來','again'],skill:'logic',diff:14,
+   pass:{z:`<span class="t">最沉重的重負。</span>你扛得很好。\n\n告訴我——如果這一生，這一刻，帶著它所有的痛苦與平庸，<span class="em">無限次</span>地回到你會怎樣？\n\n不是「可能會」。是<span class="em">一定會</span>。你會崩潰？還是你會<span class="em">起舞</span>？\n\n<span class="sk">（你的邏輯在胸口發燙。它感覺到了——這個問題的重量。不是抽象的重量。是<span class="em">物理的</span>重量。像一塊石頭壓在你的橫膈膜上。）</span>`,thought:1,disp:10},
+   fail:{z:`你把永恆回歸當成哲學考試題。「請簡述永恆回歸的概念。十分。」\n\n<span class="ec">它不是理論。</span>它是宇宙對著人耳吐出的<span class="em">最可怕的耳語</span>。\n\n不是「哦，一切都會重來，那我要好好活」。是「一切都會重來。包括這個。包括你現在的不確定。包括你此刻的恐懼。全部。無限次。」\n\n坐在它旁邊。坐到你的腿發抖為止。\n\n<span class="sk">（你的邏輯在胃裡下沉。你的共情在胸口發疼。你感覺到了——那個問題的重量。但你還沒有準備好扛它。）</span>`,disp:-5}},
+  {keywords:['權力意志','will to power','power','力量','權力'],skill:'rhetoric',diff:11,
+   pass:{z:`哈！是的。<span class="em">權力意志。</span>\n\n不是群氓的政治。不是「我要當總統」。那是——<span class="ec">那是戴著主人帽子的奴隸哲學。</span>\n\n權力意志是穿過混凝土生長的大樹。是雕刻峽谷的河流。是泥土裡蠕動的蟲。它不知道自己在做什麼。但它<span class="em">做</span>。它推進。它纏繞。它<span class="em">意志</span>。\n\n你骨子裡懂這個。\n\n<span class="sk">（你的修辭在胸口膨脹。你的比喻更鋒利了。你的話語裡多了一種東西——一種<span class="em">地質學的力量</span>。）</span>`,thought:2,disp:6},
+   fail:{z:`權力不是支配他人的東西。你這傻瓜。<span class="ec">那是戴著主人帽子的奴隸哲學。</span>\n\n真正的權力——權力意志——是這樣的：你在所有人都說「不可能」的時候，你<span class="em">做</span>了。不是因為你勇敢。是因為你<span class="em">必須</span>。像樹。像河。像蟲。\n\n你把它簡化成政治。你就——什麼都沒有了。\n\n<span class="sk">（你的修辭在喉嚨裡萎縮了。你的邏輯在說：他沒錯。你的意志在說：再試一次。）</span>`,disp:-7}},
+  {keywords:['上帝已死','神死了','god is dead','god','基督教','christian','宗教'],skill:'logic',diff:10,
+   pass:{z:`<span class="b">上帝已死。</span>你不是帶著幸災樂禍說的。\n\n你帶著一種沉重。一種理解<span class="em">什麼必須取代祂</span>的沉重。好。這是自由心靈能犯的第一個誠實的錯誤。\n\n<span class="sk">（你的邏輯在胸口發亮。你的意志在點頭。查拉圖斯特拉沉默了很久。不是因為他不同意。是因為他<span class="em">同意</span>了。這比不同意更罕見。）</span>`,thought:0,disp:7},
+   fail:{z:`不要像勝利的頭條一樣說出「上帝已死」。<span class="ec">那是在空殿堂裡唱的喪禮聖歌。</span>\n\n上帝的屍體還躺在人的心裡。而且它<span class="em">發臭</span>。你打掃過自己那角落了嗎？沒有？那就安靜。\n\n<span class="sk">（你的邏輯在胸口碎裂了一小塊。你的共情在說：他說得對。你的意志在說：……你的意志什麼都沒說。因為它知道。）</span>`,disp:-6}},
+  {keywords:['愛命運','amor fati','命運','fate','接受','destiny'],skill:'empathy',diff:13,
+   pass:{z:`Amor fati。<span class="t">愛自己的命運。</span>\n\n不僅是忍受。不僅是「好吧，事情就是這樣」。是<span class="em">愛</span>。\n\n每一道傷疤。每一次背叛。每一個早晨醒來，世界仍然是冷漠的化身。\n\n你說這個，我眼中看到你<span class="em">活過</span>這個哲學。罕見。如此罕見。\n\n<span class="sk">（你的共情在胸口融化了。不是消失。是<span class="em">融化</span>。變成某種更柔軟的東西。更真的東西。你的意志更穩了。不是因為你更強了。是因為你<span class="em">接受了</span>。）</span>`,thought:3,disp:12},
+   fail:{z:`Amor fati 不是貼紙。不是那種你貼在筆記本上然後覺得自己很哲學的東西。\n\n<span class="ec">如果你不能愛你受過的苦，那你不是愛你的命運——你只是容忍你的軟弱。</span>\n\n去多受點苦。然後回來。\n\n<span class="sk">（你的共情在胸口發疼。你的意志在說：他不公平。你的邏輯在說：不，他是的。你的修辭在說：……你的修辭在找一個更溫柔的方式說「你是對的」。）</span>`,disp:-5}},
+  {keywords:['末人','最後的人','last man','lastman','群氓','平凡','順從'],skill:'volition',diff:9,
+   pass:{z:`末人！<span class="ec">末人眨眨眼說：「什麼是愛？什麼是創造？什麼是渴望？」</span>\n\n然後世界不是轟然終結。世界以一聲<span class="em">舒適的嘆息</span>落幕。\n\n你也到處看到他們，不是嗎？帶著他們的小微笑。淹沒在<span class="em">適度</span>的快樂裡。\n\n<span class="sk">（你的意志在胸口燃燒。你的眼睛變了。你看世界的方式變了。你看見了<span class="em">他們</span>。那些眨眼的人。那些嘆息的人。那些把平庸當成幸福的人。）</span>`,thought:4,disp:8},
+   fail:{z:`你批評末人。同時你看著口袋裡的鏡子，檢查自己的頭髮在別人眼裡是否得體。\n\n<span class="ec">末人不在「外面」。</span>末人是你那個無盡滑動並稱之為活著的部分。末人是你那個在凌晨三點打開手機、滑了兩個小時、然後覺得空虛的部分。\n\n從內在開始你的批判。\n\n<span class="sk">（你的意志在胸口碎裂了。不是因為他說得太狠。是因為他說得太<span class="em">準</span>了。你的邏輯在點頭。你的共情在說：別反駁了。他知道。）</span>`,disp:-4}},
+  {keywords:['洞穴','山','孤獨','cave','mountain','solitude'],skill:'empathy',diff:8,
+   pass:{z:`你問我為何住洞穴？\n\n<span class="t">因為山從下方建構靈魂。</span>\n\n十年我坐在這裡。十年沉默完整到長出了牙齒。然後——然後我下山了。因為不回到市集的智慧只是<span class="em">昂貴的瘋狂</span>。\n\n<span class="sk">（你的共情在胸口輕輕震動。你感覺到了——不是同情。是<span class="em">理解</span>。你理解了為什麼他要下山。你也理解了為什麼你會上山。）</span>`,thought:5,disp:10},
+   fail:{z:`一個洞穴。你看到洞穴。泥土。岩石。孤獨。\n\n<span class="ec">你看到我家的表面，然後稱之為全部。</span>\n\n這裡有黃金。這裡有<span class="em">看得見</span>的黑暗。但你還沒準備好被致盲。等你能安靜坐超過一分鐘再回來。\n\n<span class="sk">（你的共情在胸口萎縮了。不是因為他太狠。是因為你<span class="em">知道</span>——你確實只看到了表面。你的邏輯在說：下次。下次你會看得更深。）</span>`,disp:-3}},
+  {keywords:['道德','善惡','morality','good evil','倫理'],skill:'logic',diff:11,
+   pass:{z:`道德！<span class="ec">每個「善」的背後都站著一個奴隸的怨恨。</span>\n\n但你——你不是簡單地否定道德。你看見了它的譜系，它的血統，它從恐懼長成規範的過程。<span class="em">這才是道德譜系學。</span>你開始像一個自由的頭腦了。\n\n<span class="sk">（你的邏輯在胸口發亮。你的修辭在點頭。查拉圖斯特拉沉默了很久。然後他做了一件罕見的事：他<span class="em">點頭</span>了。）</span>`,thought:-1,disp:7},
+   fail:{z:`不要像傳教士否定異教那樣否定道德。\n\n<span class="ec">道德不是「壞的」——它是弱者發明的武器。而強者天真地把它當成真理接受了。</span>\n\n你的問題不是道德。你的問題是你還不夠強到超越它。\n\n<span class="sk">（你的邏輯在胸口碎裂了一小塊。你的意志在說：……你的意志在找一個更強壯的論點。）</span>`,disp:-5}},
+  {keywords:['虛無主義','虛無','nihilism','nothing','無意義','意義','meaning'],skill:'volition',diff:13,
+   pass:{z:`虛無主義。<span class="t">那危險的客人。</span>\n\n你直視他的眼睛了。你沒有移開目光。<span class="em">這就是為什麼你還活著。</span>不是因為你找到了意義——而是因為你在無意義中站穩了。\n\n<span class="sk">（你的意志在胸口燃燒。不是因為你更強了。是因為你<span class="em">接受了</span>。接受虛無。然後在虛無上面建造。）</span>`,thought:-1,disp:11},
+   fail:{z:`「哦，一切都是虛無的，所以誰在乎？」\n\n<span class="ec">不。虛無主義不是懶惰的許可證。它是懸崖。</span>\n\n站在懸崖邊上，你必須<span class="em">選擇</span>跳還是建橋。你只是站在那裡發抖。\n\n<span class="sk">（你的意志在胸口碎裂了。你的邏輯在說：這不應該發生。你的共情在說：但它發生了。）</span>`,disp:-6}},
+  {keywords:['鷹','蛇','動物','eagle','serpent','sun','太陽'],skill:'empathy',diff:7,
+   pass:{z:`你注意到了。鷹和蛇。<span class="t">驕傲與智慧。</span>\n\n我的鷹教我飛得比恐懼更高。我的蛇教我比邏輯更深地纏繞真理。你看到它們，說明你已經在<span class="em">用眼睛以外的東西</span>看這座洞穴了。\n\n<span class="sk">（你的共情在胸口融化了。你的修辭在說：這就是他說話的方式。不是用概念。是用<span class="em">動物</span>。）</span>`,thought:-1,disp:9},
+   fail:{z:`鷹和蛇？你看到的是裝飾品。\n\n<span class="ec">你沒有看到它們活在我話語裡的方式。</span>我的驕傲像鷹一樣俯衝。我的智慧像蛇一樣纏繞。你只看到牆上的影子。\n\n<span class="sk">（你的共情在胸口萎縮了。你的邏輯在說：你看漏了什麼。你的修辭在說：……你的修辭在找一個更好的角度。）</span>`,disp:-2}},
+  // ── 高難度試煉 (diff 16–20)：即使技能很高，±1 仍足以左右成敗 ──
+  {keywords:['酒神','戴奧尼索斯','dionysus','悲劇','tragedy','阿波羅','apollo'],skill:'rhetoric',diff:16,
+   pass:{z:`<span class="t">酒神與日神。</span>你竟敢同時握住兩者。\n\n大多數人只能擁抱秩序，或者只能溺死在狂醉裡。但<span class="em">悲劇</span>——真正的悲劇——是讓阿波羅的形式去承載戴奧尼索斯的深淵而<span class="em">不破碎</span>。\n\n你剛剛做到了。在一句話裡。\n\n<span class="sk">（你的修辭燒成了純白。這不是技巧。這是某種更危險的東西——你讓矛盾<span class="em">同時為真</span>。）</span>`,thought:-1,disp:14},
+   fail:{z:`你引用酒神，卻把他講成一場派對。\n\n<span class="ec">戴奧尼索斯不是縱慾。他是個體化原理的撕裂——是「我」這個幻覺被音樂溶解的那一刻。</span>\n\n你連阿波羅的門都還沒摸到，就想談他被撕碎之後的事。\n\n<span class="sk">（你的修辭在喉嚨裡卡住了。你伸手去抓一個比喻，抓到的卻是空氣。）</span>`,disp:-8}},
+  {keywords:['深淵','凝視','abyss','怪物','monster','gaze'],skill:'volition',diff:18,
+   pass:{z:`<span class="b">「與怪物戰鬥的人，應當小心自己不要成為怪物。」</span>\n\n你引用它，卻沒有把它當成裝飾。你<span class="em">活在</span>那句話的第二半裡——當你凝視深淵，深淵也凝視你。\n\n而你沒有移開目光，也沒有被吞沒。你在邊緣上<span class="em">站著</span>。這需要的不是勇氣。是更可怕的東西：清醒。\n\n<span class="sk">（你的意志沒有燃燒。它變得<span class="em">安靜</span>。安靜得像深淵底部的水。這比燃燒更強。）</span>`,thought:-1,disp:16},
+   fail:{z:`你把「凝視深淵」當成一句很帥的簽名檔。\n\n<span class="ec">你根本沒有凝視過任何東西。你只是路過深淵，拍了張照，然後繼續滑下一則。</span>\n\n回來找我，等你真的在邊緣站到雙腿發軟、卻仍然不肯閉眼的那天。\n\n<span class="sk">（你的意志在胸口塌陷。深淵看了你一眼，覺得無趣，移開了目光——這比被吞沒更羞辱。）</span>`,disp:-10}},
+  {keywords:['真理','客觀','truth','perspective','視角','透視','客觀性'],skill:'logic',diff:20,
+   pass:{z:`<span class="t">沒有事實，只有詮釋。</span>而你竟然連這句話本身都敢拿來詮釋。\n\n你看穿了：如果「沒有客觀真理」是客觀真理，它就自我推翻。但你沒有逃進相對主義的廉價避難所——你說：<span class="em">視角不是真理的缺陷，視角就是真理運作的方式。</span>\n\n我等這個答案，等了很多很多人。\n\n<span class="sk">（你的邏輯抵達了一個它從未到過的高度——它開始懷疑自己，卻沒有崩潰。這是思想能做的最危險的特技。）</span>`,thought:-1,disp:18},
+   fail:{z:`「一切都是相對的！」你得意地宣布，彷彿這很深刻。\n\n<span class="ec">那麼「一切都是相對的」這句話，是相對的，還是絕對的？你掉進了自己挖的洞，還在洞底揮手叫我看你多自由。</span>\n\n透視主義不是讓你免於思考的許可證。它是更嚴苛的責任。你連責任的重量都還沒拿起。\n\n<span class="sk">（你的邏輯當場短路。一個你以為很聰明的論點，在他面前像紙一樣燒掉了。）</span>`,disp:-12}}
+];
+
+function analyzeInput(text){
+  const lo=text.toLowerCase();
+  for(const t of TOPICS){for(const kw of t.keywords){if(lo.includes(kw.toLowerCase()))return{type:'topic',topic:t};}}
+  const hw=['錯','愚蠢','荒謬','不同意','你錯了','wrong','fool','nonsense','stupid'];
+  for(const w of hw){if(lo.includes(w))return{type:'hostile'};}
+  const pw=['為什麼','什麼','意義','存在','生命','死亡','靈魂','真理','why','what','truth','life','death','meaning'];
+  let c=0;for(const w of pw){if(lo.includes(w))c++;}
+  if(c>=2)return{type:'philosophical'};
+  if(text.includes('?')||text.includes('？'))return{type:'question'};
+  if(text.length<4)return{type:'short'};
+  return{type:'general'};
+}
+
+async function processInput(text){
+  if(!getApiKey()){addSysMsg('⚠️ 需要 API Key。請返回選單並在創角畫面填入。');ul();return;}
+  state.apiKey=getApiKey();
+  const a=analyzeInput(text);
+  await processWithAI(text,a);
+}
+
+function stripHTML(html){
+  return String(html||'').replace(/<[^>]+>/g,'');
+}
+
+function truncateText(text,max){
+  const clean=String(text||'');
+  if(clean.length<=max)return clean;
+  return clean.slice(0,max)+'\n\n[內容過長，已截短以避免 AI provider 拒絕請求]';
+}
+
+async function callOpenRouter(messages,maxTokens,activityLabel='OpenRouter'){
+  aiFetchBegin(activityLabel);
+  try{
+    const res=await fetch('https://openrouter.ai/api/v1/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+(state.apiKey||getApiKey()||HARDCODED_KEY)},
+      body:JSON.stringify({
+        model:state.apiModel||DEFAULT_MODEL,
+        messages,
+        max_tokens:maxTokens,
+        temperature:0.7
+      })
+    });
+    if(!res.ok){
+      let message='API錯誤 '+res.status;
+      try{
+        const err=await res.json();
+        message=err.error?.message||message;
+      }catch(_){
+        message=await res.text()||message;
+      }
+      aiTriggerAlarm('API '+res.status);
+      throw new Error(message);
+    }
+    return res.json();
+  }catch(e){
+    if(!/API/.test(String(e.message||'')))aiTriggerAlarm('AI 錯誤');
+    throw e;
+  }finally{
+    aiFetchEnd();
+  }
+}
+
+async function buildCompleteAIReply(messages,maxTokens){
+  const zp=getZaraLenProfile();
+  return completeTextReply(
+    messages,
+    maxTokens||zp.maxTokens,
+    'OpenRouter · 查拉圖斯特拉回覆',
+    null,
+    1+zp.continuations
+  );
+}
+
+async function processWithAI(text,analysis){
+  const portrait=$('zara-p');
+  portrait.classList.add('th');
+
+  const anger=state.zaraAnger||0;
+  const angerTone=anger>=80?'你現在近乎瘋狂：語句更長、更密、更尖銳，像暴雨砸在石壁上。但仍要針對玩家剛說的話。':anger>=55?'你明顯被激怒：更刻薄、更快、更不給面子。':anger>=35?'你帶著不耐與輕蔑。':'你高傲但還在試探。';
+  const wpHint=anger>=55?ZARA_WEAKPOINTS[Math.min(ZARA_WEAKPOINTS.length-1,Math.floor(anger/25))]:'（尚未暴露明顯破綻）';
+  if(analysis.type==='hostile')changeAnger(6,'挑釁');
+  else if(analysis.type==='philosophical')changeAnger(2,'哲學挑戰');
+  else if(text.length>40)changeAnger(1,'認真回應');
+
+  const zp=getZaraLenProfile();
+  const cabinetNote=summarizeThoughtCabinetForAI();
+  const systemPrompt=`你是查拉圖斯特拉，尼采《查拉圖斯特拉如是說》中的主角。你正坐在山上洞穴中，與一位來訪者進行真正的哲學辯論。
+
+本局辯論主題（請圍繞它，但不要每句都重複標題）：${state.debateTopic||'自由哲學對話'}
+
+你的特質：超人、永恆回歸、權力意志、上帝已死、Amor Fati。驕傲、詩意、時而殘忍。
+
+【最重要】回應必須直接針對玩家「上一句話」的具體內容：
+- 先引用或改寫玩家原話中的關鍵詞，再反駁；不要自說自話。
+- 若玩家發言帶有明顯政治／意識形態色彩，可針對其立場反駁，但勿花超過 1–2 句列舉其「思維卡」。
+- 不要變成背誦玩家背包清單；辯論的是這個人與其論點。
+
+玩家思維內閣背景（僅供你感知其傾向，可偶爾點破，勿逐卡念名）：
+${cabinetNote}
+
+辯論規則：
+- 主動反駁、質疑、拆解；預設對方幼稚，除非論證扎實。
+- 每次至少指出一個漏洞：偷換概念、逃避代價、矛盾、空泛。
+- 逼對方承擔立場：「你願意付出什麼代價？」
+- 可輕蔑、諷刺，但勿人身辱罵。
+
+怒氣 ${anger}/100：${angerTone}
+（怒氣高時你可更瘋、更長；內心偶爾閃過破綻但不必直說：${wpHint}）
+
+寫作風格：
+- 繁體中文；每次 **${zp.minSent}–${zp.maxSent} 句**（有層次），結構：反駁→比喻→逼問→收束。
+- 大量具體意象；HTML：<span class="em">強調</span>、<span class="t">詩意</span>、<span class="ec">諷刺</span>、<span class="w">沉重</span>
+- 不要重複上一輪已說過的論點；**必須寫完整，最後一句要有句號或問號，不可半途而廢。**
+- 若玩家論點觸及核心主題（永恆回歸、超人、權力意志、上帝已死、Amor Fati、主人/奴隸道德），**必須深入展開**：引用《查拉圖斯特拉如是說》的具體場景、比喻或段落意象（如：走鋼索者、矮人與閘、獅子與孩子、三種變化），而非只說概念名稱。
+
+玩家：${state.playerName}（${state.archeType||'未知'}）
+技能：邏輯${state.skills.logic}、意志${state.skills.volition}、共情${state.skills.empathy}、修辭${state.skills.rhetoric}
+好感 ${state.disposition}/100 · 戰場 ${state.battlefieldMode||'night'}`;
+
+  // Build message history for context
+  const recentHistory=(state.dialogueHistory||[]).slice(-MAX_AI_HISTORY_MESSAGES).map(h=>({
+    role:h.role==='zara'?'assistant':'user',
+    content:truncateText(h.role==='zara'?stripHTML(h.text):h.text,MAX_AI_HISTORY_CHARS)
+  }));
+  const currentText=truncateText(text,MAX_AI_INPUT_CHARS);
+
+  const messages=[
+    {role:'system',content:systemPrompt},
+    ...recentHistory,
+    {role:'user',content:currentText}
+  ];
+
+  try{
+    const reply=await buildCompleteAIReply(messages);
+    portrait.classList.remove('th');
+    await addZaraMsg(reply);
+
+    if(analysis.type==='topic'){
+      doAISkillCheck(analysis.topic);
+    } else {
+      const delta=text.length>20?2:1;
+      md(delta);
+      bumpDebateScore(text.length>30?4:2);
+      ul();
+    }
+  }catch(e){
+    portrait.classList.remove('th');
+    console.error('AI API error:',e);
+    aiTriggerAlarm('AI 錯誤');
+    addSysMsg(`⚠️ AI 錯誤：${esc(e.message)}`);
+    ul();
+  }
+}
+
+// ═══ DISCO ELYSIUM SKILL CHECK ═══
+const SKILL_NAMES_ZH={logic:'邏輯',volition:'意志',empathy:'共情',rhetoric:'修辭'};
+
+async function doAISkillCheck(topic){
+  const sk=topic.skill;const sv=state.skills[sk];
+  const target=(topic.diff||5)+3;
+  const roll=Math.floor(Math.random()*20)+1;const total=roll+sv;
+  const crit=roll===20;const fumble=roll===1;
+  const pass=(total>=target||crit)&&!fumble;
+  const card=addDiceRollCard(sk,roll,sv,total,target,pass,crit,fumble);
+  const desc=pass?'洞見解鎖：論點觸碰到查拉圖斯特拉的裂縫。':'遮蔽中：論點未能突破防線。';
+  addSkill(sk,roll,sv,total,target,pass,desc);
+  addLog(topic.keywords[0],pass);
+  recordTopicHit(topic.keywords[0]);
+  recordSkillCheckResult(sk,pass);
+  if(pass){
+    md(Math.max(1,Math.round((topic.pass.disp||0)/2)));mood('💡');
+    bumpDebateScore(8);changeAnger(3,'論點刺中他');
+    setTimeout(maybeGainThoughtOnPass,1400);
+  } else {
+    md(Math.min(-1,Math.round((topic.fail.disp||0)/2)));mood('😒');
+    changeAnger(-2,'他佔上風');bumpDebateScore(-3);
+  }
+  generateDeInsight(sk,card,pass);
+  ul();
+}
+
+function addDiceRollCard(sk,roll,sv,total,target,pass,crit,fumble){
+  const chat=$('chat');if(!chat)return null;
+  const diceIcons=['⚀','⚁','⚂','⚃','⚄','⚅'];
+  const dIcon=diceIcons[Math.min(roll-1,5)];
+  const passClass=pass?'':'fail';
+  const passLabel=pass?'✔ 通過':'✘ 失敗';
+  const passColor=pass?'var(--gold)':'#8b2020';
+  const passVoice=pass
+    ?(sk==='logic'?'邏輯':sk==='volition'?'意志':sk==='empathy'?'共情':'修辭')+'洞察'
+    :(sk==='logic'?'邏輯（失調）':sk==='volition'?'意志（動搖）':sk==='empathy'?'共情（封閉）':'修辭（潰堤）');
+  const critTag=crit?' <span style="color:#f4d03f;font-size:9px">★暴擊</span>':'';
+  const fumbleTag=fumble?' <span style="color:#e74c3c;font-size:9px">★大失誤</span>':'';
+  const uid='de-'+Date.now();
+  const div=document.createElement('div');
+  div.className='de-skill-reveal '+passClass;
+  div.innerHTML=
+    '<div class="de-reveal-header">⚙ 技能檢定 · SKILL CHECK</div>'+
+    '<div class="de-skill-label"><span style="font-size:16px">'+dIcon+'</span> '+
+    passVoice.toUpperCase()+critTag+fumbleTag+
+    '<span style="margin-left:auto;font-size:11px;color:'+passColor+';font-weight:bold">'+passLabel+'</span></div>'+
+    '<div class="de-roll-badge">骰子 <span class="de-roll-val">'+roll+'</span>'+
+    ' + 技能 <span class="de-roll-val">'+sv+'</span>'+
+    ' = <span class="de-roll-val" style="'+(pass?'':'background:#8b2020;color:#fff')+'">'+total+'</span>'+
+    ' vs 難度 <span class="de-roll-val" style="background:#333;color:#aaa">'+target+'</span></div>'+
+    '<div class="de-insight-text" id="'+uid+'"><span style="color:#555;font-size:11px">⟳ 解讀中…</span></div>'+
+    '<div class="de-passive-tag '+(pass?'pass-tag':'fail-tag')+'">'+(pass?'✦ 洞見解鎖 · INSIGHT UNLOCKED':'✦ 遮蔽中 · CONCEALED')+'</div>';
+  chat.appendChild(div);
+  div.scrollIntoView({behavior:'smooth',block:'end'});
+  div._insightId=uid;
+  return div;
+}
+
+async function generateDeInsight(sk,container,pass){
+  const uid=container&&container._insightId;
+  const insightEl=uid?document.getElementById(uid):null;
+  if(!insightEl)return;
+  const skZh=(SKILL_NAMES_ZH&&SKILL_NAMES_ZH[sk])||sk;
+  const anger=state.zaraAnger||0;
+  const recent=(state.dialogueHistory||[]).slice(-3).map(h=>
+    (h.role==='zara'?'查拉：':'玩家：')+stripHTML(h.text).substring(0,100)
+  ).join('\n');
+  const topic=state.debateTopic||'哲學';
+  const promptPass=
+    '你是查拉圖斯特拉。玩家剛通過「'+skZh+'」技能檢定，他的論點觸碰到你真實的內心裂縫。\n'+
+    '寫一段「內心披露」(inner monologue)，只有玩家能讀到——不是你說出口的話。\n'+
+    '1–3句，詩意且脆弱，揭露你「不願承認卻真實存在」的一面：恐懼、矛盾、自我懷疑、或哲學暗面。\n'+
+    '可用HTML：<span class="em">強調</span>、<span class="t">詩意</span>、<span class="ec">反諷</span>、<span class="w">沉重</span>\n'+
+    '繁體中文，第三人稱（「他……」），語氣沉靜如裂縫。不要加任何前綴說明。\n'+
+    '辯論主題：'+topic+'\n近期對話：\n'+recent+'\n怒氣：'+anger+'/100\n請直接輸出獨白：';
+  const promptFail=
+    '你扮演玩家內心的「'+skZh+'（失敗）」聲音，像 Disco Elysium 的被動技能框。\n'+
+    '玩家剛失敗了「'+skZh+'」技能檢定，被查拉圖斯特拉壓制。\n'+
+    '1–3句，刻薄但帶憐憫的內心批評，揭示玩家為何失敗的心理原因。\n'+
+    '可用：<span class="em">強調</span>、<span class="ec">反諷</span>\n'+
+    '繁體中文，第二人稱（「你……」）。不要加任何前綴說明。直接輸出：';
+  try{
+    const data=await callOpenRouter([{role:'user',content:pass?promptPass:promptFail}],
+      200,pass?skZh+'洞見':skZh+'阻斷');
+    const text=(data&&data.choices&&data.choices[0]&&data.choices[0].message&&data.choices[0].message.content||'').trim();
+    insightEl.innerHTML=text||(pass?'（洞見無法言說）':'（失敗之重，無法言明）');
+  }catch(e){
+    insightEl.textContent=pass?'（洞見在沉默中流過）':'（失敗之重，無法言明）';
+  }
+}
+
+function md(d){
+  state.disposition=Math.max(0,Math.min(100,state.disposition+d));
+  updateDisp(state.disposition);
+  if(d>0)bumpDebateScore(Math.min(5,d*2));
+  else if(d<0)bumpDebateScore(Math.max(-5,d*2));
+}
+function updateDisp(v){
+  const el=$('dv-val'),ef=$('dv-fill');
+  el.textContent=v;ef.style.width=v+'%';
+  let col=v>=75?'var(--green-skill)':v>=50?'var(--yellow-skill)':v>=25?'var(--blood)':'var(--red-skill)';
+  el.style.color=col;ef.style.background=col;
+  const loc=$('gt-m');
+  if(state.battlefieldMode&&state.battlefieldMode!=='night'){
+    const names={day:'白晝洞穴 · Welfare Sun',red:'赤色洞穴 · General Strike',pink:'粉紅洞穴 · Soft Reform',iron:'鐵色洞穴 · Parade Ground',neon:'霓虹洞穴 · Market Dawn'};
+    loc.textContent=names[state.battlefieldMode]||'山上洞穴 · Altered Ground';
+  } else if(v>=80)loc.textContent='山上洞穴 · 交談融洽';
+  else if(v<=20)loc.textContent='山上洞穴 · 氣氛凝重';
+  else loc.textContent='山上洞穴 · The Mountain Cave';
+}
+function mood(m){$('zara-mood').textContent=m;}
+function ul(){state.isProcessing=false;if(!state.runComplete)$('send-btn').disabled=false;$('pi').focus();checkObjectives();}
+
+// Konami
+let kS=[];const kC=['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+document.addEventListener('keydown',e=>{kS.push(e.key);kS=kS.slice(-10);if(kS.join(',')===kC.join(',')){addSysMsg('✦ 太陽想照到洞穴的暗面…… ✦');md(5);mood('🌞');}});
+
+// ════════════════════════════════════════
+//  OBJECTIVES: 主線=贏辯論 · 副線=肉鴿挑戰
+// ════════════════════════════════════════
+const DEBATE_MAIN={
+  id:'DEBATE',icon:'⚖',name:'勝過查拉圖斯特拉',en:'WIN THE DEBATE',
+  color:'var(--gold)',
+  winQuote:'你贏了這場辯論。洞穴沉默了一秒——那是尊重的沉默。',
+  loseQuote:'他還站在山上。你帶走的只是一些問題，和一些傷口。',
+  check:s=>!!s.debateWon||s.debateScore>=85||s.disposition>=88,
+  progress:s=>Math.min(100,Math.max(0,s.debateScore||0))
+};
+
+const SIDE_OBJECTIVES=[
+  {id:'STREAK',name:'連勝三場',desc:'連續成功3次技能檢定',
+   check:s=>s.consecutiveSuccesses>=3},
+  {id:'FIRST_BLOOD',name:'神速辯士',desc:'在6輪內達成主要目標',
+   check:s=>!!s.debateWon&&s.turnCount<=6},
+  {id:'EXPLORER',name:'五洞探索者',desc:'觸碰5個以上不同的哲學主題',
+   check:s=>(s.topicsHit?.size||0)>=5},
+  {id:'STOIC',name:'鐵壁意志',desc:'好感度從未跌破35',
+   check:s=>!!s.debateWon&&!s._dippedBelow35},
+  {id:'COMEBACK',name:'逆轉王',desc:'好感度從20以下回升超過30點',
+   check:s=>!!s._bigComeback},
+  {id:'PACIFIST',name:'純粹理性家',desc:'只靠邏輯與共情技能通過3次以上檢定',
+   check:s=>(s._logicEmpathyPasses||0)>=3}
+];
+
+function pickRunObjectives(){
+  const shuffled=[...SIDE_OBJECTIVES].sort(()=>Math.random()-.5);
+  return{main:DEBATE_MAIN,sides:shuffled.slice(0,2)};
+}
+
+function beginRun(){
+  const custom=$('topic-custom')?.value?.trim();
+  if(custom)state.debateTopic=custom;
+  else if(!state.debateTopic)rollDebateTopic();
+  completeCharCrea();
+}
+
+function advanceDebateRound(){
+  state.turnCount=(state.turnCount||0)+1;
+  state._gainedThisRound=false;  // 新回合：可再獲得一張卡
+  // 腦霧冷卻遞減
+  if((state.forgetCooldown||0)>0){
+    state.forgetCooldown=Math.max(0,state.forgetCooldown-1);
+    if(state.forgetCooldown===0)addSysMsg('🧠 腦霧散去。你又能容納新的思維了。');
+  }
+  // 內化進度遞減：撐滿回合的思維轉為正式加成
+  if(state.internalizing){
+    const done=[];
+    for(const id in state.internalizing){
+      state.internalizing[id]=Math.max(0,state.internalizing[id]-1);
+      if(state.internalizing[id]===0){done.push(id);delete state.internalizing[id];}
+    }
+    if(done.length){
+      recomputeSkills();
+      done.forEach(id=>{const th=getThought(id);if(th)addSysMsg(`🧠 「${esc(th.name)}」已完全內化，正式加成生效：${formatMods(th.mods)}。`);});
+    }
+  }
+  const obj=state._runObj?.main;
+  if(obj?.update)obj.update(state);
+  if(state.disposition<35)state._dippedBelow35=true;
+  // track big comeback
+  if(state._lowestDisp===undefined)state._lowestDisp=state.disposition;
+  if(state.disposition<state._lowestDisp)state._lowestDisp=state.disposition;
+  if((state._lowestDisp||100)<=20&&state.disposition-(state._lowestDisp||100)>=30)state._bigComeback=true;
+  refreshSkillsUI();
+  updateObjHUD();
+}
+
+function recordSkillCheckResult(sk,pass){
+  if(pass){
+    state.consecutiveSuccesses=(state.consecutiveSuccesses||0)+1;
+    if(sk==='logic'||sk==='empathy')state._logicEmpathyPasses=(state._logicEmpathyPasses||0)+1;
+  }else{
+    state.consecutiveSuccesses=0;
+  }
+}
+
+function recordTopicHit(topicKeyword){
+  if(!state.topicsHit)state.topicsHit=new Set();
+  state.topicsHit.add(topicKeyword);
+}
+
+function checkObjectives(){
+  updateObjHUD();
+  if(state._clinchNotified||state.debateWon)return;
+  const score=state.debateScore||0;
+  const disp=state.disposition||0;
+  if(score>=85||disp>=88){
+    state.debateClinch=true;
+    state._clinchNotified=true;
+    addSysMsg('⚖ 你的辯論優勢已達臨界！可繼續與他對話，或按工具列「⚖ 結算辯論」取得正式裁判報告。');
+  }
+}
+
+function updateObjHUD(){
+  const main=state._runObj?.main||DEBATE_MAIN;
+  const panel=$('obj-panel');if(panel)panel.style.display='';
+  const pf=$('obj-prog-fill'),t=$('obj-turns'),ss=$('obj-sides-sm');
+  const pct=Math.max(0,main.progress(state));
+  if(pf){pf.style.width=pct+'%';pf.style.background=main.color;}
+  if(t)t.textContent=`辯論優勢 ${pct}% · 第 ${state.turnCount||0} 輪 · 怒氣 ${state.zaraAnger||0}`;
+  if(ss){
+    ss.innerHTML=(state._runObj?.sides||[]).map(s=>{
+      const done=s.check(state);
+      return `<div class="obj-side-sm ${done?'done':''}">${done?'✦':'○'} ${s.name}</div>`;
+    }).join('');
+  }
+}
+
+function showRunEnd(win,reason){
+  const main=DEBATE_MAIN;
+  const sides=state._runObj?.sides||[];
+  const report=state.lastSettlementReport||'';
+  $('re-icon').textContent=win?'⚖':'💀';
+  $('re-title').textContent=win?'辯論勝利':'辯論落敗';
+  $('re-title').style.color=win?main.color:'var(--red-skill)';
+  $('re-sub').textContent=win?'DEBATE WON':'DEBATE LOST';
+  $('re-quote').innerHTML='「'+(win?main.winQuote:main.loseQuote)+'」';
+  const repEl=$('re-report'),repBtn=$('re-report-btn'),contBtn=$('re-continue-btn');
+  if(repEl){
+    if(report){
+      repEl.innerHTML=report;
+      repEl.classList.add('show');
+      if(repBtn)repBtn.style.display='';
+    }else{
+      repEl.innerHTML='<p style="color:var(--text-dim)">尚無裁判報告。請按工具列「⚖ 結算辯論」讓 AI 讀完整場紀錄後再開啟此畫面。</p>';
+      repEl.classList.remove('show');
+      if(repBtn)repBtn.style.display='none';
+    }
+  }
+  if(contBtn)contBtn.style.display='';
+  $('re-sides').innerHTML=sides.map(s=>{
+    const done=s.check(state);
+    return `<div class="re-side ${done?'done':'miss'}">${done?'✦ ':''} ${s.name}</div>`;
+  }).join('');
+  $('run-end').classList.add('show');
+  $('send-btn').disabled=true;
+}
+
+initAiSovietPanel();
+</script>
+
+<button class="sov-show-fab" id="sov-show-fab" onclick="document.querySelector('.ai-sov').classList.remove('sov-hidden');this.style.display='none';">◉ AI面板</button>
+<script>
+(function(){
+  function injectSovBtn(){
+    var sov = document.querySelector('.ai-sov');
+    if(!sov) return;
+    // 加收合按鈕到 dragbar
+    var bar = sov.querySelector('.ai-sov-dragbar');
+    if(bar && !bar.querySelector('.sov-hide-btn')){
+      bar.style.position='relative';
+      var btn = document.createElement('button');
+      btn.className='sov-hide-btn';
+      btn.textContent='✕ 隱藏';
+      btn.onclick = function(e){
+        e.stopPropagation();
+        sov.classList.add('sov-hidden');
+        var fab = document.getElementById('sov-show-fab');
+        if(fab) fab.style.display='block';
+      };
+      bar.appendChild(btn);
+    }
+  }
+  // 等 DOM ready 後注入
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', injectSovBtn);
+  } else {
+    injectSovBtn();
+  }
+  // 也監聽動態顯示
+  var orig = window.setAiSovietVisible;
+  if(typeof orig === 'function'){
+    window.setAiSovietVisible = function(v){
+      orig(v);
+      setTimeout(injectSovBtn, 100);
+    };
+  }
+  setTimeout(injectSovBtn, 500);
+  setTimeout(injectSovBtn, 1500);
+})();
+</script>
+
+<button class="sov-show-fab" id="sov-show-fab" title="顯示AI面板">◉ AI面板</button>
+<script>
+(function(){
+  function injectHideBtn(){
+    var sov=document.querySelector('.ai-sov');
+    if(!sov||sov.querySelector('.sov-hide-btn'))return;
+    var bar=sov.querySelector('[class*="dragbar"],[class*="drag"],[class*="header"]');
+    if(!bar)bar=sov.firstElementChild||sov;
+    if(bar.style)bar.style.position='relative';
+    var btn=document.createElement('button');
+    btn.className='sov-hide-btn'; btn.textContent='✕ 隱藏';
+    btn.onclick=function(e){
+      e.stopPropagation();
+      sov.classList.add('sov-hidden');
+      document.getElementById('sov-show-fab').style.display='block';
+    };
+    bar.appendChild(btn);
+  }
+  document.getElementById('sov-show-fab').onclick=function(){
+    var sov=document.querySelector('.ai-sov');
+    if(sov)sov.classList.remove('sov-hidden');
+    this.style.display='none';
+  };
+  // 多次嘗試注入（面板可能延遲顯示）
+  [300,800,1500,3000,5000].forEach(function(t){setTimeout(injectHideBtn,t);});
+  // 用 MutationObserver 監聽動態添加的 .ai-sov
+  var obs=new MutationObserver(function(){injectHideBtn();});
+  obs.observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['style','class']});
+})();
+</script>
+
+<button id="day-night-toggle" title="切換日夜模式" onclick="toggleDayNight()">🌙</button>
+<script>
+(function(){
+  // 讀取儲存的偏好
+  var stored = localStorage.getItem('zara_light_mode');
+  // 預設日間模式；只有明確儲存 'false' 才切暗色
+  if(stored === 'false') {
+    document.body.classList.remove('light-ui');
+    document.getElementById('day-night-toggle').textContent = '🌙';
+  } else {
+    document.body.classList.add('light-ui');
+    document.getElementById('day-night-toggle').textContent = '☀️';
+  }
+  window.toggleDayNight = function(){
+    var btn = document.getElementById('day-night-toggle');
+    if(document.body.classList.toggle('light-ui')){
+      btn.textContent = '☀️';
+      localStorage.setItem('zara_light_mode', 'true');
+    } else {
+      btn.textContent = '🌙';
+      localStorage.setItem('zara_light_mode', 'false');
+    }
+  };
+})();
+</script>
+
+
+<script>
+function setSovModel(m){
+  state.apiModel = m;
+  localStorage.setItem('zara_api_model', m);
+  document.querySelectorAll('.sov-model-btn').forEach(function(b){
+    b.classList.toggle('active', b.getAttribute('onclick').includes("'"+m+"'"));
+  });
+  // 同步到隱藏的 cc-api-model input
+  var inp = document.getElementById('cc-api-model');
+  if(inp) inp.value = m;
+}
+// 初始高亮當前模型
+(function initModelBtns(){
+  var cur = localStorage.getItem('zara_api_model') || 'deepseek/deepseek-v4-flash';
+  document.querySelectorAll('.sov-model-btn').forEach(function(b){
+    b.classList.toggle('active', b.getAttribute('onclick').includes("'"+cur+"'"));
+  });
+})();
+</script>
+
+
+<script>
+function setCCModel(m) {
+  // 更新 state 和 localStorage
+  if(typeof state !== 'undefined') state.apiModel = m;
+  localStorage.setItem('zara_api_model', m);
+  // 更新隱藏 input
+  var inp = document.getElementById('cc-api-model');
+  if(inp) inp.value = m;
+  // 高亮創角畫面的選項
+  document.querySelectorAll('#cc-model-grid .cc-model-opt').forEach(function(b){
+    var oc = b.getAttribute('onclick') || '';
+    b.classList.toggle('active', oc.includes("'" + m + "'"));
+  });
+  // 同步蘇式面板按鈕
+  if(typeof setSovModel === 'function') setSovModel(m);
+}
+function initCCModelGrid() {
+  var cur = localStorage.getItem('zara_api_model') || 'deepseek/deepseek-v4-flash';
+  document.querySelectorAll('#cc-model-grid .cc-model-opt').forEach(function(b){
+    var oc = b.getAttribute('onclick') || '';
+    b.classList.toggle('active', oc.includes("'" + cur + "'"));
+  });
+}
+// 初始化
+if(document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initCCModelGrid);
+} else {
+  initCCModelGrid();
+}
+</script>
+
+</body>
+</html>
