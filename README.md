@@ -4,6 +4,7 @@
 > 靈感來自《極樂迪斯可》（Disco Elysium），由 AI 扮演查拉圖斯特拉，在哲學交鋒中勝過他。
 
 這是一個**單一 HTML 檔**——下載 `index.html`，用瀏覽器打開即可遊玩。無需安裝、無需伺服器。
+play demo here: https://brilliant-macaron-197e38.netlify.app/
 
 ---
 
