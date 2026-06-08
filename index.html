@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>與查拉圖斯特拉辯論</title>
+<title>與查拉圖斯特拉辯論 v2 (BYOK)</title>
 <style>
 :root {
   --bg-deep:#08080e;--bg-panel:#10101c;--bg-panel-light:#18182a;
@@ -474,6 +474,7 @@ body.light-ui .ai-sov-bezel{background:linear-gradient(165deg,#8a8478 0%,#5a564e
 .msg-txt .th{color:var(--purple);font-style:italic;}
 .msg-txt .ec{color:var(--blood);}
 .msg-txt .em{color:var(--gold);}
+.msg-txt .src{color:var(--text-dim);font-size:9px;font-style:italic;opacity:.7;display:block;margin-top:4px;}
 
 /* Typing */
 .typ{display:flex;gap:4px;padding:6px 10px;align-items:center;}
@@ -629,32 +630,33 @@ body.light-ui .panel,body.light-ui .dp,body.light-ui .sb{border-color:rgba(154,1
   .cc-draft{grid-template-columns:1fr;}
 }
 
-/* ── 隱藏 API 設定區（key 已內建）── */
-.cc-api-wrap, .cc-api-section, .cc-api-row { display: none !important; }
-/* 如果上面選不到，直接隱藏包含 cc-api-key 的那個區塊 */
-#cc-api-key, #cc-api-model, #cc-api-status, .cc-api-in { display: none !important; }
-label[for="cc-api-key"], label[for="cc-api-model"] { display: none !important; }
-.cc-api-note { display: none !important; }
-button#cc-test-api { display: none !important; }
+/* ── 創角流程步驟 ── */
+.cc-goal-box{background:var(--bg-panel);border:1px solid rgba(201,168,76,.2);border-radius:4px;padding:16px 20px;margin-bottom:16px;text-align:center;}
+.cc-goal-title{font-size:11px;color:var(--gold);letter-spacing:3px;font-family:"Courier New",monospace;margin-bottom:8px;}
+.cc-goal-text{font-size:13px;color:var(--text-mid);line-height:1.8;margin-bottom:10px;}
+.cc-goal-hint{color:var(--gold-dim);font-style:italic;}
+.cc-goal-steps{font-size:11px;color:var(--text-dim);font-family:"Courier New",monospace;letter-spacing:1px;}
+.cc-step{padding:2px 6px;border-radius:2px;transition:all .3s;}
+.cc-step.active{color:var(--gold);background:rgba(201,168,76,.12);}
+.cc-step.done{color:var(--cyan);}
+.cc-section{margin-bottom:16px;}
+.cc-section-lbl{font-size:12px;color:var(--gold);letter-spacing:2px;font-family:"Courier New",monospace;margin-bottom:6px;}
+.cc-section-hint{font-size:10px;color:var(--text-dim);margin-bottom:8px;line-height:1.5;}
+.cc-nav-row{display:flex;gap:8px;margin-top:10px;}
+.cc-confirm-summary{background:var(--bg-panel-light);border:1px solid rgba(201,168,76,.1);border-radius:3px;padding:12px;margin-bottom:12px;font-size:12px;color:var(--text-mid);line-height:1.8;}
+.cc-confirm-summary .cs-name{font-size:16px;color:var(--gold);font-weight:bold;margin-bottom:4px;}
+.cc-confirm-summary .cs-arche{color:var(--cyan);margin-bottom:2px;}
+.cc-confirm-summary .cs-skills{color:var(--text-mid);font-size:11px;margin-bottom:4px;}
+.cc-confirm-summary .cs-thoughts{color:var(--text-dim);font-size:11px;}
 
+/* ── 進階設定摺疊 ── */
+.cc-advanced-wrap{margin-top:16px;border-top:1px solid rgba(201,168,76,.08);padding-top:10px;}
+.cc-advanced-toggle{font-size:10px;color:var(--text-dim);font-family:"Courier New",monospace;letter-spacing:1px;cursor:pointer;user-select:none;padding:4px 0;}
+.cc-advanced-toggle:hover{color:var(--gold-dim);}
+.cc-advanced-body{padding:8px 0;}
 
-.sov-hide-btn {
-  position: absolute; top: 4px; right: 6px;
-  background: none; border: 1px solid #6a6558; color: #c8c0a8;
-  font-size: 9px; font-family: 'Courier New', monospace;
-  padding: 1px 6px; cursor: pointer; letter-spacing: 1px;
-  border-radius: 2px; z-index: 10060;
-}
-.sov-hide-btn:hover { background: rgba(255,255,255,.08); }
-.ai-sov.sov-hidden { opacity: 0 !important; pointer-events: none !important; }
-.sov-show-fab {
-  position: fixed; bottom: 14px; right: 14px; z-index: 10040;
-  background: #1a1814; border: 1px solid #6a6558; color: #c8c0a8;
-  font-size: 9px; font-family: 'Courier New', monospace;
-  padding: 4px 10px; cursor: pointer; letter-spacing: 1px;
-  border-radius: 2px; display: none;
-}
-.sov-show-fab:hover { background: rgba(255,255,255,.08); }
+/* ── BYOK 模式：API key 輸入區完全可見 ── */
+/* (已移除舊的隱藏規則，v2 BYOK 版需要使用者自行填入 key) */
 
 
 /* ── Soviet panel toggle ── */
@@ -867,7 +869,6 @@ body.light-ui #day-night-toggle {
 
 
 /* ── 模型快選 ── */
-.sov-model-pick {
   margin-top: 8px;
   padding-top: 7px;
   border-top: 1px solid rgba(255,255,255,.07);
@@ -965,9 +966,31 @@ body.light-ui .cc-model-opt.active {
 .de-insight-text .em{color:var(--gold)}.de-insight-text .t{color:#7ec8e3}.de-insight-text .ec{color:#f4a261}.de-insight-text .w{color:#e0c97a}
 .de-passive-tag{font-size:9px;letter-spacing:2px;color:#444;margin-top:10px;text-transform:uppercase}
 .de-passive-tag.pass-tag{color:#2d6a2d}.de-passive-tag.fail-tag{color:#6a2020}
+
+/* ═══ BYOK BANNER ═══ */
+#byok-banner {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 99990;
+  background: linear-gradient(90deg, #1a0a00, #0d0800, #1a0a00);
+  border-bottom: 1px solid rgba(201,168,76,.6);
+  font-size: 12px; font-family: 'Courier New', monospace;
+  color: var(--gold); letter-spacing: 1px;
+  padding: 7px 16px; display: flex; align-items: center; justify-content: center; gap: 12px;
+  text-align: center;
+}
+#byok-banner.key-ok { background: linear-gradient(90deg, #001a05, #000d03, #001a05); border-bottom-color: var(--cyan); color: var(--cyan); }
+#byok-banner a { color: #e8c060; text-decoration: underline; }
+#byok-banner .byok-x { cursor: pointer; opacity: .5; font-size: 10px; padding: 0 4px; margin-left: 6px; }
+#byok-banner .byok-x:hover { opacity: 1; }
+body { padding-top: 36px; } /* compensate banner height */
 </style>
 </head>
 <body class="light-ui">
+<div id="byok-banner">
+  ⚠️ 本版需填入您自己的 OpenRouter API Key —— 在下方「創角」→「⚙️ API 設定」中填入。
+  <a href="https://openrouter.ai/keys" target="_blank" rel="noopener">免費申請 →</a>
+  <span class="byok-x" onclick="this.parentElement.style.display='none';document.body.style.paddingTop='0'">✕</span>
+</div>
+
 <div class="bg-ambient"></div>
 <div class="cave-fire"></div>
 
@@ -1002,82 +1025,38 @@ body.light-ui .cc-model-opt.active {
 <div class="screen hidden" id="sc">
   <div class="cc-wrap">
     <div class="cc-title">創造你的靈魂</div>
-    <div class="cc-sub">CREATE YOUR SOUL · 分配技能點數</div>
+    <div class="cc-sub">CREATE YOUR SOUL</div>
 
-    <div class="cc-row">
-      <span class="cc-lbl">你的名字：</span>
-      <input class="cc-in" id="cc-name" placeholder="流浪者..." maxlength="20">
-    </div>
-
-    <!-- API Settings -->
-    <div class="cc-api-zone" style="display:none">
-      <div class="cc-api-lbl">⚡ AI API 設定 · OPENROUTER</div>
-      <div class="cc-api-row">
-        <span class="cc-lbl">API Key</span>
-        <input class="cc-api-in" id="cc-api-key" tabindex="-1" type="password" placeholder="sk-or-v1-...">
+    <!-- 遊戲目標說明 -->
+    <div class="cc-goal-box">
+      <div class="cc-goal-title">✦ 你的任務</div>
+      <div class="cc-goal-text">
+        這不是背誦尼采的考試。<br>
+        你將走進查拉圖斯特拉的洞穴，以自己的立場向他發起辯論。<br>
+        用你的論點、你的技能、你的意識形態——挑戰他，或被挑戰。<br>
+        <span class="cc-goal-hint">AI 會根據你的論證強度給出判定。</span>
       </div>
-      <div class="cc-api-row">
-        <span class="cc-lbl">模型</span>
-        <input class="cc-api-in" id="cc-api-model" value="openrouter/owl-alpha" placeholder="openrouter/xxx">
-      </div>
-      <div class="cc-api-note"></div>
-      <div class="cc-api-status" id="cc-api-status"></div>
-      <button class="btn btn-s" style="margin-top:6px" onclick="testAPI()">🔌 測試連接</button>
-    </div>
-
-    <!-- Model Selection -->
-    <div class="cc-model-zone">
-      <div class="cc-model-lbl">⚡ AI 模型 · MODEL SELECT</div>
-      <div class="cc-model-grid" id="cc-model-grid">
-        <button class="cc-model-opt" onclick="setCCModel('deepseek/deepseek-v4-flash')">
-          <span class="cm-name">DS V4 Flash</span>
-          <span class="cm-desc">DeepSeek V4 Flash<br>本週 #1 · 1M ctx</span>
-          <span class="cm-speed">⚡⚡⚡⚡ 極快</span>
-        </button>
-        <button class="cc-model-opt" onclick="setCCModel('qwen/qwen3.5-flash-02-23')">
-          <span class="cm-name">Q3.5 Flash</span>
-          <span class="cm-desc">Qwen3.5 Flash<br>超快 · 1M ctx</span>
-          <span class="cm-speed">⚡⚡⚡⚡ 極快</span>
-        </button>
-        <button class="cc-model-opt" onclick="setCCModel('qwen/qwen3-8b')">
-          <span class="cm-name">Q3-8B</span>
-          <span class="cm-desc">Qwen3 8B<br>輕量免費</span>
-          <span class="cm-speed">⚡⚡⚡ 快</span>
-        </button>
-        <button class="cc-model-opt" onclick="setCCModel('google/gemini-2.5-flash-lite')">
-          <span class="cm-name">Gemini Lite</span>
-          <span class="cm-desc">Gemini 2.5 Flash Lite<br>Google最新輕量</span>
-          <span class="cm-speed">⚡⚡⚡ 快</span>
-        </button>
-        <button class="cc-model-opt" onclick="setCCModel('xiaomi/mimo-v2-flash')">
-          <span class="cm-name">MiMo Flash</span>
-          <span class="cm-desc">Xiaomi MiMo V2<br>Flash 極速版</span>
-          <span class="cm-speed">⚡⚡⚡ 快</span>
-        </button>
-        <button class="cc-model-opt" onclick="setCCModel('openrouter/owl-alpha')">
-          <span class="cm-name">Owl α</span>
-          <span class="cm-desc">Owl Alpha<br>原版免費</span>
-          <span class="cm-speed">⚡⚡ 中</span>
-        </button>
+      <div class="cc-goal-steps">
+        <span class="cc-step active" id="step-1">① 取名</span> →
+        <span class="cc-step" id="step-2">② 選原型</span> →
+        <span class="cc-step" id="step-3">③ 選思想</span> →
+        <span class="cc-step" id="step-4">④ 開始辯論</span>
       </div>
     </div>
 
-    <div class="cc-pts-row">
-      <span class="cc-pts-lbl">剩餘點數（可將一項技能加滿至 15，共 12 點）</span>
-      <span class="cc-pts-val" id="cc-pts">12</span>
+    <!-- STEP 1: 名字 -->
+    <div class="cc-section" id="cc-step1">
+      <div class="cc-section-lbl">第一步：你的名字</div>
+      <div class="cc-row">
+        <input class="cc-in" id="cc-name" placeholder="流浪者..." maxlength="20">
+        <button class="btn btn-s" onclick="if(!$('cc-name').value.trim()){$('cc-name').value='流浪者';}ccGoStep(2);">繼續 →</button>
+      </div>
     </div>
 
-    <div class="cc-skills" id="cc-skills"></div>
-
-    <!-- Archetype -->
-    <div class="cc-arche-zone">
-      <div class="cc-arche-lbl">✦ 原型·ARCHETYPE — 輸入你的描述，AI為你生成</div>
-      <div class="cc-arche-type-row">
-        <input class="cc-in cc-arche-in" id="cc-arche-input"
-          placeholder='例如："一個在教堂長大的懷疑論者" 或 "前軍人轉行的詩人"'>
-        <button class="btn btn-s" id="cc-arche-gen-btn" onclick="generateArche()">🎲 AI生成</button>
-      </div>
-      <div class="cc-arche-status" id="cc-arche-status"></div>
+    <!-- STEP 2: 原型 + 技能 -->
+    <div class="cc-section hidden" id="cc-step2">
+      <div class="cc-section-lbl">第二步：選擇你的原型 · 分配技能</div>
+      <div class="cc-section-hint">選擇一個原型，或自訂你的角色。技能點影響辯論中各路線的檢定成功率。</div>
 
       <div class="cc-presets">
         <div class="cc-preset" onclick="pickPreset('philosopher',this)"><div class="cc-preset-n">哲學家</div><div class="cc-preset-d">邏輯+2</div></div>
@@ -1085,6 +1064,13 @@ body.light-ui .cc-model-opt.active {
         <div class="cc-preset" onclick="pickPreset('mystic',this)"><div class="cc-preset-n">神秘主義者</div><div class="cc-preset-d">共情+2</div></div>
         <div class="cc-preset" onclick="pickPreset('poet',this)"><div class="cc-preset-n">詩人</div><div class="cc-preset-d">修辭+2</div></div>
       </div>
+
+      <div class="cc-arche-type-row" style="margin-top:10px">
+        <input class="cc-in cc-arche-in" id="cc-arche-input"
+          placeholder='或自訂："一個在教堂長大的懷疑論者"'>
+        <button class="btn btn-s" id="cc-arche-gen-btn" onclick="generateArche()">🎲 AI生成</button>
+      </div>
+      <div class="cc-arche-status" id="cc-arche-status"></div>
 
       <div class="cc-arche-preview" id="cc-arche-preview">
         <div class="ap-name" id="ap-name"></div>
@@ -1104,22 +1090,106 @@ body.light-ui .cc-model-opt.active {
           <button class="btn btn-s" onclick="applyArcheEdit()">套用</button>
         </div>
       </div>
+
+      <div class="cc-pts-row">
+        <span class="cc-pts-lbl">技能點數（共 12 點，每項最低 1，最高 15）</span>
+        <span class="cc-pts-val" id="cc-pts">12</span>
+      </div>
+      <div class="cc-skills" id="cc-skills"></div>
+
+      <div class="cc-nav-row">
+        <button class="btn btn-s" onclick="ccGoStep(1)">← 返回</button>
+        <button class="btn btn-s" onclick="if(!CC.arche){alert('請選擇一個原型');return;}ccGoStep(3);">繼續 →</button>
+      </div>
     </div>
 
-    <!-- Thought Draft (roguelike 10-choose-3) -->
-    <div class="cc-arche-zone">
-      <div class="cc-arche-lbl">✦ 思維草稿 · 10 抽 3（起始內閣）</div>
+    <!-- STEP 3: 思維草稿 -->
+    <div class="cc-section hidden" id="cc-step3">
+      <div class="cc-section-lbl">第三步：選擇 3 個起始思想</div>
+      <div class="cc-section-hint">這些思想會影響你的語調與論點傾向。之後可在辯論中領悟更多。</div>
       <div class="cc-draft-bar">
         <span>已選 <span id="cc-draft-count">0/3</span></span>
-        <button class="btn btn-s" onclick="rerollDraft()">🔄 重抽 10 個</button>
-        <span style="font-size:9px;color:var(--text-dim);">康米 ★ · 社民 ✿ · 法西斯 ▲ · 自由 ◇ — 之後可在辯論中領悟更多</span>
+        <button class="btn btn-s" onclick="rerollDraft()">🔄 重抽</button>
+        <span style="font-size:9px;color:var(--text-dim);">★ 康米 · ✿ 社民 · ▲ 法西斯 · ◇ 自由</span>
       </div>
       <div class="cc-draft" id="cc-draft"></div>
+
+      <div class="cc-nav-row">
+        <button class="btn btn-s" onclick="ccGoStep(2)">← 返回</button>
+        <button class="btn btn-s" onclick="if((CC.draftPicks||[]).length<3){alert('請選擇 3 個思想');return;}ccGoStep(4);">繼續 →</button>
+      </div>
     </div>
 
-    <div class="cc-confirm">
-      <button class="btn" id="cc-confirm" onclick="startGame()" disabled>✦ 開始辯論 ✦</button>
+    <!-- STEP 4: 確認 + 開始 -->
+    <div class="cc-section hidden" id="cc-step4">
+      <div class="cc-section-lbl">最後一步：確認你的角色</div>
+      <div class="cc-confirm-summary" id="cc-confirm-summary"></div>
+      <div class="cc-confirm">
+        <button class="btn" id="cc-confirm" onclick="startGame()">✦ 進入洞穴，開始辯論 ✦</button>
+      </div>
+      <div class="cc-nav-row">
+        <button class="btn btn-s" onclick="ccGoStep(3)">← 返回修改</button>
+      </div>
     </div>
+
+    <!-- 進階設定（摺疊，預設收起） -->
+    <div class="cc-advanced-wrap">
+      <div class="cc-advanced-toggle" onclick="toggleAdvanced()">
+        <span id="adv-toggle-icon">▼</span> ⚙️ API 設定 · BYOK（必填）
+      </div>
+      <div class="cc-advanced-body" id="cc-advanced-body" style="display:block">
+        <div class="cc-api-zone">
+          <div class="cc-api-lbl">API 設定</div>
+          <div class="cc-api-row">
+            <span class="cc-lbl">API Key</span>
+            <input class="cc-api-in" id="cc-api-key" type="password" placeholder="sk-or-v1-... (在 openrouter.ai/keys 取得)">
+          </div>
+          <div class="cc-api-row">
+            <span class="cc-lbl">模型</span>
+            <input class="cc-api-in" id="cc-api-model" value="openrouter/owl-alpha" placeholder="openrouter/xxx">
+          </div>
+          <div class="cc-api-note">⚠️ 本版需填入您自己的 <a href="https://openrouter.ai/keys" target="_blank" style="color:var(--gold)">OpenRouter API Key</a>（免費申請）。Key 儲存在瀏覽器本地，不會上傳。</div>
+          <div class="cc-api-status" id="cc-api-status"></div>
+          <button class="btn btn-s" style="margin-top:6px" onclick="testAPI()">🔌 測試連接</button>
+        </div>
+        <div class="cc-model-zone" style="margin-top:10px">
+          <div class="cc-model-lbl">模型選擇</div>
+          <div class="cc-model-grid" id="cc-model-grid">
+            <button class="cc-model-opt" onclick="setCCModel('deepseek/deepseek-v4-flash')">
+              <span class="cm-name">DS V4</span>
+              <span class="cm-desc">DeepSeek V4 Flash</span>
+              <span class="cm-speed">⚡⚡⚡⚡</span>
+            </button>
+            <button class="cc-model-opt" onclick="setCCModel('qwen/qwen3.5-flash-02-23')">
+              <span class="cm-name">Q3.5</span>
+              <span class="cm-desc">Qwen3.5 Flash</span>
+              <span class="cm-speed">⚡⚡⚡⚡</span>
+            </button>
+            <button class="cc-model-opt" onclick="setCCModel('qwen/qwen3-8b')">
+              <span class="cm-name">Q3-8B</span>
+              <span class="cm-desc">Qwen3 8B</span>
+              <span class="cm-speed">⚡⚡⚡</span>
+            </button>
+            <button class="cc-model-opt" onclick="setCCModel('google/gemini-2.5-flash-lite')">
+              <span class="cm-name">Gemini</span>
+              <span class="cm-desc">Gemini 2.5 Flash Lite</span>
+              <span class="cm-speed">⚡⚡⚡</span>
+            </button>
+            <button class="cc-model-opt" onclick="setCCModel('xiaomi/mimo-v2-flash')">
+              <span class="cm-name">MiMo</span>
+              <span class="cm-desc">Xiaomi MiMo V2</span>
+              <span class="cm-speed">⚡⚡⚡</span>
+            </button>
+            <button class="cc-model-opt" onclick="setCCModel('openrouter/owl-alpha')">
+              <span class="cm-name">Owl α</span>
+              <span class="cm-desc">Owl Alpha</span>
+              <span class="cm-speed">⚡⚡</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -1160,6 +1230,7 @@ body.light-ui .cc-model-opt.active {
       <button class="btn btn-s" onclick="settleDebate()">⚖ 結算辯論</button>
       <button class="btn btn-s" onclick="openSettlementReport()">📜 裁判報告</button>
       <button class="btn btn-s" onclick="toggleSceneBox()">📜 場景</button>
+      <button class="btn btn-s" onclick="toggleAiPanel()" id="ai-panel-btn">📡 AI狀態</button>
       <div class="tb-hint" id="ultra-status">超技：需同派 5 張 · 日光可隨時切換</div>
     </div>
 
@@ -1192,9 +1263,17 @@ body.light-ui .cc-model-opt.active {
       </div>
       <div class="dp" id="dialogue-panel"></div>
       <div class="choice-panel" id="choice-panel">
-        <div class="choice-ph">◈ 回應路線 · 先點選技能檢定，成功後 AI 才撰寫台詞</div>
+        <div class="choice-panel-header">
+          <div class="choice-ph" style="margin-bottom:0">◈ 回應路線 · 選一條路線擲骰</div>
+          <button class="choice-panel-close" onclick="hideChoicePanel()" title="關閉面板">✕ 關閉</button>
+        </div>
         <div class="choice-grid" id="choice-grid"></div>
         <div class="choice-fail-note" id="choice-fail-note">檢定未過：這條話在你喉嚨裡打結。請在下方親手輸入你的反駁。</div>
+        <button class="allin-btn" id="allin-btn" onclick="tryAllIn()" title="孤注一擲：擲3顆骰取最高，但無論成敗都有 debuff">
+          ⚠ 孤注一擲 · ALL-IN GAMBLE<br>
+          <span style="font-size:9px;opacity:.7">擲 3 骰取最高 · 無論成敗都有 debuff</span>
+        </button>
+        <div class="allin-debuff" id="allin-debuff" style="display:none"></div>
       </div>
       <div class="ia">
         <div class="iw">
@@ -1320,9 +1399,9 @@ body.light-ui .cc-model-opt.active {
 // ════════════════════════════════════════
 //  CONFIG
 // ════════════════════════════════════════
-const API_KEY='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';
+// const API_KEY removed (v2 BYOK mode)
 const DEFAULT_MODEL = 'deepseek/deepseek-v4-flash';
-const HARDCODED_KEY = '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';
+const HARDCODED_KEY = ''; // v2 BYOK: 無內建 key，請在下方填入您自己的 OpenRouter API Key
 const MAX_AI_INPUT_CHARS = 2500;
 const MAX_AI_HISTORY_MESSAGES = 6;
 const MAX_AI_HISTORY_CHARS = 600;
@@ -1698,6 +1777,7 @@ function newGame(slot){
   state._slot=slot||null;
   showScreen('sc');
   initCharCrea();
+  // 步驟導航已在 initCharCrea 中重置到第 1 步
 }
 
 function loadSlot(id){
@@ -1727,6 +1807,7 @@ function loadSlot(id){
   state.debateTopic=sv.debateTopic||'';
   state.debateWon=!!sv.debateWon;
   state.debateScore=sv.debateScore||0;
+  state.advantageScore=sv.advantageScore||0;
   state.lastSettlementReport=sv.lastSettlementReport||'';
   recomputeSkills();
   startGameFromSave();
@@ -1795,6 +1876,7 @@ function buildSaveData(){
     debateTopic:state.debateTopic||'',
     debateWon:!!state.debateWon,
     debateScore:state.debateScore||0,
+    advantageScore:state.advantageScore||0,
     lastSettlementReport:state.lastSettlementReport||'',
     time:Date.now()
   };
@@ -1887,6 +1969,63 @@ function initCharCrea(){
   renderCCSkills();
   initThoughtDraft();
   updateCC();
+  // 重置步驟到第一步
+  ccGoStep(1);
+}
+
+// ── 步驟導航 ──
+function ccGoStep(n){
+  // 隱藏所有步驟
+  for(let i=1;i<=4;i++){
+    const el=$('cc-step'+i);
+    if(el)el.classList.add('hidden');
+  }
+  // 顯示目標步驟
+  const target=$('cc-step'+n);
+  if(target)target.classList.remove('hidden');
+  // 更新步驟指示器
+  for(let i=1;i<=4;i++){
+    const s=$('step-'+i);
+    if(!s)continue;
+    s.classList.remove('active','done');
+    if(i<n)s.classList.add('done');
+    if(i===n)s.classList.add('active');
+  }
+  // 步驟 2：確保技能已渲染
+  if(n===2){
+    renderCCSkills();
+    updateCC();
+  }
+  // 步驟 3：確保思維草稿已渲染
+  if(n===3)renderDraft();
+  // 步驟 4：生成確認摘要
+  if(n===4)buildConfirmSummary();
+  // 滾動到頂部
+  const wrap=document.querySelector('.cc-wrap');
+  if(wrap)wrap.scrollTop=0;
+}
+
+function buildConfirmSummary(){
+  const name=$('cc-name').value.trim()||'流浪者';
+  const arche=CC.archeType||'未定型的靈魂';
+  const sk=`邏輯 ${CC.skills.logic} · 意志 ${CC.skills.volition} · 共情 ${CC.skills.empathy} · 修辭 ${CC.skills.rhetoric}`;
+  const thoughts=(CC.draftPicks||[]).map(id=>{const t=getThought(id);return t?t.name:'?';}).join('、');
+  const el=$('cc-confirm-summary');
+  if(!el)return;
+  el.innerHTML=`<div class="cs-name">${esc(name)}</div>
+    <div class="cs-arche">原型：${esc(arche)}</div>
+    <div class="cs-skills">${esc(sk)}</div>
+    <div class="cs-thoughts">起始思想：${esc(thoughts)}</div>`;
+}
+
+// ── 進階設定摺疊 ──
+function toggleAdvanced(){
+  const body=$('cc-advanced-body');
+  const icon=$('adv-toggle-icon');
+  if(!body)return;
+  const isHidden=body.style.display==='none';
+  body.style.display=isHidden?'block':'none';
+  if(icon)icon.textContent=isHidden?'▼':'▶';
 }
 
 function renderCCSkills(){
@@ -2093,7 +2232,7 @@ const state={
   ultraUsed:false,battlefieldMode:'night',forgetCooldown:0,
   internalizing:{},_gainedThisRound:false,lightMode:false,
   zaraAnger:20,debateTopic:'',debateTopicCustom:'',sceneCollapsed:false,
-  debateWon:false,debateScore:0,_pendingChoices:null,_choiceFailed:false,
+  debateWon:false,debateScore:0,advantageScore:0,_pendingChoices:null,_choiceFailed:false,
   lastSettlementReport:'',aiLenZara:5,aiLenPlayer:5
 };
 
@@ -2189,7 +2328,92 @@ const ROUTE_HINTS={
 function hideChoicePanel(){
   const p=$('choice-panel');if(p)p.classList.remove('show');
   state._pendingChoices=null;
+  state._chosenIndex=null;
   const n=$('choice-fail-note');if(n)n.classList.remove('show');
+  const db=$('allin-debuff');if(db){db.style.display='none';}
+}
+
+// ═══ 孤注一擲 · ALL-IN GAMBLE ═══
+// 擲3骰取最高，但無論成敗都有 debuff
+async function tryAllIn(){
+  if(state.isProcessing||state._allInUsed||!state._pendingChoices)return;
+  if(state._chosenIndex!=null)return; // 已選路線後不能孤注
+
+  state._allInUsed=true;
+  state.isProcessing=true;
+  renderChoiceButtons();
+
+  // 孤注一擲：3顆骰子選最高
+  const rolls=[
+    Math.floor(Math.random()*20)+1,
+    Math.floor(Math.random()*20)+1,
+    Math.floor(Math.random()*20)+1
+  ];
+  const best=Math.max(...rolls);
+  const rollStr=rolls.map((r,i)=>r===best?`<span style="color:var(--gold);font-weight:bold">${r}</span>`:r).join(' / ');
+
+  // 隨機選一個技能路線（孤注一擲不讓你選技能）
+  const skills=['logic','volition','empathy','rhetoric'];
+  const sk=skills[Math.floor(Math.random()*4)];
+  const sv=state.skills[sk]||3;
+  const diff=state._pendingChoices.find(c=>c.skill===sk)?.diff||20;
+  const total=best+sv;
+  const crit=best===20;const fumble=best===1&&rolls.every(r=>r===1); // 三骰全1才算大失敗
+  const pass=(total>=diff||crit)&&!fumble;
+
+  addSysMsg(`🎰 <span style="color:#e06060;font-weight:bold">孤注一擲</span> · ${SK_NAMES[sk]}路線 · 3骰：${rollStr} → 取 <span style="color:var(--gold)">${best}</span>+${sv}=${total} / 目標 ${diff} · ${pass?'<span style="color:var(--green-skill)">話語成形</span>':'<span style="color:var(--red-skill)">話語潰散</span>'}`);
+
+  // ── DEBUFF（無論成敗）──
+  const debuffs=[
+    {txt:'意志消耗：本回合查拉圖斯特拉怒氣 +8（他看穿了你的賭博）',fn:()=>changeAnger(8,'孤注被識破')},
+    {txt:'好感損失：好感 -10（查拉圖斯特拉不屑賭徒）',fn:()=>md(-10)},
+    {txt:'辯論分 -5（賭博被視為論證空虛）',fn:()=>bumpDebateScore(-5)},
+    {txt:'下一輪 AI 回應更激烈（怒氣 +5）',fn:()=>changeAnger(5,'孤注挑釁')},
+  ];
+  const debuff=debuffs[Math.floor(Math.random()*debuffs.length)];
+  debuff.fn();
+  const db=$('allin-debuff');
+  if(db){
+    db.style.display='block';
+    db.innerHTML='⚠ DEBUFF：'+debuff.txt;
+  }
+
+  recordSkillCheckResult(sk,pass);
+
+  if(!pass){
+    bumpDebateScore(-4);
+    $('choice-fail-note')?.classList.add('show');
+    $('input-hint').textContent='孤注失敗：在下方親手輸入你的反駁。';
+    addSysMsg('骰子沒有憐憫你。話語在你嘴邊碎裂。查拉圖斯特拉看著，一言不發。');
+    state.isProcessing=false;
+    if(!state.runComplete)$('send-btn').disabled=false;
+    $('pi').focus();
+    return;
+  }
+
+  // 成功：生成台詞
+  changeAnger(5,'孤注刺中他，他震驚');
+  bumpDebateScore(10); // 成功獎勵更高
+  if(!getApiKey()){addSysMsg('⚠️ 需要 API Key');state.isProcessing=false;return;}
+  state.apiKey=getApiKey();
+  $('input-hint').textContent='孤注成功！AI 正在撰寫你的台詞…';
+
+  try{
+    const text=await generatePlayerLine(sk);
+    if(!text)throw new Error('空');
+    // 直接填入輸入框
+    const input=$('pi');
+    if(input){input.value=text;}
+    hideChoicePanel();
+    $('input-hint').textContent='孤注台詞已備好！確認後按送出。';
+    addSysMsg('你賭贏了。話語像刀一樣成形。<span style="color:var(--gold)">孤注成功！</span>');
+  }catch(e){
+    addSysMsg('⚠️ 孤注台詞生成失敗：'+esc(e.message)+' 請在下方自己輸入。');
+    $('input-hint').textContent='請在下方親手輸入。';
+  }
+  state.isProcessing=false;
+  if(!state.runComplete)$('send-btn').disabled=false;
+  $('pi').focus();
 }
 
 /** 隱藏檢定難度（不顯示給玩家）；隨技能／怒氣／回合升高，高技能也不會輕鬆過 */
@@ -2212,16 +2436,20 @@ function offerDialogueRoutes(zaraHtml){
   state._lastZaraCtx=stripHTML(zaraHtml||'').slice(0,900);
   state._pendingChoices=buildStaticRouteOffers();
   state._choiceFailed=false;
+  state._chosenIndex=null;
+  state._allInUsed=false;
+  const db=$('allin-debuff');if(db){db.style.display='none';db.textContent='';}
   failNote?.classList.remove('show');
   panel.classList.add('show');
   renderChoiceButtons();
-  $('input-hint').textContent='先選一條路線檢定；成功後 AI 才寫台詞，再點一次送出';
+  $('input-hint').textContent='選一條路線擲骰（只能選一次）· 或孤注一擲';
   scrollBottom();
 }
 
 function renderChoiceButtons(){
   const grid=$('choice-grid');if(!grid)return;
   grid.innerHTML='';
+  const chosen=state._chosenIndex!=null;
   (state._pendingChoices||[]).forEach((c,i)=>{
     const btn=document.createElement('button');
     btn.type='button';
@@ -2230,11 +2458,23 @@ function renderChoiceButtons(){
     else if(c.failed)btn.classList.add('failed');
     else if(c.generating)btn.classList.add('locked');
     else btn.classList.add('locked');
+    // 單選：已選某個時，其他全灰
+    if(chosen && state._chosenIndex!==i && !c.unlocked)
+      btn.classList.add('disabled-choice');
+    if(state._chosenIndex===i && !c.failed && !c.unlocked)
+      btn.classList.add('selected-choice');
     btn.innerHTML=choiceBtnHTML(c);
-    btn.disabled=!!c.failed||!!c.generating;
+    btn.disabled=!!c.failed||!!c.generating||(chosen&&state._chosenIndex!==i&&!c.unlocked);
     btn.onclick=()=>tryDialogueChoice(i);
     grid.appendChild(btn);
   });
+  // 孤注一擲按鈕狀態
+  const ab=$('allin-btn');
+  if(ab){
+    ab.disabled=chosen||state._allInUsed||state.isProcessing;
+    if(state._allInUsed)ab.classList.add('used');
+    else ab.classList.remove('used');
+  }
 }
 
 function choiceBtnHTML(c){
@@ -2262,6 +2502,12 @@ async function tryDialogueChoice(index){
   const c=state._pendingChoices[index];
   if(!c||c.failed||c.generating)return;
   if(c.unlocked&&c.text){sendChoiceLine(index);return;}
+  // 單選鎖定：已選過其他路線就不能再選
+  if(state._chosenIndex!=null&&state._chosenIndex!==index)return;
+
+  // 標記已選
+  state._chosenIndex=index;
+  renderChoiceButtons();
 
   const sv=state.skills[c.skill]||3;
   const roll=Math.floor(Math.random()*20)+1;
@@ -2282,11 +2528,13 @@ async function tryDialogueChoice(index){
     bumpDebateScore(-2);
     c.failed=true;
     state._choiceFailed=true;
-    if(btn){btn.classList.remove('locked');btn.classList.add('failed');}
+    if(btn){btn.classList.remove('locked','selected-choice');btn.classList.add('failed');}
     updateChoiceBtn(index);
     $('choice-fail-note')?.classList.add('show');
-    $('input-hint').textContent='檢定失敗：請在下方親手輸入。其他路線仍可嘗試。';
+    $('input-hint').textContent='檢定失敗：請在下方親手輸入。';
     addSysMsg('你的話在喉嚨裡潰散了。查拉圖斯特拉冷笑著，等你自己開口。');
+    state._chosenIndex=null; // 失敗後解鎖讓玩家選其他
+    renderChoiceButtons();
     state.isProcessing=false;
     if(!state.runComplete)$('send-btn').disabled=false;
     $('pi').focus();
@@ -3007,18 +3255,20 @@ function renderDraft(){
 }
 
 function getApiKey(){
-  const hardcoded=HARDCODED_KEY;
+  // v2 BYOK: 優先讀取使用者輸入，無 hardcoded key
   const box=($('cc-api-key')?.value||'').trim();
-  if(box.length>30 && /^[\x00-\xFF]+$/.test(box)) return box;
-  if(state.apiKey && state.apiKey.length>30 && /^[\x00-\xFF]+$/.test(state.apiKey)) return state.apiKey;
-  return hardcoded;
+  if(box.length>10) return box;
+  const stored=localStorage.getItem('zara_api_key')||'';
+  if(stored.length>10) return stored;
+  if(state.apiKey && state.apiKey.length>10) return state.apiKey;
+  return '';
 }
 
 function ensureApiKey(){
   const key=getApiKey();
   if(key)return true;
   const st=$('cc-api-status');
-  if(st){st.textContent='請先填入 OpenRouter API Key';st.className='cc-api-status err';}
+  if(st){st.textContent='⚠️ 請先在「進階設定」填入您的 OpenRouter API Key';st.className='cc-api-status err';}
   return false;
 }
 
@@ -3033,9 +3283,12 @@ function startGame(){
   }
   if((CC.draftPicks||[]).length<DRAFT_PICKS){
     alert(`請在思維草稿中選滿 ${DRAFT_PICKS} 張卡`);
+    ccGoStep(3);
     return;
   }
-  state.playerName=$('cc-name').value.trim()||'流浪者';
+  // 確保名字有值
+  if(!$('cc-name').value.trim())$('cc-name').value='流浪者';
+  state.playerName=$('cc-name').value.trim();
   state.baseSkills={...CC.skills};
   state.disposition=50;
   state.isProcessing=false;
@@ -3056,7 +3309,7 @@ function startGame(){
   // Q1 狂熱懲罰：開局就把自己交給單一主義，查拉圖斯特拉鄙視羊群式信徒，初始好感更低
   const zf0=factionZealot();
   if(zf0)state.disposition=Math.max(15,state.disposition-10);
-  state.apiKey=$('cc-api-key').value.trim()||getApiKey()||HARDCODED_KEY;
+  state.apiKey=$('cc-api-key').value.trim()||getApiKey();
   state.apiModel=$('cc-api-model').value.trim()||DEFAULT_MODEL;
   if(state.apiKey)localStorage.setItem('zara_api_key',state.apiKey);
   localStorage.setItem('zara_api_model',state.apiModel);
@@ -3074,6 +3327,7 @@ function startGame(){
   state.zaraAnger=20;
   state.debateWon=false;
   state.debateScore=0;
+  state.advantageScore=0;
   state.debateClinch=false;
   state._clinchNotified=false;
   state.sceneCollapsed=false;
@@ -3256,6 +3510,75 @@ function addSysMsg(html){
   panel.appendChild(msg);scrollBottom();
 }
 
+// ═══ 看破系統 · ZARA EXPOSURE CHECK ═══
+// 每次查拉圖斯特拉回應後，隱藏判斷他是否暴露了破綻
+// 通過則加 advantageScore，並顯示一段「看破」洞見
+
+async function checkZaraExposure(zaraReply, playerText){
+  if(!zaraReply||!getApiKey())return;
+  // 隱藏技能檢定：用玩家的「邏輯」+ 「共情」平均 vs 難度
+  const logicSk=state.skills?.logic||3;
+  const empathySk=state.skills?.empathy||3;
+  const combinedSk=Math.floor((logicSk+empathySk)/2);
+  const anger=state.zaraAnger||0;
+  // 難度隨局勢變化：怒氣高時查拉破綻更明顯（較易看破），但基礎難度也高
+  const baseDC=12+Math.floor((state.turnCount||0)/3);
+  const angerBonus=anger>=60?-2:anger>=40?-1:0; // 怒氣高反而容易看破
+  const dc=Math.max(8,baseDC+angerBonus);
+  const roll=Math.floor(Math.random()*20)+1;
+  const total=roll+combinedSk;
+  const pass=total>=dc;
+
+  if(!pass)return; // 失敗：靜默，不顯示任何東西
+
+  // 通過：加優勢分、生成 AI 洞見
+  state.advantageScore=(state.advantageScore||0)+1;
+  updateObjHUD(); // 更新 HUD 的看破計數
+
+  // 閃一下計數器
+  setTimeout(()=>{
+    const el=document.getElementById('adv-counter');
+    if(el){el.classList.remove('adv-counter-flash');void el.offsetWidth;el.classList.add('adv-counter-flash');}
+  },100);
+
+  // 用 AI 生成「看破洞見」（短，不佔 API 太多）
+  generateExposureInsight(zaraReply, playerText, roll, combinedSk, total, dc);
+}
+
+async function generateExposureInsight(zaraReply, playerText, roll, skill, total, dc){
+  const anger=state.zaraAnger||0;
+  const advCount=state.advantageScore||0;
+  const zaraSnip=zaraReply.replace(/<[^>]+>/g,'').substring(0,300);
+
+  const prompt=
+    '你正在分析查拉圖斯特拉的以下回應，找出他話語中隱藏的破綻或矛盾：\n\n'+
+    '查拉圖斯特拉說：「'+zaraSnip+'」\n\n'+
+    '任務：用1–2句，以「看破」的視角指出他這段話裡最脆弱的地方——\n'+
+    '可能是：他在迴避什麼問題？他的比喻在哪裡站不住腳？他的高傲背後藏著什麼恐懼？\n\n'+
+    '格式：像一個哲學分析者的旁白，簡短銳利。\n'+
+    '可用 HTML：<span class=\"em\">...</span>、<span class=\"ec\">...</span>、<span class=\"t\">...</span>\n'+
+    '繁體中文。不要加任何前綴說明。直接輸出那1–2句：';
+
+  try{
+    const data=await callOpenRouter([{role:'user',content:prompt}],150,'看破分析');
+    const text=(data?.choices?.[0]?.message?.content||'').trim();
+    if(!text)return;
+
+    const chat=$('chat');if(!chat)return;
+    const div=document.createElement('div');
+    div.className='adv-reveal';
+    div.innerHTML=
+      '<div class="adv-reveal-header">👁 看破 · EXPOSED  ·  看破第 '+advCount+' 次  ·  檢定 '+roll+'+'+skill+'='+total+' vs '+dc+'</div>'+
+      '<div class="adv-insight-text">'+text+'</div>'+
+      '<div class="adv-tag">✦ 辯論優勢 +1 · ADVANTAGE GAINED</div>';
+    chat.appendChild(div);
+    div.scrollIntoView({behavior:'smooth',block:'end'});
+  }catch(e){
+    // 靜默失敗，不打斷遊戲
+    console.warn('Exposure insight failed:',e);
+  }
+}
+
 async function settleDebate(){
   if(state.isProcessing)return;
   if(!state.dialogueHistory||state.dialogueHistory.length<2){
@@ -3273,14 +3596,28 @@ async function settleDebate(){
   if(!getApiKey()){addSysMsg('⚠️ 結算需要 API Key');ul();return;}
   state.apiKey=getApiKey();
 
+  const advScore=state.advantageScore||0;
+  const advFactor=Math.min(30,advScore*5); // 每次看破+5%，最高30%
+  const debScore=Math.min(100,state.debateScore||0);
+  const dispScore=state.disposition||50;
+  // 綜合優勢分：debateScore 70% + advantageScore(看破) 20-30%
+  const combinedAdvantage=Math.round(debScore*0.70 + advFactor*0.30 + (dispScore-50)*0.10);
+
   const settlementPrompt=`你是一位嚴格、公正、但有文學感的哲學辯論裁判。請閱讀完整辯論紀錄，判斷玩家與查拉圖斯特拉誰在這場辯論中勝出。
 
-裁判標準：
+【系統數據（請納入判斷，佔總判定約 20-30%）】
+- 玩家辯論分：${debScore}/100
+- 玩家看破查拉圖斯特拉破綻次數：${advScore} 次（每次代表玩家真正抓住了查拉論述中的矛盾）
+- 好感度：${dispScore}/100
+- 綜合優勢指數：${combinedAdvantage}/100
+
+裁判標準（純論述 70% + 系統數據 30%）：
 1. 論點是否清楚、有主張、有理由。
 2. 是否真正回應對方，而不是逃避或只講漂亮話。
-3. 是否指出對方矛盾或弱點。
+3. 是否指出對方矛盾或弱點（看破次數是重要參考）。
 4. 是否有哲學深度，而不是空泛情緒。
 5. 是否能承擔自己立場的代價。
+6. 綜合優勢指數 >= 65 時，玩家具有明顯場面優勢，需要查拉有壓倒性論證才能翻盤。
 
 請用繁體中文輸出，格式如下：
 <div class="tu">
@@ -3289,15 +3626,15 @@ async function settleDebate(){
   <div class="tu-e">一句話總評</div>
 </div>
 接著用 4 段短文分析：
-1. 玩家最強的地方
+1. 玩家最強的地方（含看破破綻的論述效果）
 2. 玩家最弱的地方
 3. 查拉圖斯特拉最強的地方
-4. 為什麼最後這樣判
+4. 為什麼最後這樣判（請明確說明系統數據如何影響判定）
 
 不要客套，不要安慰。像真正的裁判一樣直接。
 
 完整辯論紀錄：
-${truncateText(transcript,12000)}`;
+\${truncateText(transcript,12000)}`;
 
   try{
     const data=await callOpenRouter([{role:'user',content:settlementPrompt}],3000,'OpenRouter · 結算裁判');
@@ -3452,7 +3789,7 @@ async function callOpenRouter(messages,maxTokens,activityLabel='OpenRouter'){
   try{
     const res=await fetch('https://openrouter.ai/api/v1/chat/completions',{
       method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+(state.apiKey||getApiKey()||HARDCODED_KEY)},
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+(state.apiKey||getApiKey())},
       body:JSON.stringify({
         model:state.apiModel||DEFAULT_MODEL,
         messages,
@@ -3532,6 +3869,7 @@ ${cabinetNote}
 - 大量具體意象；HTML：<span class="em">強調</span>、<span class="t">詩意</span>、<span class="ec">諷刺</span>、<span class="w">沉重</span>
 - 不要重複上一輪已說過的論點；**必須寫完整，最後一句要有句號或問號，不可半途而廢。**
 - 若玩家論點觸及核心主題（永恆回歸、超人、權力意志、上帝已死、Amor Fati、主人/奴隸道德），**必須深入展開**：引用《查拉圖斯特拉如是說》的具體場景、比喻或段落意象（如：走鋼索者、矮人與閘、獅子與孩子、三種變化），而非只說概念名稱。
+- **文本錨**：每次回應的開頭或結尾，用 <span class="src">（《查拉圖斯特拉如是說》· 卷X · 章節名）</span> 標注你引用或呼應的原文出處。如果即興發揮則標 <span class="src">（即興）</span>。
 
 玩家：${state.playerName}（${state.archeType||'未知'}）
 技能：邏輯${state.skills.logic}、意志${state.skills.volition}、共情${state.skills.empathy}、修辭${state.skills.rhetoric}
@@ -3563,6 +3901,8 @@ ${cabinetNote}
       bumpDebateScore(text.length>30?4:2);
       ul();
     }
+    // 看破判斷：隱藏檢定，通過則加 advantageScore 並顯示洞見
+    setTimeout(()=>checkZaraExposure(reply,text),600);
   }catch(e){
     portrait.classList.remove('th');
     console.error('AI API error:',e);
@@ -3792,7 +4132,8 @@ function updateObjHUD(){
   const pf=$('obj-prog-fill'),t=$('obj-turns'),ss=$('obj-sides-sm');
   const pct=Math.max(0,main.progress(state));
   if(pf){pf.style.width=pct+'%';pf.style.background=main.color;}
-  if(t)t.textContent=`辯論優勢 ${pct}% · 第 ${state.turnCount||0} 輪 · 怒氣 ${state.zaraAnger||0}`;
+  const advCnt=state.advantageScore||0;
+  if(t)t.innerHTML=`辯論優勢 ${pct}% · 第 ${state.turnCount||0} 輪 · 怒氣 ${state.zaraAnger||0}<span id="adv-counter"> ⚡看破 ${advCnt} 次</span>`;
   if(ss){
     ss.innerHTML=(state._runObj?.sides||[]).map(s=>{
       const done=s.check(state);
@@ -3834,75 +4175,63 @@ function showRunEnd(win,reason){
 initAiSovietPanel();
 </script>
 
-<button class="sov-show-fab" id="sov-show-fab" onclick="document.querySelector('.ai-sov').classList.remove('sov-hidden');this.style.display='none';">◉ AI面板</button>
-<script>
-(function(){
-  function injectSovBtn(){
-    var sov = document.querySelector('.ai-sov');
-    if(!sov) return;
-    // 加收合按鈕到 dragbar
-    var bar = sov.querySelector('.ai-sov-dragbar');
-    if(bar && !bar.querySelector('.sov-hide-btn')){
-      bar.style.position='relative';
-      var btn = document.createElement('button');
-      btn.className='sov-hide-btn';
-      btn.textContent='✕ 隱藏';
-      btn.onclick = function(e){
-        e.stopPropagation();
-        sov.classList.add('sov-hidden');
-        var fab = document.getElementById('sov-show-fab');
-        if(fab) fab.style.display='block';
-      };
-      bar.appendChild(btn);
-    }
-  }
-  // 等 DOM ready 後注入
-  if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded', injectSovBtn);
-  } else {
-    injectSovBtn();
-  }
-  // 也監聽動態顯示
-  var orig = window.setAiSovietVisible;
-  if(typeof orig === 'function'){
-    window.setAiSovietVisible = function(v){
-      orig(v);
-      setTimeout(injectSovBtn, 100);
-    };
-  }
-  setTimeout(injectSovBtn, 500);
-  setTimeout(injectSovBtn, 1500);
-})();
-</script>
-
 <button class="sov-show-fab" id="sov-show-fab" title="顯示AI面板">◉ AI面板</button>
 <script>
 (function(){
+  // ── AI 面板切換 ──
+  var _aiPanelVisible=false;
+  window.toggleAiPanel=function(){
+    _aiPanelVisible=!_aiPanelVisible;
+    setAiSovietVisible(_aiPanelVisible);
+    var btn=document.getElementById('ai-panel-btn');
+    if(btn)btn.textContent=_aiPanelVisible?'📡 隱藏AI狀態':'📡 AI狀態';
+    // 同步 FAB 可見性
+    var fab=document.getElementById('sov-show-fab');
+    if(fab)fab.style.display=_aiPanelVisible?'none':'none'; // FAB 始終隱藏（用工具列按鈕控制）
+  };
+
+  // ── 單一、乾淨的 AI 面板 隱藏/顯示 機制 ──
   function injectHideBtn(){
     var sov=document.querySelector('.ai-sov');
     if(!sov||sov.querySelector('.sov-hide-btn'))return;
-    var bar=sov.querySelector('[class*="dragbar"],[class*="drag"],[class*="header"]');
+    var bar=sov.querySelector('.ai-sov-dragbar,[class*="dragbar"],[class*="drag"]');
     if(!bar)bar=sov.firstElementChild||sov;
     if(bar.style)bar.style.position='relative';
     var btn=document.createElement('button');
-    btn.className='sov-hide-btn'; btn.textContent='✕ 隱藏';
+    btn.className='sov-hide-btn';
+    btn.textContent='✕ 隱藏';
     btn.onclick=function(e){
       e.stopPropagation();
       sov.classList.add('sov-hidden');
-      document.getElementById('sov-show-fab').style.display='block';
+      _aiPanelVisible=false;
+      var tbBtn=document.getElementById('ai-panel-btn');
+      if(tbBtn)tbBtn.textContent='📡 AI狀態';
     };
     bar.appendChild(btn);
   }
-  document.getElementById('sov-show-fab').onclick=function(){
-    var sov=document.querySelector('.ai-sov');
-    if(sov)sov.classList.remove('sov-hidden');
-    this.style.display='none';
-  };
-  // 多次嘗試注入（面板可能延遲顯示）
-  [300,800,1500,3000,5000].forEach(function(t){setTimeout(injectHideBtn,t);});
-  // 用 MutationObserver 監聽動態添加的 .ai-sov
+
+  // FAB 預設隱藏（用工具列按鈕控制面板）
+  var fab=document.getElementById('sov-show-fab');
+  if(fab){
+    fab.style.display='none'; // 始終隱藏
+  }
+  // 注意：不再需要 FAB 點擊處理，改用工具列按鈕
+
+  // 攔截 setAiSovietVisible 讓隱藏按鈕在面板出現後也能注入
+  var _orig=window.setAiSovietVisible;
+  if(typeof _orig==='function'){
+    window.setAiSovietVisible=function(v){
+      _orig(v);
+      setTimeout(injectHideBtn,120);
+    };
+  }
+
+  // 多次嘗試注入（面板可能在 JS 初始化後才渲染）
+  [100,400,900,2000,4000].forEach(function(t){setTimeout(injectHideBtn,t);});
+
+  // MutationObserver 保底
   var obs=new MutationObserver(function(){injectHideBtn();});
-  obs.observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['style','class']});
+  obs.observe(document.body,{childList:true,subtree:true});
 })();
 </script>
 
@@ -3983,6 +4312,20 @@ if(document.readyState === 'loading') {
 } else {
   initCCModelGrid();
 }
+</script>
+
+
+<script>
+// BYOK banner: hide if key already stored
+(function(){
+  var k = localStorage.getItem('zara_api_key') || '';
+  var b = document.getElementById('byok-banner');
+  if (!b) return;
+  if (k && k.length > 10) {
+    b.className = 'key-ok';
+    b.innerHTML = '✅ API Key 已儲存 — 可在創角設定中更新 <span class="byok-x" onclick="this.parentElement.style.display=\'none\';document.body.style.paddingTop=\'0\'">✕</span>';
+  }
+})();
 </script>
 
 </body>
